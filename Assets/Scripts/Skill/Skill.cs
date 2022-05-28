@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public interface Skill
+public interface ISkill
 {
     public abstract void Invoke();
 }
 
-public abstract class BasicSkill : Skill
+public abstract class BasicSkill : ISkill
 {
     protected GameObject owner;
     protected GameObject item;
@@ -37,11 +37,8 @@ public class SplashSkill : BasicSkill
 
     }
 }
-//TODO: item 클래스 만들기. projectile이나 effect 등 멤버 만들것. 그후 invoke 구현하면 될듯.
-//player inventory, projectile 클래스 먼저 만들어야할듯.
-//stat도 만들어야할듯.
 
-public abstract class MovementSkill : Skill
+public abstract class MovementSkill : ISkill
 {
     protected GameObject owner;
     protected Vector3 direction;
