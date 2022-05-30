@@ -61,3 +61,10 @@ public class BlinkSkill : MovementSkill
         throw new System.NotImplementedException();
     }
 }
+
+public abstract class Ult : ISkill
+{
+    public abstract void Invoke();
+}
+
+//TODO: 궁극기는 각각 따로따로 만들어야될듯.
