@@ -1,19 +1,9 @@
 using UnityEngine;
 
-public class SkillSlot
-{
-
-}
-
 public class PlayerSkillSlots : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    public BasicSkill defaultSkill;
+    public BasicSkill[] basicSkills = new BasicSkill[2];
+    public MovementSkill movementSkill;
+    public Ult ult;
 }

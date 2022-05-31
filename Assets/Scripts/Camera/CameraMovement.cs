@@ -15,6 +15,8 @@ public class CameraMovement : MonoBehaviour
     const float MOUSE_MOVEMENT_Y_MIN = 10.0f;
     const float MOUSE_MOVEMENT_Y_MAX = 80.0f;
 
+    const float SCROLL_SPEED = 4.8f;
+
     [SerializeField]
     Transform cameraRig;
 
@@ -41,5 +43,13 @@ public class CameraMovement : MonoBehaviour
 
         transform.position = rotation * distanceVector3 + cameraRig.position;
         transform.rotation = rotation;
+
+        float scrollDelta = Input.mouseScrollDelta.y;
+
+        if (scrollDelta != 0)
+        {
+            float fov = Camera.main.fieldOfView - scrollDelta * SCROLL_SPEED;
+            Camera.main.fieldOfView = Mathf.Clamp(fov, 20.0f, 60.0f);
+        }
     }
 }

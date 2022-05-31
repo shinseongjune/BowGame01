@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public class Item
 {
     public int id;
     public string itemName;
@@ -8,5 +8,5 @@ public class Item : MonoBehaviour
 
     public Sprite icon;
 
-    public readonly int MAX_COUNT;
+    public int MAX_COUNT;
 }
