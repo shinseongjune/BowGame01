@@ -31,8 +31,17 @@ public class SkillDataBase : MonoBehaviour
         //TODO: 파일 읽기로 스킬 관리
         //Debug: 테스트 코드 시작
         MeleeSkill testAttack = new();
+        testAttack.name = "맨손 공격";
+        testAttack.damage = 3;
+        testAttack.coolDown = 0.2f;
+        testAttack.reach = 1f;
         defaultSkills[0] = testAttack;
         RangedSkill testBowShot = new();
+        testBowShot.name = "화살 공격";
+        testBowShot.damage = 10;
+        testBowShot.coolDown = 0.4f;
+        testBowShot.reach = 30.0f;
+        testBowShot.attackPrefab = Resources.Load<GameObject>("Prefabs/ArrowProjectile");
         defaultSkills[1] = testBowShot;
         //Debug: 테스트 코드 끝
     }

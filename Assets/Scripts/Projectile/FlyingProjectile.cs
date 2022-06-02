@@ -5,14 +5,24 @@ public class FlyingProjectile : MonoBehaviour
     public float speed;
     public Aggression aggression;
 
+    public float restTime = 8;
+    public float restDistance = 30;
+
     void Update()
     {
-        transform.position += new Vector3(0, 0, 1) * speed * Time.deltaTime;
+        transform.position += transform.forward * speed * Time.deltaTime;
+
+        restTime -= Time.deltaTime;
+        restDistance -= speed * Time.deltaTime;
+        if (restTime <= 0 || restDistance <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (aggression.attacker == other.gameObject)
+        if (other.transform.IsChildOf(aggression.attacker.transform))
         {
             return;
         }
@@ -22,7 +32,6 @@ public class FlyingProjectile : MonoBehaviour
         {
             aggression.target = other.gameObject;
             damageable.Damaged(aggression);
-            print("test1!");
         }
 
         //TODO: 화살 박히는건 나중에 생각할것. 안해도 무방함.
