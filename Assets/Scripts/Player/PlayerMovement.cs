@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    PlayerState state;
+
     Vector3 frontDirection = Vector3.forward;
     Vector3 rightDirection = Vector3.right;
 
@@ -11,27 +13,46 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        state = GetComponent<PlayerState>();
         body = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        GetCameraDirections();
-
-        Vector3 velocity = new();
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        if (horizontal != 0)
+        if (state.isSkillMoving)
         {
-            velocity += rightDirection * horizontal * speed;
+            state.skillMovingTime -= Time.deltaTime;
+            if (state.skillMovingTime <= 0)
+            {
+                state.isSkillMoving = false;
+                //TODO: 테스트 코드. 지울것
+                GetComponentInChildren<MeshRenderer>().material.color = Color.white;
+                //테스트 코드 끝
+            }
+            return;
         }
-
-        float vertical = Input.GetAxisRaw("Vertical");
-        if (vertical != 0)
+        else
         {
-            velocity += frontDirection * vertical * speed;
-        }
+            GetCameraDirections();
 
-        body.velocity = velocity;
+            Vector3 velocity = new();
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            if (state.isMovable)
+            {
+                if (horizontal != 0)
+                {
+                    velocity += speed * horizontal * rightDirection;
+                }
+
+                float vertical = Input.GetAxisRaw("Vertical");
+                if (vertical != 0)
+                {
+                    velocity += speed * vertical * frontDirection;
+                }
+            }
+
+            body.velocity = velocity;
+        }
     }
 
     void GetCameraDirections()
