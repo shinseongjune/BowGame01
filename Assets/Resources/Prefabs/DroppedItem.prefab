@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8604050268454177771}
   - component: {fileID: 8604050268454177765}
   - component: {fileID: 8604050268454177764}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8604050268916707272}
   - component: {fileID: 8604050268916707273}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DroppedItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,6 @@ MonoBehaviour:
   textBackgroundImage: {fileID: 8604050269429307375}
   modelMeshRenderer: {fileID: 8604050270028040197}
   itemName: {fileID: 8604050268454177764}
-  player: {fileID: 0}
 --- !u!1 &8604050269429307374
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +199,7 @@ GameObject:
   - component: {fileID: 8604050269429307370}
   - component: {fileID: 8604050269429307369}
   - component: {fileID: 8604050269429307368}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +317,7 @@ GameObject:
   - component: {fileID: 8604050269593434998}
   - component: {fileID: 8604050269593434997}
   - component: {fileID: 8604050269593434996}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +418,7 @@ GameObject:
   - component: {fileID: 8604050270028040198}
   - component: {fileID: 8604050270028040197}
   - component: {fileID: 8604050270028040196}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

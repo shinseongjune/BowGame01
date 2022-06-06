@@ -1499,13 +1499,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1307857250}
   - component: {fileID: 1307857252}
-  - component: {fileID: 1307857251}
   - component: {fileID: 1307857253}
   - component: {fileID: 1307857254}
   - component: {fileID: 1307857255}
   - component: {fileID: 1307857257}
   - component: {fileID: 1307857256}
   - component: {fileID: 1307857258}
+  - component: {fileID: 1307857259}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1529,18 +1529,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1307857251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1307857249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77a1dcff9488fb14aa34a893e6db6654, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1307857252
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1697,8 +1685,22 @@ MonoBehaviour:
   isMovable: 1
   isAttackable: 1
   isBlinkable: 1
+  isInCombat: 0
   isSkillMoving: 0
   skillMovingTime: 0
+--- !u!114 &1307857259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307857249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f9d304e3a20af499a1fc9d231899ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillDataBase: {fileID: 262127298}
 --- !u!1 &1445405593
 GameObject:
   m_ObjectHideFlags: 0
