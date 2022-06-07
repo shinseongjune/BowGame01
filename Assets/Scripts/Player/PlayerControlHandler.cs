@@ -12,6 +12,9 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField]
     SkillDataBase skillDataBase;
 
+    [SerializeField] Canvas basicModeCanvas;
+    [SerializeField] Canvas buildingModeCanvas;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,17 +33,76 @@ public class PlayerControlHandler : MonoBehaviour
         }
         //회전 끝
 
-        //좌클릭 시작
-        if (Input.GetMouseButton(0))
+        if (state.isBuilding) //건설 모드
         {
-            if (!state.isInCombat) //전투 중이 아닐 경우
+            if (Input.GetKeyDown(KeyCode.B)) //건설 모드 취소
             {
-                if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
+                state.isBuilding = false;
+                buildingModeCanvas.gameObject.SetActive(false);
+                basicModeCanvas.gameObject.SetActive(true);
+            }
+
+            //TODO: 건축물 선택, 마우스 따라 건축물 붙어다니기, 건축 가능 여부 표시
+
+            //TODO: 좌클릭 시작
+            if (Input.GetMouseButton(0))
+            {
+
+            }
+            //좌클릭 끝
+
+            //스페이스바 시작
+            if (Input.GetKey(KeyCode.Space) && slots.movementSkillCooldown <= 0)
+            {
+                MovementSkill skill = skillDataBase.movementSkills[slots.movementSkill];
+                if (skill is DashSkill)
                 {
-                    //TODO: 아이템 획득 시작
-                    //아이템 획득 끝
+                    if (state.isMovable)
+                    {
+                        DoMovementSkill(skill);
+                    }
                 }
-                else
+                else if (skill is BlinkSkill)
+                {
+                    if (state.isBlinkable)
+                    {
+                        DoMovementSkill(skill);
+                    }
+                }
+            }
+            //스페이스바 끝
+        }
+        else //일반 모드
+        {
+            if (Input.GetKeyDown(KeyCode.B)) //건설 모드 시작
+            {
+                if (!state.isInCombat)
+                {
+                    state.isBuilding = true;
+                    basicModeCanvas.gameObject.SetActive(false);
+                    buildingModeCanvas.gameObject.SetActive(true);
+                }
+            }
+
+            //좌클릭 시작
+            if (Input.GetMouseButton(0))
+            {
+                if (!state.isInCombat) //전투 중이 아닐 경우
+                {
+                    if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
+                    {
+                        //TODO: 아이템 획득 시작
+                        //아이템 획득 끝
+                    }
+                    else
+                    {
+                        if (slots.defaultCooldown <= 0)
+                        {
+                            DoBasicAttack();
+                        }
+                    }
+                }
+                else //전투 중일 경우
                 {
                     if (slots.defaultCooldown <= 0)
                     {
@@ -48,36 +110,29 @@ public class PlayerControlHandler : MonoBehaviour
                     }
                 }
             }
-            else //전투 중일 경우
-            {
-                if (slots.defaultCooldown <= 0)
-                {
-                    DoBasicAttack();
-                }
-            }
-        }
-        //좌클릭 끝
+            //좌클릭 끝
 
-        //스페이스바 시작
-        if (Input.GetKey(KeyCode.Space) && slots.movementSkillCooldown <= 0)
-        {
-            MovementSkill skill = skillDataBase.movementSkills[slots.movementSkill];
-            if (skill is DashSkill)
+            //스페이스바 시작
+            if (Input.GetKey(KeyCode.Space) && slots.movementSkillCooldown <= 0)
             {
-                if (state.isMovable)
+                MovementSkill skill = skillDataBase.movementSkills[slots.movementSkill];
+                if (skill is DashSkill)
                 {
-                    DoMovementSkill(skill);
+                    if (state.isMovable)
+                    {
+                        DoMovementSkill(skill);
+                    }
+                }
+                else if (skill is BlinkSkill)
+                {
+                    if (state.isBlinkable)
+                    {
+                        DoMovementSkill(skill);
+                    }
                 }
             }
-            else if (skill is BlinkSkill)
-            {
-                if (state.isBlinkable)
-                {
-                    DoMovementSkill(skill);
-                }
-            }
+            //스페이스바 끝
         }
-        //스페이스바 끝
     }
 
     void DoBasicAttack()
