@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerControlHandler : MonoBehaviour
 {
+    int? constructId = null;
+    GameObject selectedConstruct;
+
     Rigidbody rb;
     
     PlayerState state;
@@ -11,6 +15,12 @@ public class PlayerControlHandler : MonoBehaviour
 
     [SerializeField]
     SkillDataBase skillDataBase;
+
+    [SerializeField]
+    BuildingDataBase buildingDataBase;
+
+    [SerializeField]
+    GridManager gridManager;
 
     [SerializeField] Canvas basicModeCanvas;
     [SerializeField] Canvas buildingModeCanvas;
@@ -35,19 +45,93 @@ public class PlayerControlHandler : MonoBehaviour
 
         if (state.isBuilding) //건설 모드
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                constructId = null;
+                if (selectedConstruct != null)
+                {
+                    Destroy(selectedConstruct);
+                }
+                selectedConstruct = null;
+            }
+
             if (Input.GetKeyDown(KeyCode.B)) //건설 모드 취소
             {
                 state.isBuilding = false;
                 buildingModeCanvas.gameObject.SetActive(false);
                 basicModeCanvas.gameObject.SetActive(true);
+
+                constructId = null;
+                Destroy(selectedConstruct);
+                selectedConstruct = null;
+                
+                //건축 가이드라인 끄기 시작
+                foreach(Transform child in gridManager.transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+                //건축 가이드라인 끄기 끝
             }
 
-            //TODO: 건축물 선택, 마우스 따라 건축물 붙어다니기, 건축 가능 여부 표시
+            if (constructId != null)
+            {
+                if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Ground")))
+                {
+                    selectedConstruct.transform.position = hit.point;
+                    
+                    //스냅 시작
+                    //벽 시작
+                    if (constructId == 0)
+                    {
+                        TileLine[,] lines;
+                        if (selectedConstruct.transform.rotation.eulerAngles.y == 90 || selectedConstruct.transform.rotation.eulerAngles.y == 270)
+                        {
+                            lines = gridManager.verticalLines;
+                        }
+                        else
+                        {
+                            lines = gridManager.horizontalLines;
+                        }
+                        foreach(TileLine line in lines)
+                        {
+                            if (Vector3.Distance(line.position, selectedConstruct.transform.position) < 1.1f)
+                            {
+                                selectedConstruct.transform.position = line.position;
+                                selectedConstruct.GetComponentInChildren<Constructs>().isSnapped = true;
+                                break;
+                            }
+                            else
+                            {
+                                selectedConstruct.GetComponentInChildren<Constructs>().isSnapped = false;
+                            }
+                        }
+                    }
+                    //벽 끝
+                    //스냅 끝
+                }
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    selectedConstruct.transform.Rotate(new(0, 90, 0));
+                }
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    selectedConstruct.transform.Rotate(new(0, -90, 0));
+                }
+            }
 
             //TODO: 좌클릭 시작
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
-
+                if (constructId != null)
+                {
+                    if (!IsPointerOverUIObject() && selectedConstruct.GetComponentInChildren<Constructs>().isSnapped) //마우스가 ui 위에 있지 않을 경우 && 지정된 위치에 스냅됐을 경우
+                    {
+                        GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
+                        building.transform.position = selectedConstruct.transform.position;
+                        building.transform.rotation = selectedConstruct.transform.rotation;
+                    }
+                }
             }
             //좌클릭 끝
 
@@ -81,6 +165,13 @@ public class PlayerControlHandler : MonoBehaviour
                     state.isBuilding = true;
                     basicModeCanvas.gameObject.SetActive(false);
                     buildingModeCanvas.gameObject.SetActive(true);
+
+                    //건축 가이드라인 켜기 시작
+                    foreach (Transform child in gridManager.transform)
+                    {
+                        child.gameObject.SetActive(true);
+                    }
+                    //건축 가이드라인 켜기 끝
                 }
             }
 
@@ -154,5 +245,34 @@ public class PlayerControlHandler : MonoBehaviour
         state.skillMovingTime = skill.movingTime;
         slots.movementSkillCooldown = skill.coolDown;
         skill.Invoke();
+    }
+    
+    public void SelectConstructPrefab(int id)
+    {
+        if (selectedConstruct != null)
+        {
+            Destroy(selectedConstruct);
+        }
+
+        constructId = id;
+        selectedConstruct = Instantiate(buildingDataBase.constructsPrefabs[id]);
+
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Ground")) && !state.isSkillMoving && !state.isAttacking)
+        {
+            selectedConstruct.transform.position = hit.point;
+        }
+        selectedConstruct.GetComponentInChildren<BoxCollider>().isTrigger = true;
+        selectedConstruct.GetComponentInChildren<MeshRenderer>().material.color = Color.cyan;
+    }
+
+    bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 }
