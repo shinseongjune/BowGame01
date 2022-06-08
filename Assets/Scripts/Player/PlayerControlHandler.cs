@@ -12,6 +12,9 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField]
     SkillDataBase skillDataBase;
 
+    [SerializeField]
+    GridManager gridManager;
+
     [SerializeField] Canvas basicModeCanvas;
     [SerializeField] Canvas buildingModeCanvas;
 
@@ -40,6 +43,13 @@ public class PlayerControlHandler : MonoBehaviour
                 state.isBuilding = false;
                 buildingModeCanvas.gameObject.SetActive(false);
                 basicModeCanvas.gameObject.SetActive(true);
+                
+                //건축 가이드라인 끄기 시작
+                foreach(Transform child in gridManager.transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+                //건축 가이드라인 끄기 끝
             }
 
             //TODO: 건축물 선택, 마우스 따라 건축물 붙어다니기, 건축 가능 여부 표시
@@ -81,6 +91,13 @@ public class PlayerControlHandler : MonoBehaviour
                     state.isBuilding = true;
                     basicModeCanvas.gameObject.SetActive(false);
                     buildingModeCanvas.gameObject.SetActive(true);
+
+                    //건축 가이드라인 켜기 시작
+                    foreach (Transform child in gridManager.transform)
+                    {
+                        child.gameObject.SetActive(true);
+                    }
+                    //건축 가이드라인 켜기 끝
                 }
             }
 

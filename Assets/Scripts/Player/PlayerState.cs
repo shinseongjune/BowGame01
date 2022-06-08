@@ -17,12 +17,4 @@ public class PlayerState : MonoBehaviour
     public float skillMovingTime;       //이동 스킬 지속 시간
 
     public bool isBuilding = false;     //건설 모드
-
-    private void Update()
-    {
-        if (isInCombat)
-        {
-            isBuilding = false;
-        }
-    }
 }
