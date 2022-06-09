@@ -43,7 +43,7 @@ public class PlayerControlHandler : MonoBehaviour
         }
         //회전 끝
 
-        if (state.isBuilding) //건설 모드
+        if (state.isBuilding) //건설 모드일 경우
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -97,12 +97,12 @@ public class PlayerControlHandler : MonoBehaviour
                             if (Vector3.Distance(line.position, selectedConstruct.transform.position) < 1.1f)
                             {
                                 selectedConstruct.transform.position = line.position;
-                                selectedConstruct.GetComponentInChildren<Constructs>().isSnapped = true;
+                                selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
                             else
                             {
-                                selectedConstruct.GetComponentInChildren<Constructs>().isSnapped = false;
+                                selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = false;
                             }
                         }
                     }
@@ -125,11 +125,17 @@ public class PlayerControlHandler : MonoBehaviour
             {
                 if (constructId != null)
                 {
-                    if (!IsPointerOverUIObject() && selectedConstruct.GetComponentInChildren<Constructs>().isSnapped) //마우스가 ui 위에 있지 않을 경우 && 지정된 위치에 스냅됐을 경우
+                    if (!IsPointerOverUIObject() && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isConstructable) //마우스가 ui 위에 있지 않을 경우 && 지정된 위치에 스냅됐을 경우
                     {
                         GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
                         building.transform.position = selectedConstruct.transform.position;
                         building.transform.rotation = selectedConstruct.transform.rotation;
+                        Destroy(building.GetComponentInChildren<BuildingConstructs>());
+
+                        //벽일 경우 양 옆 기둥 콜라이더 켜기
+                        building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
+                        building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
+                        //콜라이더 켜기 끝
                     }
                 }
             }
@@ -265,6 +271,14 @@ public class PlayerControlHandler : MonoBehaviour
         }
         selectedConstruct.GetComponentInChildren<BoxCollider>().isTrigger = true;
         selectedConstruct.GetComponentInChildren<MeshRenderer>().material.color = Color.cyan;
+
+        //벽일 경우 양 옆 기둥 콜라이더 끄기
+        if (constructId == 0)
+        {
+            selectedConstruct.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = false;
+            selectedConstruct.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = false;
+        }
+        //콜라이더 끄기 끝
     }
 
     bool IsPointerOverUIObject()
