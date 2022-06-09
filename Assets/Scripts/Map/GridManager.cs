@@ -10,15 +10,10 @@ public class GridManager : MonoBehaviour
     public TileLine[,] verticalLines = new TileLine[GRID_X + 1, GRID_Y];
 
     public GameObject buildingGuideLinePrefab;
-    public List<GameObject> buildingGuideLines = new();
 
     public const float TILE_SIZE = 4.4f;
     public const int GRID_X = 16;
     public const int GRID_Y = 16;
-
-    //TODO: delete this
-    //public bool isInitialized = false;
-    //===============
 
     private void Start()
     {
@@ -71,54 +66,5 @@ public class GridManager : MonoBehaviour
             renderer.SetPosition(1, to);
             go.SetActive(false);
         }
-
-        //TODO: delete this
-        //isInitialized = true;
-        //================
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    if (!isInitialized)
-    //    {
-    //        return;
-    //    }
-
-    //    GUIStyle style = new();
-    //    style.fontStyle = FontStyle.Normal;
-    //    style.alignment = TextAnchor.MiddleCenter;
-    //    style.normal.textColor = Color.red;
-
-    //    for (int y = 0; y < GRID_Y; y++)
-    //    {
-    //        for (int x = 0; x < GRID_X; x++)
-    //        {
-    //            Vector3 pos = grid[x, y].position;
-    //            string str = "(" + x + "," + y + ")";
-    //            Handles.Label(pos, str, style);
-    //        }
-    //    }
-
-    //    for (int y = 0; y < GRID_Y + 1; y++)
-    //    {
-    //        for (int x = 0; x < GRID_X; x++)
-    //        {
-    //            Vector3 pos = horizontalLines[x, y].position;
-    //            Vector3 from = new(pos.x - TILE_SIZE / 2, 0, pos.z);
-    //            Vector3 to = new(pos.x + TILE_SIZE / 2, 0, pos.z);
-    //            Gizmos.DrawLine(from, to);
-    //        }
-    //    }
-
-    //    for (int y = 0; y < GRID_Y; y++)
-    //    {
-    //        for (int x = 0; x < GRID_X + 1; x++)
-    //        {
-    //            Vector3 pos = verticalLines[x, y].position;
-    //            Vector3 from = new(pos.x, 0, pos.z - TILE_SIZE / 2);
-    //            Vector3 to = new(pos.x, 0, pos.z + TILE_SIZE / 2);
-    //            Gizmos.DrawLine(from, to);
-    //        }
-    //    }
-    //}
 }

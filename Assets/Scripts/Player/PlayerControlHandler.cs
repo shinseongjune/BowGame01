@@ -25,6 +25,8 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] Canvas basicModeCanvas;
     [SerializeField] Canvas buildingModeCanvas;
 
+    const float SNAP_DISTANCE = 1.1f;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -39,7 +41,7 @@ public class PlayerControlHandler : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Ground")) && !state.isSkillMoving && !state.isAttacking)
         {
-            rb.MoveRotation(Quaternion.LookRotation(hit.point - transform.position, Vector3.up));
+            rb.MoveRotation(Quaternion.LookRotation(new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position, Vector3.up));
         }
         //회전 끝
 
@@ -77,7 +79,7 @@ public class PlayerControlHandler : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Ground")))
                 {
-                    selectedConstruct.transform.position = hit.point;
+                    selectedConstruct.transform.position = hit.point + new Vector3(0, 0.01f, 0);
                     
                     //스냅 시작
                     //벽 시작
@@ -94,7 +96,7 @@ public class PlayerControlHandler : MonoBehaviour
                         }
                         foreach(TileLine line in lines)
                         {
-                            if (Vector3.Distance(line.position, selectedConstruct.transform.position) < 1.1f)
+                            if (Vector3.Distance(line.position, selectedConstruct.transform.position) < SNAP_DISTANCE)
                             {
                                 selectedConstruct.transform.position = line.position;
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
@@ -105,8 +107,23 @@ public class PlayerControlHandler : MonoBehaviour
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = false;
                             }
                         }
-                    }
-                    //벽 끝
+                    } //벽 끝
+                    else //타일 중앙 스냅 시작
+                    {
+                        foreach (Tile tile in gridManager.grid)
+                        {
+                            if (Vector3.Distance(tile.position, selectedConstruct.transform.position) < SNAP_DISTANCE)
+                            {
+                                selectedConstruct.transform.position = tile.position;
+                                selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
+                                break;
+                            }
+                            else
+                            {
+                                selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = false;
+                            }
+                        }
+                    } //타일 중앙 스냅 끝
                     //스냅 끝
                 }
 
@@ -132,32 +149,30 @@ public class PlayerControlHandler : MonoBehaviour
                         building.transform.rotation = selectedConstruct.transform.rotation;
                         Destroy(building.GetComponentInChildren<BuildingConstructs>());
 
-                        //벽일 경우 양 옆 기둥 콜라이더 켜기
-                        building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
-                        building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
-                        //콜라이더 켜기 끝
+                        if (constructId == 0)
+                        {
+                            //벽일 경우 양 옆 기둥 콜라이더 켜기
+                            building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
+                            building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
+                            //콜라이더 켜기 끝
+                        }
                     }
                 }
             }
             //좌클릭 끝
 
             //스페이스바 시작
-            if (Input.GetKey(KeyCode.Space) && slots.movementSkillCooldown <= 0)
+            if (Input.GetKey(KeyCode.Space))
             {
-                MovementSkill skill = skillDataBase.movementSkills[slots.movementSkill];
-                if (skill is DashSkill)
+                if (constructId != null)
                 {
-                    if (state.isMovable)
-                    {
-                        DoMovementSkill(skill);
-                    }
+                    constructId = null;
+                    Destroy(selectedConstruct);
                 }
-                else if (skill is BlinkSkill)
+
+                if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Construct")))
                 {
-                    if (state.isBlinkable)
-                    {
-                        DoMovementSkill(skill);
-                    }
+                    Destroy(hit.transform.root.gameObject);
                 }
             }
             //스페이스바 끝
