@@ -39,7 +39,7 @@ public class GridManager : MonoBehaviour
         {
             for (int x = 0; x < GRID_X; x++)
             {
-                grid[x, y] = new Tile(TILE_SIZE, x, y, horizontalLines[x, y + 1], horizontalLines[x, y], verticalLines[x, y], verticalLines[x + 1, y]);
+                grid[x, y] = new Tile(TILE_SIZE, x, 0, y, horizontalLines[x, y + 1], horizontalLines[x, y], verticalLines[x, y], verticalLines[x + 1, y]);
             }
         }
 

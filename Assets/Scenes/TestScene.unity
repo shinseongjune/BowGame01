@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 61292909}
   - component: {fileID: 61292908}
   - component: {fileID: 61292907}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2416,6 +2416,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPrefab: {fileID: 3210944260837629098, guid: 26b6b8e783d23b54984a538bebb972f7, type: 3}
+  waterPrefab: {fileID: 637312529430691070, guid: 3fc53e2602fe7a44e83e174271065c1c, type: 3}
+  rockPrefab: {fileID: 942252193179296279, guid: f3b52a6f2d9f943429053ce9b54c5ecc, type: 3}
   gridManager: {fileID: 1643823731}
 --- !u!4 &1096421407
 Transform:
@@ -2907,7 +2909,7 @@ GameObject:
   - component: {fileID: 1307857256}
   - component: {fileID: 1307857258}
   - component: {fileID: 1307857259}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3313,7 +3315,7 @@ GameObject:
   - component: {fileID: 1514585194}
   - component: {fileID: 1514585193}
   - component: {fileID: 1514585192}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FrontCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

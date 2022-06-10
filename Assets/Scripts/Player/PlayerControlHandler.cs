@@ -197,7 +197,7 @@ public class PlayerControlHandler : MonoBehaviour
             }
 
             //좌클릭 시작
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && !IsPointerOverUIObject())
             {
                 if (!state.isInCombat) //전투 중이 아닐 경우
                 {
