@@ -10,6 +10,8 @@ public class MapGenerator : MonoBehaviour
 
     public float[,] heightMap;
 
+    public const float OFFSET = 2f;
+
     public void GenerateMap()
     {
         int width = GridManager.GRID_X;
@@ -22,8 +24,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                heightMap[x, y] = Mathf.PerlinNoise(x * size, y * size);
-                print("(" + x + "," + y + ") = " + heightMap[x, y]);
+                heightMap[x, y] = Mathf.PerlinNoise(x / size * OFFSET, y / size * OFFSET);
             }
         }
 
@@ -31,8 +32,15 @@ public class MapGenerator : MonoBehaviour
         {
             for (int z = 0; z < height; z++)
             {
-                GameObject ground = Instantiate(groundPrefab, new Vector3(x * size, Mathf.RoundToInt(heightMap[x,z] * 5), z * size), Quaternion.identity);
-                ground.transform.parent = transform;
+                int y = Mathf.RoundToInt(heightMap[x, z] * 5) * 5;
+
+                if (y < 0) y = 0;
+
+                for (int i = -1; i < y; i += 5)
+                {
+                    GameObject ground = Instantiate(groundPrefab, new Vector3(x * size, i, z * size), Quaternion.identity);
+                    ground.transform.parent = transform;
+                }
             }
         }
     }

@@ -12,8 +12,8 @@ public class GridManager : MonoBehaviour
     public GameObject buildingGuideLinePrefab;
 
     public const float TILE_SIZE = 4.4f;
-    public const int GRID_X = 16;
-    public const int GRID_Y = 16;
+    public const int GRID_X = 256;
+    public const int GRID_Y = 256;
 
     private void Start()
     {
