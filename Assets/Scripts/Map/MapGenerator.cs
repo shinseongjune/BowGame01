@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour
 
                 heightMap[x, z] = new MapPiece();
                 heightMap[x, z].x = x;
-                heightMap[x, z].y = 1;
+                heightMap[x, z].y = 0;
                 heightMap[x, z].z = z;
                 grounds.Add(heightMap[x, z]);
             }
@@ -54,14 +54,14 @@ public class MapGenerator : MonoBehaviour
         {
             int hillX = Random.Range(0, width);
             int hillZ = Random.Range(0, height);
-            if (heightMap[hillX, hillZ].y == 2)
+            if (heightMap[hillX, hillZ].y == 1)
             {
                 continue;
             }
             int[,] flags = new int[width, height];
             int chance = 80;
 
-            heightMap[hillX, hillZ].y = 2;
+            heightMap[hillX, hillZ].y = 1;
             grounds.Remove(heightMap[hillX, hillZ]);
             hills.Add(heightMap[hillX, hillZ]);
 
@@ -94,7 +94,7 @@ public class MapGenerator : MonoBehaviour
                         {
                             if (Random.Range(0, 100) <= chance)
                             {
-                                heightMap[x, z].y = 2;
+                                heightMap[x, z].y = 1;
                                 checkNext.Enqueue(heightMap[x, z]);
                                 chance--;
                                 hillSize++;
@@ -121,7 +121,7 @@ public class MapGenerator : MonoBehaviour
             for (int z = 0; z < height; z++)
             {
                 GameObject prefab;
-                if (heightMap[x,z].y == 1)
+                if (heightMap[x,z].y == 0)
                 {
                     prefab = groundPrefab;
                 }
@@ -134,97 +134,7 @@ public class MapGenerator : MonoBehaviour
                 mapPiece.transform.SetParent(transform, false);
             }
         }
-
-        ////SmoothingMap();
-
-        //for (int x = 0; x < width; x++)
-        //{
-        //    for (int z = 0; z < height; z++)
-        //    {
-        //        int y = (int)heightMap[x, z];
-
-        //        if (y < 0) y = 0;
-
-        //        for (int i = -1; i < y; i += 5)
-        //        {
-        //            GameObject prefab;
-        //            if (y == 0)
-        //            {
-        //                prefab = waterPrefab;
-        //            }
-        //            else if (y >= 10)
-        //            {
-        //                prefab = rockPrefab;
-        //            }
-        //            else
-        //            {
-        //                prefab = groundPrefab;
-        //            }
-        //            GameObject tile = Instantiate(prefab, new Vector3(x * size, i, z * size), Quaternion.identity);
-        //            tile.transform.parent = transform;
-        //        }
-        //    }
-        //}
     }
-
-    //void SmoothingMap()
-    //{
-    //    int width = GridManager.GRID_X;
-    //    int height = GridManager.GRID_Y;
-
-    //    for (int y = 0; y < height; y++)
-    //    {
-    //        for (int x = 0; x < width; x++)
-    //        {
-    //            int zeros = 0;
-    //            int fives = 0;
-    //            int tens = 0;
-
-    //            for (int offsetX = x - 1; offsetX < x + 1; offsetX++)
-    //            {
-    //                for (int offsetY = y - 1; offsetY < y + 1; offsetY++)
-    //                {
-    //                    if (offsetX < 0 || offsetY < 0 || offsetX >= width || offsetY <= height)
-    //                    {
-    //                        continue;
-    //                    }
-    //                    else if (offsetX == x && offsetY == y)
-    //                    {
-    //                        continue;
-    //                    }
-    //                    else
-    //                    {
-    //                        if (heightMap[offsetX, offsetY] == 0)
-    //                        {
-    //                            zeros++;
-    //                        }
-    //                        else if (heightMap[offsetX, offsetY] == 5)
-    //                        {
-    //                            fives++;
-    //                        }
-    //                        else if (heightMap[offsetX, offsetY] == 10)
-    //                        {
-    //                            tens++;
-    //                        }
-    //                    }
-    //                }
-    //            }
-
-    //            if (zeros > fives && zeros > tens)
-    //            {
-    //                heightMap[x, y] = 0;
-    //            }
-    //            else if (fives > zeros && fives > tens)
-    //            {
-    //                heightMap[x, y] = 5;
-    //            }
-    //            else
-    //            {
-    //                heightMap[x, y] = 10;
-    //            }
-    //        }
-    //    }
-    //}
 
     public void SmoothingMap()
     {
@@ -251,7 +161,7 @@ public class MapGenerator : MonoBehaviour
                         }
                         else
                         {
-                            if (heightMap[offsetX, offsetZ].y == 2)
+                            if (heightMap[offsetX, offsetZ].y == 1)
                             {
                                 hillCount++;
                             }
@@ -261,11 +171,11 @@ public class MapGenerator : MonoBehaviour
 
                 if (hillCount > 4)
                 {
-                    heightMap[x, z].y = 2;
+                    heightMap[x, z].y = 1;
                 }
                 else if (hillCount < 4)
                 {
-                    heightMap[x, z].y = 1;
+                    heightMap[x, z].y = 0;
                 }
             }
         }

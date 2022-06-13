@@ -79,7 +79,9 @@ public class DashSkill : MovementSkill
 {
     public override void Invoke()
     {
-        owner.GetComponent<Rigidbody>().velocity = owner.transform.forward * power;
+        Rigidbody rb = owner.GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+        rb.velocity = owner.transform.forward * power;
 
         //TODO:테스트용. 지울것
         owner.GetComponentInChildren<MeshRenderer>().material.color = color;

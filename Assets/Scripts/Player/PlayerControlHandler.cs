@@ -22,8 +22,12 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField]
     GridManager gridManager;
 
+    [SerializeField]
+    PlayerInventory inventory;
+
     [SerializeField] Canvas basicModeCanvas;
     [SerializeField] Canvas buildingModeCanvas;
+    [SerializeField] Canvas inventoryCanvas;
 
     const float SNAP_DISTANCE = 1.1f;
 
@@ -34,6 +38,7 @@ public class PlayerControlHandler : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         state = GetComponent<PlayerState>();
         slots = GetComponent<PlayerSkillSlots>();
+        inventory = GetComponent<PlayerInventory>();
     }
 
     void Update()
@@ -54,10 +59,14 @@ public class PlayerControlHandler : MonoBehaviour
             if (scrollDelta > 0)
             {
                 state.buildingFloor = 1;
+                gridManager.transform.GetChild(0).gameObject.SetActive(false);
+                gridManager.transform.GetChild(1).gameObject.SetActive(true);
             }
             else if (scrollDelta < 0)
             {
                 state.buildingFloor = 0;
+                gridManager.transform.GetChild(1).gameObject.SetActive(false);
+                gridManager.transform.GetChild(0).gameObject.SetActive(true);
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -79,12 +88,10 @@ public class PlayerControlHandler : MonoBehaviour
                 constructId = null;
                 Destroy(selectedConstruct);
                 selectedConstruct = null;
-                
+
                 //건축 가이드라인 끄기 시작
-                foreach(Transform child in gridManager.transform)
-                {
-                    child.gameObject.SetActive(false);
-                }
+                gridManager.transform.GetChild(0).gameObject.SetActive(false);
+                gridManager.transform.GetChild(1).gameObject.SetActive(false);
                 //건축 가이드라인 끄기 끝
             }
 
@@ -98,34 +105,35 @@ public class PlayerControlHandler : MonoBehaviour
                     //벽 시작
                     if (constructId == 0)
                     {
-                        TileLine[,] lines;
+                        List<TileLine> lines;
                         if (selectedConstruct.transform.rotation.eulerAngles.y == 90 || selectedConstruct.transform.rotation.eulerAngles.y == 270)
                         {
-                            if (state.buildingFloor == 0)
-                            {
-                                lines = gridManager.groundVerticalLines;
-                            }
-                            else
-                            {
-                                lines = gridManager.hillVerticalLines;
-                            }
+                            lines = gridManager.verticalLines;
                         }
                         else
                         {
-                            if (state.buildingFloor == 0)
-                            {
-                                lines = gridManager.groundHorizontalLines;
-                            }
-                            else
-                            {
-                                lines = gridManager.hillHorizontalLines;
-                            }
+                            lines = gridManager.horizontalLines;
                         }
                         foreach(TileLine line in lines)
                         {
+                            if (state.buildingFloor == 0)
+                            {
+                                if (Mathf.Approximately(line.position.y, GridManager.TILE_SIZE * 2))
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                if (Mathf.Approximately(line.position.y, GridManager.TILE_SIZE))
+                                {
+                                    continue;
+                                }
+                            }
+
                             if (Vector3.Distance(line.position, selectedConstruct.transform.position) < SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = line.position;
+                                selectedConstruct.transform.position = line.position + new Vector3(0, 0.3f, 0);
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
@@ -139,11 +147,26 @@ public class PlayerControlHandler : MonoBehaviour
                     {
                         foreach (Tile tile in gridManager.grid)
                         {
+                            if (state.buildingFloor == 0)
+                            {
+                                if (Mathf.Approximately(tile.y, GridManager.TILE_SIZE * 2))
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                if (Mathf.Approximately(tile.y, GridManager.TILE_SIZE))
+                                {
+                                    continue;
+                                }
+                            }
+
                             float size = GridManager.TILE_SIZE;
                             Vector3 tilePosition = new((tile.x * size) + size / 2, tile.y, (tile.z * size) + size / 2);
-                            if (Vector3.Distance(tilePosition, selectedConstruct.transform.position) < SNAP_DISTANCE)
+                            if (Vector3.Distance(tilePosition, selectedConstruct.transform.position) <= SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = tilePosition;
+                                selectedConstruct.transform.position = tilePosition + new Vector3(0, 0.4f, 0);
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
@@ -190,8 +213,8 @@ public class PlayerControlHandler : MonoBehaviour
             }
             //좌클릭 끝
 
-            //스페이스바 시작
-            if (Input.GetKey(KeyCode.Space))
+            //쉬프트 시작
+            if (Input.GetKey(KeyCode.LeftShift))
             {
                 if (constructId != null)
                 {
@@ -204,7 +227,7 @@ public class PlayerControlHandler : MonoBehaviour
                     Destroy(hit.transform.root.gameObject);
                 }
             }
-            //스페이스바 끝
+            //쉬프트 끝
         }
         else //일반 모드
         {
@@ -226,9 +249,15 @@ public class PlayerControlHandler : MonoBehaviour
                     buildingModeCanvas.gameObject.SetActive(true);
 
                     //건축 가이드라인 켜기 시작
-                    foreach (Transform child in gridManager.transform)
+                    if (transform.position.y < 4.7f)
                     {
-                        child.gameObject.SetActive(true);
+                        state.buildingFloor = 0;
+                        gridManager.transform.GetChild(0).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        state.buildingFloor = 1;
+                        gridManager.transform.GetChild(1).gameObject.SetActive(true);
                     }
                     //건축 가이드라인 켜기 끝
                 }
@@ -262,8 +291,8 @@ public class PlayerControlHandler : MonoBehaviour
             }
             //좌클릭 끝
 
-            //스페이스바 시작
-            if (Input.GetKey(KeyCode.Space) && slots.movementSkillCooldown <= 0)
+            //쉬프트 시작
+            if (Input.GetKey(KeyCode.LeftShift) && slots.movementSkillCooldown <= 0)
             {
                 MovementSkill skill = skillDataBase.movementSkills[slots.movementSkill];
                 if (skill is DashSkill)
@@ -281,7 +310,11 @@ public class PlayerControlHandler : MonoBehaviour
                     }
                 }
             }
-            //스페이스바 끝
+            //쉬프트 끝
+
+            //인벤토리 시작
+
+            //인벤토리 끝
         }
     }
 

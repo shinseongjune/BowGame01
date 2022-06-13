@@ -19,13 +19,6 @@ public class CameraRigControl : MonoBehaviour
 
     void Update()
     {
-        if (state.isBuilding && state.buildingFloor == 1)
-        {
-            transform.position = player.position + new Vector3(0, OFFSET_Y + 4.4f, 0);
-        }
-        else
-        {
-            transform.position = player.position + new Vector3(0, OFFSET_Y, 0);
-        }
+        transform.position = player.position + new Vector3(0, OFFSET_Y, 0);
     }
 }

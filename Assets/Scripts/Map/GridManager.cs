@@ -9,10 +9,8 @@ public class GridManager : MonoBehaviour
 
     public Tile[,] grid = new Tile[GRID_X, GRID_Y];
 
-    public TileLine[,] groundHorizontalLines = new TileLine[GRID_X, GRID_Y + 1];
-    public TileLine[,] hillHorizontalLines = new TileLine[GRID_X, GRID_Y + 1];
-    public TileLine[,] groundVerticalLines = new TileLine[GRID_X + 1, GRID_Y];
-    public TileLine[,] hillVerticalLines = new TileLine[GRID_X + 1, GRID_Y];
+    public List<TileLine> horizontalLines = new();
+    public List<TileLine> verticalLines = new();
 
     public GameObject buildingGuideLinePrefab;
 
@@ -32,105 +30,71 @@ public class GridManager : MonoBehaviour
                 float y;
                 if (mapGenerator.heightMap[x,z].y == 0)
                 {
-                    y = TILE_SIZE;
+                    y = TILE_SIZE / 2;
                 }
                 else
                 {
-                    y = TILE_SIZE * 2;
+                    y = TILE_SIZE * 1.5f;
                 }
                 Tile tile = new(x, y, z);
                 grid[x, z] = tile;
             }
         }
 
-        //horizontal line generate
-        for (int z = 0; z < GRID_Y + 1; z++)
+        foreach(Tile tile in grid)
         {
-            for (int x = 0; x < GRID_X; x++)
-            {
-                TileLine line;
+            Vector3 tilePosition = new(tile.x * TILE_SIZE + TILE_SIZE / 2, tile.y, tile.z * TILE_SIZE + TILE_SIZE / 2);
+            TileLine top = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z + TILE_SIZE / 2), true);
+            TileLine bottom = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z - TILE_SIZE / 2), true);
+            TileLine left = new(new(tilePosition.x - TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
+            TileLine right = new(new(tilePosition.x + TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
 
-                if (heightMap[x, z].y == 0)
-                {
-                    line = new(new Vector3((TILE_SIZE * x) + TILE_SIZE / 2, TILE_SIZE, TILE_SIZE * z), true);
-                    groundHorizontalLines[x, z] = line;
-                }
-                else
-                {
-                    line = new(new Vector3((TILE_SIZE * x) + TILE_SIZE / 2, TILE_SIZE * 2, TILE_SIZE * z), true);
-                    hillHorizontalLines[x, z] = line;
-                }
+            horizontalLines.Add(top);
+            horizontalLines.Add(bottom);
+
+            verticalLines.Add(left);
+            verticalLines.Add(right);
+        }
+
+        foreach(TileLine line in horizontalLines)
+        {
+            GameObject go = Instantiate(buildingGuideLinePrefab);
+            LineRenderer renderer = go.GetComponent<LineRenderer>();
+            Vector3 from = new(line.position.x - TILE_SIZE / 2, line.position.y, line.position.z);
+            Vector3 to = new(line.position.x + TILE_SIZE / 2, line.position.y, line.position.z);
+            renderer.SetPosition(0, from);
+            renderer.SetPosition(1, to);
+
+            if (Mathf.Approximately(line.position.y, TILE_SIZE / 2 + 0.3f))
+            {
+                go.transform.SetParent(transform.GetChild(0));
+            }
+            else
+            {
+                go.transform.SetParent(transform.GetChild(1));
             }
         }
 
-        //vertical line generate
-        for (int z = 0; z < GRID_Y; z++)
+        foreach (TileLine line in verticalLines)
         {
-            for (int x = 0; x < GRID_X + 1; x++)
-            {
-                TileLine line;
+            GameObject go = Instantiate(buildingGuideLinePrefab);
+            LineRenderer renderer = go.GetComponent<LineRenderer>();
+            Vector3 from = new(line.position.x, line.position.y, line.position.z - TILE_SIZE / 2);
+            Vector3 to = new(line.position.x, line.position.y, line.position.z + TILE_SIZE / 2);
+            renderer.SetPosition(0, from);
+            renderer.SetPosition(1, to);
 
-                if (heightMap[x, z].y == 0)
-                {
-                    line = new(new Vector3(TILE_SIZE * x, TILE_SIZE, (TILE_SIZE * z) + TILE_SIZE / 2), false);
-                    groundVerticalLines[x, z] = line;
-                }
-                else
-                {
-                    line = new(new Vector3(TILE_SIZE * x, TILE_SIZE * 2, (TILE_SIZE * z) + TILE_SIZE / 2), false);
-                    hillVerticalLines[x, z] = line;
-                }
+            if (Mathf.Approximately(line.position.y, TILE_SIZE / 2 + 0.3f))
+            {
+                go.transform.SetParent(transform.GetChild(0));
+            }
+            else
+            {
+                go.transform.SetParent(transform.GetChild(1));
             }
         }
 
-        //horizontal line object generate
-        foreach (TileLine line in groundHorizontalLines)
-        {
-            GameObject go = Instantiate(buildingGuideLinePrefab);
-            go.transform.SetParent(transform);
-            LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x - TILE_SIZE / 2, TILE_SIZE, line.position.z);
-            Vector3 to = new(line.position.x + TILE_SIZE / 2, TILE_SIZE, line.position.z);
-            renderer.SetPosition(0, from);
-            renderer.SetPosition(1, to);
-            go.SetActive(false);
-        }
-
-        foreach (TileLine line in hillHorizontalLines)
-        {
-            GameObject go = Instantiate(buildingGuideLinePrefab);
-            go.transform.SetParent(transform);
-            LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x - TILE_SIZE / 2, TILE_SIZE * 2, line.position.z);
-            Vector3 to = new(line.position.x + TILE_SIZE / 2, TILE_SIZE * 2, line.position.z);
-            renderer.SetPosition(0, from);
-            renderer.SetPosition(1, to);
-            go.SetActive(false);
-        }
-
-        //vertical line object generate
-        foreach (TileLine line in groundVerticalLines)
-        {
-            GameObject go = Instantiate(buildingGuideLinePrefab);
-            go.transform.SetParent(transform);
-            LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x, TILE_SIZE, line.position.z - TILE_SIZE / 2);
-            Vector3 to = new(line.position.x, TILE_SIZE, line.position.z + TILE_SIZE / 2);
-            renderer.SetPosition(0, from);
-            renderer.SetPosition(1, to);
-            go.SetActive(false);
-        }
-
-        foreach (TileLine line in hillVerticalLines)
-        {
-            GameObject go = Instantiate(buildingGuideLinePrefab);
-            go.transform.SetParent(transform);
-            LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x, TILE_SIZE * 2, line.position.z - TILE_SIZE / 2);
-            Vector3 to = new(line.position.x, TILE_SIZE * 2, line.position.z + TILE_SIZE / 2);
-            renderer.SetPosition(0, from);
-            renderer.SetPosition(1, to);
-            go.SetActive(false);
-        }
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
     }
 }
