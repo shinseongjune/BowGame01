@@ -27,6 +27,8 @@ public class PlayerControlHandler : MonoBehaviour
 
     const float SNAP_DISTANCE = 1.1f;
 
+    const float SCROLL_SPEED = 4.8f;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,6 +49,17 @@ public class PlayerControlHandler : MonoBehaviour
 
         if (state.isBuilding) //건설 모드일 경우
         {
+            float scrollDelta = Input.mouseScrollDelta.y;
+
+            if (scrollDelta > 0)
+            {
+                state.buildingFloor = 1;
+            }
+            else if (scrollDelta < 0)
+            {
+                state.buildingFloor = 0;
+            }
+
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 constructId = null;
@@ -88,11 +101,25 @@ public class PlayerControlHandler : MonoBehaviour
                         TileLine[,] lines;
                         if (selectedConstruct.transform.rotation.eulerAngles.y == 90 || selectedConstruct.transform.rotation.eulerAngles.y == 270)
                         {
-                            lines = gridManager.verticalLines;
+                            if (state.buildingFloor == 0)
+                            {
+                                lines = gridManager.groundVerticalLines;
+                            }
+                            else
+                            {
+                                lines = gridManager.hillVerticalLines;
+                            }
                         }
                         else
                         {
-                            lines = gridManager.horizontalLines;
+                            if (state.buildingFloor == 0)
+                            {
+                                lines = gridManager.groundHorizontalLines;
+                            }
+                            else
+                            {
+                                lines = gridManager.hillHorizontalLines;
+                            }
                         }
                         foreach(TileLine line in lines)
                         {
@@ -112,9 +139,11 @@ public class PlayerControlHandler : MonoBehaviour
                     {
                         foreach (Tile tile in gridManager.grid)
                         {
-                            if (Vector3.Distance(tile.position, selectedConstruct.transform.position) < SNAP_DISTANCE)
+                            float size = GridManager.TILE_SIZE;
+                            Vector3 tilePosition = new((tile.x * size) + size / 2, tile.y, (tile.z * size) + size / 2);
+                            if (Vector3.Distance(tilePosition, selectedConstruct.transform.position) < SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = tile.position;
+                                selectedConstruct.transform.position = tilePosition;
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
@@ -179,10 +208,19 @@ public class PlayerControlHandler : MonoBehaviour
         }
         else //일반 모드
         {
+            float scrollDelta = Input.mouseScrollDelta.y;
+
+            if (scrollDelta != 0)
+            {
+                float fov = Camera.main.fieldOfView - scrollDelta * SCROLL_SPEED;
+                Camera.main.fieldOfView = Mathf.Clamp(fov, 20.0f, 60.0f);
+            }
+
             if (Input.GetKeyDown(KeyCode.B)) //건설 모드 시작
             {
                 if (!state.isInCombat)
                 {
+                    Camera.main.fieldOfView = 60.0f;
                     state.isBuilding = true;
                     basicModeCanvas.gameObject.SetActive(false);
                     buildingModeCanvas.gameObject.SetActive(true);

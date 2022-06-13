@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public MapGenerator mapGenerator;
+
     public Tile[,] grid = new Tile[GRID_X, GRID_Y];
-    public TileLine[,] horizontalLines = new TileLine[GRID_X, GRID_Y + 1];
-    public TileLine[,] verticalLines = new TileLine[GRID_X + 1, GRID_Y];
+
+    public TileLine[,] groundHorizontalLines = new TileLine[GRID_X, GRID_Y + 1];
+    public TileLine[,] hillHorizontalLines = new TileLine[GRID_X, GRID_Y + 1];
+    public TileLine[,] groundVerticalLines = new TileLine[GRID_X + 1, GRID_Y];
+    public TileLine[,] hillVerticalLines = new TileLine[GRID_X + 1, GRID_Y];
 
     public GameObject buildingGuideLinePrefab;
 
@@ -15,53 +20,114 @@ public class GridManager : MonoBehaviour
     public const int GRID_X = 256;
     public const int GRID_Y = 256;
 
-    private void Start()
+    public void GenerateGrid()
     {
-        for (int y = 0; y < GRID_Y + 1; y++)
+        MapPiece[,] heightMap = mapGenerator.heightMap;
+
+        //tile grid
+        for (int z = 0; z < GRID_Y; z++)
         {
             for (int x = 0; x < GRID_X; x++)
             {
-                TileLine line = new(new Vector3((TILE_SIZE * x) + (TILE_SIZE / 2), 0, TILE_SIZE * y), true);
-                horizontalLines[x, y] = line;
+                float y;
+                if (mapGenerator.heightMap[x,z].y == 0)
+                {
+                    y = TILE_SIZE;
+                }
+                else
+                {
+                    y = TILE_SIZE * 2;
+                }
+                Tile tile = new(x, y, z);
+                grid[x, z] = tile;
             }
         }
 
-        for (int y = 0; y < GRID_Y; y++)
+        //horizontal line generate
+        for (int z = 0; z < GRID_Y + 1; z++)
+        {
+            for (int x = 0; x < GRID_X; x++)
+            {
+                TileLine line;
+
+                if (heightMap[x, z].y == 0)
+                {
+                    line = new(new Vector3((TILE_SIZE * x) + TILE_SIZE / 2, TILE_SIZE, TILE_SIZE * z), true);
+                    groundHorizontalLines[x, z] = line;
+                }
+                else
+                {
+                    line = new(new Vector3((TILE_SIZE * x) + TILE_SIZE / 2, TILE_SIZE * 2, TILE_SIZE * z), true);
+                    hillHorizontalLines[x, z] = line;
+                }
+            }
+        }
+
+        //vertical line generate
+        for (int z = 0; z < GRID_Y; z++)
         {
             for (int x = 0; x < GRID_X + 1; x++)
             {
-                TileLine line = new(new Vector3(TILE_SIZE * x, 0, (TILE_SIZE * y) + (TILE_SIZE / 2)), false);
-                verticalLines[x, y] = line;
+                TileLine line;
+
+                if (heightMap[x, z].y == 0)
+                {
+                    line = new(new Vector3(TILE_SIZE * x, TILE_SIZE, (TILE_SIZE * z) + TILE_SIZE / 2), false);
+                    groundVerticalLines[x, z] = line;
+                }
+                else
+                {
+                    line = new(new Vector3(TILE_SIZE * x, TILE_SIZE * 2, (TILE_SIZE * z) + TILE_SIZE / 2), false);
+                    hillVerticalLines[x, z] = line;
+                }
             }
         }
 
-        for (int y = 0; y < GRID_Y; y++)
-        {
-            for (int x = 0; x < GRID_X; x++)
-            {
-                grid[x, y] = new Tile(TILE_SIZE, x, 0, y, horizontalLines[x, y + 1], horizontalLines[x, y], verticalLines[x, y], verticalLines[x + 1, y]);
-            }
-        }
-
-        foreach (TileLine line in horizontalLines)
+        //horizontal line object generate
+        foreach (TileLine line in groundHorizontalLines)
         {
             GameObject go = Instantiate(buildingGuideLinePrefab);
             go.transform.SetParent(transform);
             LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x - TILE_SIZE / 2, 0.1f, line.position.z);
-            Vector3 to = new(line.position.x + TILE_SIZE / 2, 0.1f, line.position.z);
+            Vector3 from = new(line.position.x - TILE_SIZE / 2, TILE_SIZE, line.position.z);
+            Vector3 to = new(line.position.x + TILE_SIZE / 2, TILE_SIZE, line.position.z);
             renderer.SetPosition(0, from);
             renderer.SetPosition(1, to);
             go.SetActive(false);
         }
 
-        foreach (TileLine line in verticalLines)
+        foreach (TileLine line in hillHorizontalLines)
         {
             GameObject go = Instantiate(buildingGuideLinePrefab);
             go.transform.SetParent(transform);
             LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x, 0.1f, line.position.z - TILE_SIZE / 2);
-            Vector3 to = new(line.position.x, 0.1f, line.position.z + TILE_SIZE / 2);
+            Vector3 from = new(line.position.x - TILE_SIZE / 2, TILE_SIZE * 2, line.position.z);
+            Vector3 to = new(line.position.x + TILE_SIZE / 2, TILE_SIZE * 2, line.position.z);
+            renderer.SetPosition(0, from);
+            renderer.SetPosition(1, to);
+            go.SetActive(false);
+        }
+
+        //vertical line object generate
+        foreach (TileLine line in groundVerticalLines)
+        {
+            GameObject go = Instantiate(buildingGuideLinePrefab);
+            go.transform.SetParent(transform);
+            LineRenderer renderer = go.GetComponent<LineRenderer>();
+            Vector3 from = new(line.position.x, TILE_SIZE, line.position.z - TILE_SIZE / 2);
+            Vector3 to = new(line.position.x, TILE_SIZE, line.position.z + TILE_SIZE / 2);
+            renderer.SetPosition(0, from);
+            renderer.SetPosition(1, to);
+            go.SetActive(false);
+        }
+
+        foreach (TileLine line in hillVerticalLines)
+        {
+            GameObject go = Instantiate(buildingGuideLinePrefab);
+            go.transform.SetParent(transform);
+            LineRenderer renderer = go.GetComponent<LineRenderer>();
+            Vector3 from = new(line.position.x, TILE_SIZE * 2, line.position.z - TILE_SIZE / 2);
+            Vector3 to = new(line.position.x, TILE_SIZE * 2, line.position.z + TILE_SIZE / 2);
             renderer.SetPosition(0, from);
             renderer.SetPosition(1, to);
             go.SetActive(false);

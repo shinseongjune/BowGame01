@@ -17,6 +17,13 @@ public class MapGenerator : MonoBehaviour
 
     public const float OFFSET = 2f;
 
+    private void Start()
+    {
+        GenerateMap();
+
+        gridManager.GenerateGrid();
+    }
+
     public void GenerateMap()
     {
         int width = GridManager.GRID_X;
