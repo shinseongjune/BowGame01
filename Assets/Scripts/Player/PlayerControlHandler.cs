@@ -20,6 +20,9 @@ public class PlayerControlHandler : MonoBehaviour
     BuildingDataBase buildingDataBase;
 
     [SerializeField]
+    ItemDataBase itemDataBase;
+
+    [SerializeField]
     GridManager gridManager;
 
     [SerializeField]
@@ -51,6 +54,21 @@ public class PlayerControlHandler : MonoBehaviour
             rb.MoveRotation(Quaternion.LookRotation(new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position, Vector3.up));
         }
         //회전 끝
+
+        //인벤토리 시작
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (inventoryCanvas.gameObject.activeSelf)
+            {
+                inventoryCanvas.gameObject.SetActive(false);
+            }
+            else
+            {
+                inventory.WindowUpdate();
+                inventoryCanvas.gameObject.SetActive(true);
+            }
+        }
+        //인벤토리 끝
 
         if (state.isBuilding) //건설 모드일 경우
         {
@@ -271,6 +289,43 @@ public class PlayerControlHandler : MonoBehaviour
                     if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
                     {
                         //TODO: 아이템 획득 시작
+                        DroppedItem di = hit.transform.root.GetComponent<DroppedItem>();
+
+                        Item item = itemDataBase.items[di.itemId];
+
+                        foreach (ItemSlot slot in inventory.slots)
+                        {
+                            if (slot.itemId == di.itemId && slot.count < item.MAX_COUNT)
+                            {
+                                int rest = item.MAX_COUNT - slot.count;
+                                if (rest <= di.itemCount)
+                                {
+                                    slot.count += rest;
+                                    di.itemCount -= rest;
+                                    inventory.WindowUpdate();
+                                    if (di.itemCount == 0)
+                                    {
+                                        Destroy(hit.transform.root.gameObject);
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    slot.count += di.itemCount;
+                                    Destroy(hit.transform.root.gameObject);
+                                    inventory.WindowUpdate();
+                                    break;
+                                }
+                            }
+                            else if (slot.itemId == null)
+                            {
+                                slot.itemId = di.itemId;
+                                slot.count = di.itemCount;
+                                Destroy(hit.transform.root.gameObject);
+                                inventory.WindowUpdate();
+                                break;
+                            }
+                        }
                         //아이템 획득 끝
                     }
                     else
@@ -311,10 +366,6 @@ public class PlayerControlHandler : MonoBehaviour
                 }
             }
             //쉬프트 끝
-
-            //인벤토리 시작
-
-            //인벤토리 끝
         }
     }
 
@@ -322,7 +373,15 @@ public class PlayerControlHandler : MonoBehaviour
     {
         if (state.isAttackable)
         {
-            BasicSkill skill = skillDataBase.defaultSkills[slots.defaultSkill];
+            BasicSkill skill;
+            if (slots.defaultSkill == null)
+            {
+                skill = skillDataBase.defaultSkills[0];
+            }
+            else
+            {
+                skill = skillDataBase.defaultSkills[(int)slots.defaultSkill];
+            }
             skill.owner = gameObject;
             slots.defaultCooldown = skill.coolDown;
             skill.Invoke();

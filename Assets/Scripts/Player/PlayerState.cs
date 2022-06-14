@@ -18,4 +18,6 @@ public class PlayerState : MonoBehaviour
 
     public bool isBuilding = false;     //건설 모드
     public int buildingFloor = 0;
+
+    public bool isMovingItemOnInventory = false; //인벤토리에서 아이템 클릭으로 옮기기
 }

@@ -6,33 +6,24 @@ public class PlayerEquip : MonoBehaviour
     [SerializeField]
     ItemDataBase itemDataBase;
 
+    [SerializeField]
+    SkillDataBase skillDataBase;
+
     PlayerSkillSlots skillSlots;
 
-    public GameObject equipSlots;
-    public int?[] equipment = new int?[10];
+    public Transform equipSlots;
 
     public int currentEquipedSlotIndex = 0;
 
     private void Start()
     {
-        //TODO: delete this. 인벤토리에 변동이 있을 시 스프라이트를 바꾸도록.
-        //Debug용 코드 시작
-        equipment[0] = 0;
-        equipSlots.transform.GetChild(0).GetComponent<Image>().sprite = itemDataBase.items[(int)equipment[0]].icon;
-        //Debug용 코드 끝
-
         skillSlots = GetComponent<PlayerSkillSlots>();
 
-        //debug용 코드 시작
-        if (equipment[currentEquipedSlotIndex].HasValue)
-        {
-            skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-        }
-        else
-        {
-            skillSlots.defaultSkill = 0;
-        }
-        //debug용 코드 끝
+        //TODO: 테스트용 코드 시작
+        EquipSlot slot = equipSlots.GetChild(0).GetComponent<EquipSlot>();
+        slot.SetItem(0, 1);
+        Equip(0);
+        //테스트용 코드 끝
     }
 
     private void Update()
@@ -40,244 +31,78 @@ public class PlayerEquip : MonoBehaviour
         //숫자키 입력 시작
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            currentEquipedSlotIndex = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            currentEquipedSlotIndex = 1;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            currentEquipedSlotIndex = 2;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(2);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            currentEquipedSlotIndex = 3;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(3);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            currentEquipedSlotIndex = 4;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(4);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            currentEquipedSlotIndex = 5;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(5);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            currentEquipedSlotIndex = 6;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(6);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha8))
         {
-            currentEquipedSlotIndex = 7;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(7);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-            currentEquipedSlotIndex = 8;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            if (equipment[currentEquipedSlotIndex].HasValue)
-            {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
-            }
-            else
-            {
-                skillSlots.defaultSkill = 0;
-            }
+            Equip(8);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            currentEquipedSlotIndex = 9;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == currentEquipedSlotIndex)
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = true;
-                }
-                else
-                {
-                    equipSlots.transform.GetChild(i).GetComponent<Outline>().enabled = false;
-                }
-            }
+            Equip(9);
+        }
+        //숫자키 입력 끝
+    }
 
-            if (equipment[currentEquipedSlotIndex].HasValue)
+    void Equip(int index)
+    {
+        currentEquipedSlotIndex = index;
+        for (int i = 0; i < 10; i++)
+        {
+            if (i == currentEquipedSlotIndex)
             {
-                skillSlots.defaultSkill = itemDataBase.items[(int)equipment[currentEquipedSlotIndex]].defaultSkill;
+                equipSlots.GetChild(i).GetComponent<Outline>().enabled = true;
+            }
+            else
+            {
+                equipSlots.GetChild(i).GetComponent<Outline>().enabled = false;
+            }
+        }
+
+        EquipSlot slot = equipSlots.GetChild(currentEquipedSlotIndex).GetComponent<EquipSlot>();
+        if (slot.itemId.HasValue)
+        {
+            Item item = itemDataBase.items[(int)slot.itemId];
+            if (item.defaultSkill.HasValue)
+            {
+                skillSlots.defaultSkill = (int)item.defaultSkill;
             }
             else
             {
                 skillSlots.defaultSkill = 0;
             }
         }
-        //숫자키 입력 끝
+        else
+        {
+            skillSlots.defaultSkill = 0;
+        }
     }
 }

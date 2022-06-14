@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerSkillSlots : MonoBehaviour
 {
-    public int defaultSkill;
+    public int defaultSkill = 0;
     public int[] basicSkills = new int[2];
     public int movementSkill;
     public int ult;
