@@ -41,19 +41,30 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        foreach(Tile tile in grid)
+        for (int z = 0; z < GRID_Y; z++)
         {
-            Vector3 tilePosition = new(tile.x * TILE_SIZE + TILE_SIZE / 2, tile.y, tile.z * TILE_SIZE + TILE_SIZE / 2);
-            TileLine top = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z + TILE_SIZE / 2), true);
-            TileLine bottom = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z - TILE_SIZE / 2), true);
-            TileLine left = new(new(tilePosition.x - TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
-            TileLine right = new(new(tilePosition.x + TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
+            for (int x = 0; x < GRID_X; x++)
+            {
+                Tile tile = grid[x, z];
 
-            horizontalLines.Add(top);
-            horizontalLines.Add(bottom);
+                Vector3 tilePosition = new(tile.x * TILE_SIZE + TILE_SIZE / 2, tile.y, tile.z * TILE_SIZE + TILE_SIZE / 2);
+                TileLine top = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z + TILE_SIZE / 2), true);
+                TileLine right = new(new(tilePosition.x + TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
 
-            verticalLines.Add(left);
-            verticalLines.Add(right);
+                horizontalLines.Add(top);
+                verticalLines.Add(right);
+
+                if (tile.x == 0 || grid[x - 1, z].y != tile.y)
+                {
+                    TileLine left = new(new(tilePosition.x - TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
+                    verticalLines.Add(left);
+                }
+                if (tile.z == 0 || grid[x, z - 1].y != tile.y)
+                {
+                    TileLine bottom = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z - TILE_SIZE / 2), true);
+                    horizontalLines.Add(bottom);
+                }
+            }
         }
 
         foreach(TileLine line in horizontalLines)

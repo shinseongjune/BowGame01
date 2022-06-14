@@ -20,6 +20,9 @@ public class PlayerControlHandler : MonoBehaviour
     BuildingDataBase buildingDataBase;
 
     [SerializeField]
+    ItemDataBase itemDataBase;
+
+    [SerializeField]
     GridManager gridManager;
 
     [SerializeField]
@@ -51,6 +54,21 @@ public class PlayerControlHandler : MonoBehaviour
             rb.MoveRotation(Quaternion.LookRotation(new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position, Vector3.up));
         }
         //회전 끝
+
+        //인벤토리 시작
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (inventoryCanvas.gameObject.activeSelf)
+            {
+                inventoryCanvas.gameObject.SetActive(false);
+            }
+            else
+            {
+                inventory.WindowUpdate();
+                inventoryCanvas.gameObject.SetActive(true);
+            }
+        }
+        //인벤토리 끝
 
         if (state.isBuilding) //건설 모드일 경우
         {
@@ -192,21 +210,24 @@ public class PlayerControlHandler : MonoBehaviour
             //TODO: 좌클릭 시작
             if (Input.GetMouseButtonDown(0))
             {
-                if (constructId != null)
+                if (!state.isMovingItemOnInventory)
                 {
-                    if (!IsPointerOverUIObject() && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isConstructable) //마우스가 ui 위에 있지 않을 경우 && 지정된 위치에 스냅됐을 경우
+                    if (constructId != null)
                     {
-                        GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
-                        building.transform.position = selectedConstruct.transform.position;
-                        building.transform.rotation = selectedConstruct.transform.rotation;
-                        Destroy(building.GetComponentInChildren<BuildingConstructs>());
-
-                        if (constructId == 0)
+                        if (!IsPointerOverUIObject() && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isConstructable) //마우스가 ui 위에 있지 않을 경우 && 지정된 위치에 스냅됐을 경우
                         {
-                            //벽일 경우 양 옆 기둥 콜라이더 켜기
-                            building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
-                            building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
-                            //콜라이더 켜기 끝
+                            GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
+                            building.transform.position = selectedConstruct.transform.position;
+                            building.transform.rotation = selectedConstruct.transform.rotation;
+                            Destroy(building.GetComponentInChildren<BuildingConstructs>());
+
+                            if (constructId == 0)
+                            {
+                                //벽일 경우 양 옆 기둥 콜라이더 켜기
+                                building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
+                                building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
+                                //콜라이더 켜기 끝
+                            }
                         }
                     }
                 }
@@ -266,26 +287,66 @@ public class PlayerControlHandler : MonoBehaviour
             //좌클릭 시작
             if (Input.GetMouseButton(0) && !IsPointerOverUIObject())
             {
-                if (!state.isInCombat) //전투 중이 아닐 경우
+                if (!state.isMovingItemOnInventory)
                 {
-                    if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
+                    if (!state.isInCombat) //전투 중이 아닐 경우
                     {
-                        //TODO: 아이템 획득 시작
-                        //아이템 획득 끝
+                        if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
+                        {
+                            //TODO: 아이템 획득 시작
+                            DroppedItem di = hit.transform.root.GetComponent<DroppedItem>();
+
+                            Item item = itemDataBase.items[di.itemId];
+
+                            foreach (ItemSlot slot in inventory.slots)
+                            {
+                                if (slot.itemId == di.itemId && slot.count < item.MAX_COUNT)
+                                {
+                                    int rest = item.MAX_COUNT - slot.count;
+                                    if (rest <= di.itemCount)
+                                    {
+                                        slot.count += rest;
+                                        di.itemCount -= rest;
+                                        inventory.WindowUpdate();
+                                        if (di.itemCount == 0)
+                                        {
+                                            Destroy(hit.transform.root.gameObject);
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        slot.count += di.itemCount;
+                                        Destroy(hit.transform.root.gameObject);
+                                        inventory.WindowUpdate();
+                                        break;
+                                    }
+                                }
+                                else if (slot.itemId == null)
+                                {
+                                    slot.itemId = di.itemId;
+                                    slot.count = di.itemCount;
+                                    Destroy(hit.transform.root.gameObject);
+                                    inventory.WindowUpdate();
+                                    break;
+                                }
+                            }
+                            //아이템 획득 끝
+                        }
+                        else
+                        {
+                            if (slots.defaultCooldown <= 0)
+                            {
+                                DoBasicAttack();
+                            }
+                        }
                     }
-                    else
+                    else //전투 중일 경우
                     {
                         if (slots.defaultCooldown <= 0)
                         {
                             DoBasicAttack();
                         }
-                    }
-                }
-                else //전투 중일 경우
-                {
-                    if (slots.defaultCooldown <= 0)
-                    {
-                        DoBasicAttack();
                     }
                 }
             }
@@ -311,10 +372,6 @@ public class PlayerControlHandler : MonoBehaviour
                 }
             }
             //쉬프트 끝
-
-            //인벤토리 시작
-
-            //인벤토리 끝
         }
     }
 
@@ -322,7 +379,9 @@ public class PlayerControlHandler : MonoBehaviour
     {
         if (state.isAttackable)
         {
-            BasicSkill skill = skillDataBase.defaultSkills[slots.defaultSkill];
+            BasicSkill skill;
+            skill = skillDataBase.defaultSkills[(int)slots.defaultSkill];
+
             skill.owner = gameObject;
             slots.defaultCooldown = skill.coolDown;
             skill.Invoke();

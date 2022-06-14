@@ -10,6 +10,6 @@ public class Item
 
     public int MAX_COUNT;
 
-    public int defaultSkill;
-    public int subSkill;
+    public int? defaultSkill;
+    public int? subSkill;
 }

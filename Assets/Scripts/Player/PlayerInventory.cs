@@ -29,14 +29,22 @@ public class PlayerInventory : MonoBehaviour
 
     public const int SLOT_COUNT = 30;
 
-    readonly List<ItemSlot> slots = new();
+    public readonly List<ItemSlot> slots = new();
 
     private void Start()
     {
         for (int i = 0; i < SLOT_COUNT; i++)
         {
-            slots[i] = new ItemSlot(i, null, 0);
+            slots.Add(new ItemSlot(i, null, 0));
         }
+
+        //TODO: 테스트용 코드 시작
+        slots[0].itemId = 0;
+        slots[0].count = 1;
+        slots[1].itemId = 1;
+        slots[1].count = 13;
+        WindowUpdate();
+        //테스트용 코드 끝
     }
 
     public ItemSlot this[int i]
@@ -51,19 +59,23 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    public void WindowOn()
+    public void WindowUpdate()
     {
-        for (int i = 0; i < SLOT_COUNT; i++)
+        for (int i = 0; i < slots.Count; i++)
         {
             ItemSlot slot = slots[i];
             Image slotImage = inventory.GetChild(i).GetComponent<Image>();
             if (slot.itemId == null)
             {
+                slotImage.GetComponent<ItemSlotUI>().itemId = null;
+                slotImage.GetComponent<ItemSlotUI>().count = 0;
                 slotImage.sprite = null;
                 slotImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "";
             }
             else
             {
+                slotImage.GetComponent<ItemSlotUI>().itemId = slot.itemId;
+                slotImage.GetComponent<ItemSlotUI>().count = slot.count;
                 slotImage.sprite = itemDatabase.items[(int)slot.itemId].icon;
                 slotImage.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = slot.count.ToString();
             }
