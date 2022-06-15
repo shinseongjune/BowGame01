@@ -20,9 +20,6 @@ public class EquipSlot : MonoBehaviour
     PlayerEquip equip;
 
     [SerializeField]
-    PlayerInventory inventory;
-
-    [SerializeField]
     PlayerSkillSlots skillSlots;
 
     [SerializeField]
@@ -57,7 +54,6 @@ public class EquipSlot : MonoBehaviour
         GameObject go = Instantiate(movingItemSlotPrefab);
         go.GetComponent<MovingItemSlotPrefab>().itemId = (int)itemId;
         go.GetComponent<MovingItemSlotPrefab>().count = count;
-        go.GetComponent<MovingItemSlotPrefab>().slotId = slotId;
         Image image = go.GetComponent<Image>();
         image.sprite = image.sprite;
         state.isMovingItemOnInventory = true;
@@ -66,7 +62,6 @@ public class EquipSlot : MonoBehaviour
         count = movingItem.count;
 
         Destroy(movingItem.gameObject);
-        inventory.WindowUpdate();
     }
 
     public void SupplementItem(MovingItemSlotPrefab movingItem)
@@ -91,7 +86,6 @@ public class EquipSlot : MonoBehaviour
                 movingItem.count -= rest;
                 movingItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = movingItem.count.ToString();
             }
-            inventory.WindowUpdate();
         }
     }
 }

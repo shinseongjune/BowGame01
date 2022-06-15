@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -559,7 +559,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &72971435
@@ -740,7 +739,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &149572416
@@ -1014,10 +1012,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: -62}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &186858018
 MonoBehaviour:
@@ -1073,9 +1071,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &202688114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,7 +1092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &202688115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,7 +1140,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202688114}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -2168,10 +2166,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: -136}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &389551384
 MonoBehaviour:
@@ -2227,9 +2225,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &413878834
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,7 +2474,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &458431211
@@ -2725,7 +2722,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &500769729
@@ -2763,10 +2759,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -99}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &500769731
 MonoBehaviour:
@@ -2822,9 +2818,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &519065331
 GameObject:
   m_ObjectHideFlags: 0
@@ -2860,10 +2856,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: -62}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &519065333
 MonoBehaviour:
@@ -2919,9 +2915,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &539143516
 GameObject:
   m_ObjectHideFlags: 0
@@ -3092,10 +3088,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 174, y: -99}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553639024
 MonoBehaviour:
@@ -3151,9 +3147,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &562144783
 GameObject:
   m_ObjectHideFlags: 0
@@ -3601,10 +3597,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 174, y: -136}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &659459733
 MonoBehaviour:
@@ -3660,9 +3656,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &678604971
 GameObject:
   m_ObjectHideFlags: 0
@@ -3892,6 +3888,106 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &747750007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 747750011}
+  - component: {fileID: 747750010}
+  - component: {fileID: 747750009}
+  - component: {fileID: 747750008}
+  m_Layer: 5
+  m_Name: MovingItemCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &747750008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747750007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &747750009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747750007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &747750010
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747750007}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 10
+  m_TargetDisplay: 0
+--- !u!224 &747750011
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747750007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &807042783
 GameObject:
   m_ObjectHideFlags: 0
@@ -4911,10 +5007,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: -173}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &942400623
 MonoBehaviour:
@@ -4970,9 +5066,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &946392545
 GameObject:
   m_ObjectHideFlags: 0
@@ -5376,10 +5472,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: -173}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1019105275
 MonoBehaviour:
@@ -5435,9 +5531,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1035250578
 GameObject:
   m_ObjectHideFlags: 0
@@ -5877,7 +5973,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &1068731779
@@ -5915,10 +6010,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 174, y: -62}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1068731781
 MonoBehaviour:
@@ -5974,9 +6069,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1094820353
 GameObject:
   m_ObjectHideFlags: 0
@@ -6195,10 +6290,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -173}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1114167124
 MonoBehaviour:
@@ -6254,9 +6349,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1121037752
 GameObject:
   m_ObjectHideFlags: 0
@@ -6794,10 +6889,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -173}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1154593257
 MonoBehaviour:
@@ -6853,9 +6948,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1180663172
 GameObject:
   m_ObjectHideFlags: 0
@@ -7026,10 +7121,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: -25}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1191323653
 MonoBehaviour:
@@ -7085,9 +7180,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1211748067
 GameObject:
   m_ObjectHideFlags: 0
@@ -7365,7 +7460,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &1253628565
@@ -7403,10 +7497,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -62}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1253628567
 MonoBehaviour:
@@ -7462,9 +7556,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1294050510
 GameObject:
   m_ObjectHideFlags: 0
@@ -7500,10 +7594,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 174, y: -25}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1294050512
 MonoBehaviour:
@@ -7559,9 +7653,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1304536218
 GameObject:
   m_ObjectHideFlags: 0
@@ -7714,7 +7808,6 @@ GameObject:
   - component: {fileID: 1307857256}
   - component: {fileID: 1307857258}
   - component: {fileID: 1307857259}
-  - component: {fileID: 1307857260}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -7902,6 +7995,7 @@ MonoBehaviour:
   isBuilding: 0
   buildingFloor: 0
   isMovingItemOnInventory: 0
+  movingItem: {fileID: 0}
 --- !u!114 &1307857259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7918,24 +8012,9 @@ MonoBehaviour:
   buildingDataBase: {fileID: 1051659465}
   itemDataBase: {fileID: 654260451}
   gridManager: {fileID: 1643823731}
-  inventory: {fileID: 0}
   basicModeCanvas: {fileID: 1481797032}
   buildingModeCanvas: {fileID: 149572419}
   inventoryCanvas: {fileID: 202688117}
---- !u!114 &1307857260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1307857249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fae69ed4d8139e48b6c16fd4afb58ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 1035250579}
-  itemDatabase: {fileID: 654260451}
 --- !u!1 &1316526995
 GameObject:
   m_ObjectHideFlags: 0
@@ -7971,10 +8050,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: -136}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1316526997
 MonoBehaviour:
@@ -8030,9 +8109,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1355044937
 GameObject:
   m_ObjectHideFlags: 0
@@ -8203,10 +8282,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -136}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1423754623
 MonoBehaviour:
@@ -8262,9 +8341,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1436831081
 GameObject:
   m_ObjectHideFlags: 0
@@ -8300,10 +8379,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -62}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1436831083
 MonoBehaviour:
@@ -8359,9 +8438,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1445171572
 GameObject:
   m_ObjectHideFlags: 0
@@ -8608,7 +8687,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &1449818515
@@ -8646,10 +8724,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: -99}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1449818517
 MonoBehaviour:
@@ -8705,9 +8783,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1462707575
 GameObject:
   m_ObjectHideFlags: 0
@@ -8743,10 +8821,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -210}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1462707577
 MonoBehaviour:
@@ -8802,9 +8880,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1481797029
 GameObject:
   m_ObjectHideFlags: 0
@@ -8941,10 +9019,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 174, y: -210}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1483502271
 MonoBehaviour:
@@ -9000,9 +9078,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1505183838
 GameObject:
   m_ObjectHideFlags: 0
@@ -9675,10 +9753,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -136}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1619898716
 MonoBehaviour:
@@ -9734,9 +9812,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1643823730
 GameObject:
   m_ObjectHideFlags: 0
@@ -9820,10 +9898,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -99}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1648395714
 MonoBehaviour:
@@ -9879,9 +9957,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1686608620
 GameObject:
   m_ObjectHideFlags: 0
@@ -9917,10 +9995,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63, y: -25}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1686608622
 MonoBehaviour:
@@ -9976,9 +10054,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1713239892
 GameObject:
   m_ObjectHideFlags: 0
@@ -10008,6 +10086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400c17f9c47954d41912287bc5e913ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventory: {fileID: 1035250579}
 --- !u!4 &1713239894
 Transform:
   m_ObjectHideFlags: 0
@@ -10750,7 +10829,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &1893575622
@@ -10788,10 +10866,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -25}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1893575624
 MonoBehaviour:
@@ -10847,9 +10925,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1915662731
 GameObject:
   m_ObjectHideFlags: 0
@@ -10961,7 +11039,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &1928453547
@@ -10999,10 +11076,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 174, y: -173}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1928453549
 MonoBehaviour:
@@ -11058,9 +11135,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &1937140595
 GameObject:
   m_ObjectHideFlags: 0
@@ -11442,7 +11519,6 @@ MonoBehaviour:
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
   equip: {fileID: 1307857256}
-  inventory: {fileID: 1307857260}
   skillSlots: {fileID: 1307857257}
   itemDataBase: {fileID: 654260451}
 --- !u!1 &1973372062
@@ -12020,10 +12096,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: -25}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2089261798
 MonoBehaviour:
@@ -12079,9 +12155,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &2096055010
 GameObject:
   m_ObjectHideFlags: 0
@@ -12205,10 +12281,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -210}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2099058282
 MonoBehaviour:
@@ -12264,9 +12340,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &2128181500
 GameObject:
   m_ObjectHideFlags: 0
@@ -12302,10 +12378,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: -99}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2128181502
 MonoBehaviour:
@@ -12361,9 +12437,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &2135137208
 GameObject:
   m_ObjectHideFlags: 0
@@ -12399,10 +12475,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: -210}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2135137210
 MonoBehaviour:
@@ -12458,9 +12534,9 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
 --- !u!1 &2140808241
 GameObject:
   m_ObjectHideFlags: 0
@@ -12496,10 +12572,10 @@ RectTransform:
   m_Father: {fileID: 1035250579}
   m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26, y: -210}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2140808243
 MonoBehaviour:
@@ -12555,6 +12631,6 @@ MonoBehaviour:
   count: 0
   movingItemSlotPrefab: {fileID: 4048570099199719040, guid: 4ae4a31dfc15ebb479ab5262ca0c9f75, type: 3}
   state: {fileID: 1307857258}
-  inventory: {fileID: 1307857260}
   itemDataBase: {fileID: 654260451}
   player: {fileID: 1307857249}
+  movingItemCanvas: {fileID: 747750011}
