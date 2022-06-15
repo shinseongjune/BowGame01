@@ -14,60 +14,44 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     GameObject movingItemSlotPrefab;
 
-    [SerializeField]
-    PlayerState state;
-
-    [SerializeField]
-    PlayerInventory inventory;
+    public PlayerState state;
 
     [SerializeField]
     ItemDataBase itemDataBase;
 
+    public GameObject player;
+
+    Image image;
+    public TextMeshProUGUI text;
+
+    public Transform movingItemCanvas;
+
     [SerializeField]
-    GameObject player;
+    ItemDivideWindow itemDivideWindow;
 
-    public void ExchangeItem(MovingItemSlotPrefab movingItem)
+    private void Awake()
     {
-        GameObject go = Instantiate(movingItemSlotPrefab);
-        go.GetComponent<MovingItemSlotPrefab>().itemId = (int)itemId;
-        go.GetComponent<MovingItemSlotPrefab>().count = count;
-        go.GetComponent<MovingItemSlotPrefab>().slotId = slotId;
-        Image image = go.GetComponent<Image>();
-        image.sprite = image.sprite;
-        state.isMovingItemOnInventory = true;
-
-        inventory[slotId].itemId = movingItem.itemId;
-        inventory[slotId].count = movingItem.count;
-
-        Destroy(movingItem.gameObject);
-        inventory.WindowUpdate();
+        image = GetComponent<Image>();
+        text = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void SupplementItem(MovingItemSlotPrefab movingItem)
+    public void SetItem(int? itemId, int count)
     {
-        Item item = itemDataBase.items[(int)itemId];
-        if (count >= item.MAX_COUNT)
+        if (itemId == null)
         {
-            return;
+            this.itemId = null;
+            this.count = 0;
+
+            image.sprite = null;
+            text.text = "";
         }
         else
         {
-            int rest = item.MAX_COUNT - count;
+            this.itemId = itemId;
+            this.count = count;
 
-            if (movingItem.count <= rest)
-            {
-                inventory[slotId].count += rest;
-                count += rest;
-                Destroy(movingItem.gameObject);
-            }
-            else
-            {
-                inventory[slotId].count += rest;
-                count += rest;
-                movingItem.count -= rest;
-                movingItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = movingItem.count.ToString();
-            }
-            inventory.WindowUpdate();
+            image.sprite = itemDataBase.items[(int)itemId].icon;
+            text.text = count.ToString();
         }
     }
 
@@ -80,24 +64,83 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
                 return;
             }
 
-            GameObject go = Instantiate(movingItemSlotPrefab);
-            MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
-            misp.itemId = (int)itemId;
-            misp.count = count;
-            misp.slotId = slotId;
-            misp.player = player;
-            misp.inventory = player.GetComponent<PlayerInventory>();
-            misp.transform.SetParent(transform.root);
-            go.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = count.ToString();
-            Image image = go.GetComponent<Image>();
-            image.sprite = GetComponent<Image>().sprite;
-            state.isMovingItemOnInventory = true;
+            if (itemDivideWindow.gameObject.activeSelf)
+            {
+                return;
+            }
 
-            itemId = null;
-            count = 0;
-            inventory[slotId].itemId = null;
-            inventory[slotId].count = 0;
-            inventory.WindowUpdate();
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                itemDivideWindow.gameObject.SetActive(true);
+                itemDivideWindow.InitializeWindow(gameObject);
+            }
+            else
+            {
+                GameObject go = Instantiate(movingItemSlotPrefab);
+                MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
+                misp.itemId = (int)itemId;
+                misp.count = count;
+                misp.player = player;
+                misp.transform.SetParent(movingItemCanvas);
+                misp.image.sprite = GetComponent<Image>().sprite;
+                misp.text.text = count.ToString();
+                state.movingItem = misp;
+                state.isMovingItemOnInventory = true;
+
+                SetItem(null, 0);
+            }
+        }
+        else
+        {
+            MovingItemSlotPrefab misp = state.movingItem;
+            if (itemId == null) //빈칸
+            {
+                SetItem(misp.itemId, misp.count);
+                Destroy(misp.gameObject);
+                state.isMovingItemOnInventory = false;
+                state.movingItem = null;
+            }
+            else if (itemId == misp.itemId) //아이템 보충
+            {
+                Item item = itemDataBase.items[(int)itemId];
+                if (count >= item.MAX_COUNT)
+                {
+                    return;
+                }
+                else
+                {
+                    int rest = item.MAX_COUNT - count;
+
+                    if (misp.count <= rest)
+                    {
+                        count += misp.count;
+                        Destroy(misp.gameObject);
+                        text.text = count.ToString();
+                        state.isMovingItemOnInventory = false;
+                        state.movingItem = null;
+                    }
+                    else
+                    {
+                        count += rest;
+                        text.text = count.ToString();
+                        misp.count -= rest;
+                        misp.text.text = misp.count.ToString();
+                    }
+                }
+            }
+            else //아이템 교체
+            {
+                int nowId = (int)itemId;
+                int nowCount = count;
+
+                misp.image.sprite = GetComponent<Image>().sprite;
+                misp.text.text = count.ToString();
+
+                SetItem(misp.itemId, misp.count);
+
+                misp.itemId = nowId;
+                misp.count = nowCount;
+            }
         }
     }
 }

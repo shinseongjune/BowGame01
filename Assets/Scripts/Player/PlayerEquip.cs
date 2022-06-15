@@ -80,7 +80,7 @@ public class PlayerEquip : MonoBehaviour
         //숫자키 입력 끝
     }
 
-    void Equip(int index)
+    public void Equip(int index)
     {
         currentEquipedSlotIndex = index;
         for (int i = 0; i < 10; i++)

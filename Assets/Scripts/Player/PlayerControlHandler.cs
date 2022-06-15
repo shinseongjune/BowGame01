@@ -25,9 +25,6 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField]
     GridManager gridManager;
 
-    [SerializeField]
-    PlayerInventory inventory;
-
     [SerializeField] Canvas basicModeCanvas;
     [SerializeField] Canvas buildingModeCanvas;
     [SerializeField] Canvas inventoryCanvas;
@@ -41,7 +38,6 @@ public class PlayerControlHandler : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         state = GetComponent<PlayerState>();
         slots = GetComponent<PlayerSkillSlots>();
-        inventory = GetComponent<PlayerInventory>();
     }
 
     void Update()
@@ -58,14 +54,13 @@ public class PlayerControlHandler : MonoBehaviour
         //인벤토리 시작
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if (inventoryCanvas.gameObject.activeSelf)
+            if (inventoryCanvas.enabled)
             {
-                inventoryCanvas.gameObject.SetActive(false);
+                inventoryCanvas.enabled = false;
             }
             else
             {
-                inventory.WindowUpdate();
-                inventoryCanvas.gameObject.SetActive(true);
+                inventoryCanvas.enabled = true;
             }
         }
         //인벤토리 끝
@@ -151,7 +146,7 @@ public class PlayerControlHandler : MonoBehaviour
 
                             if (Vector3.Distance(line.position, selectedConstruct.transform.position) < SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = line.position + new Vector3(0, 0.3f, 0);
+                                selectedConstruct.transform.position = line.position + new Vector3(0, 0.2f, 0);
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
@@ -184,7 +179,7 @@ public class PlayerControlHandler : MonoBehaviour
                             Vector3 tilePosition = new((tile.x * size) + size / 2, tile.y, (tile.z * size) + size / 2);
                             if (Vector3.Distance(tilePosition, selectedConstruct.transform.position) <= SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = tilePosition + new Vector3(0, 0.4f, 0);
+                                selectedConstruct.transform.position = tilePosition + new Vector3(0, 0.35f, 0);
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
@@ -294,43 +289,6 @@ public class PlayerControlHandler : MonoBehaviour
                         if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
                         {
                             //TODO: 아이템 획득 시작
-                            DroppedItem di = hit.transform.root.GetComponent<DroppedItem>();
-
-                            Item item = itemDataBase.items[di.itemId];
-
-                            foreach (ItemSlot slot in inventory.slots)
-                            {
-                                if (slot.itemId == di.itemId && slot.count < item.MAX_COUNT)
-                                {
-                                    int rest = item.MAX_COUNT - slot.count;
-                                    if (rest <= di.itemCount)
-                                    {
-                                        slot.count += rest;
-                                        di.itemCount -= rest;
-                                        inventory.WindowUpdate();
-                                        if (di.itemCount == 0)
-                                        {
-                                            Destroy(hit.transform.root.gameObject);
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        slot.count += di.itemCount;
-                                        Destroy(hit.transform.root.gameObject);
-                                        inventory.WindowUpdate();
-                                        break;
-                                    }
-                                }
-                                else if (slot.itemId == null)
-                                {
-                                    slot.itemId = di.itemId;
-                                    slot.count = di.itemCount;
-                                    Destroy(hit.transform.root.gameObject);
-                                    inventory.WindowUpdate();
-                                    break;
-                                }
-                            }
                             //아이템 획득 끝
                         }
                         else
@@ -380,7 +338,7 @@ public class PlayerControlHandler : MonoBehaviour
         if (state.isAttackable)
         {
             BasicSkill skill;
-            skill = skillDataBase.defaultSkills[(int)slots.defaultSkill];
+            skill = skillDataBase.defaultSkills[slots.defaultSkill];
 
             skill.owner = gameObject;
             slots.defaultCooldown = skill.coolDown;

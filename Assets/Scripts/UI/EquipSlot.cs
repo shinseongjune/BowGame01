@@ -3,30 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class EquipSlot : MonoBehaviour
+public class EquipSlot : MonoBehaviour, IPointerClickHandler
 {
     public int slotId;
     public int? itemId;
     public int count;
 
+    public GameObject player;
+
     [SerializeField]
     GameObject movingItemSlotPrefab;
 
-    [SerializeField]
-    PlayerState state;
+    public PlayerState state;
 
-    [SerializeField]
-    PlayerEquip equip;
+    public PlayerEquip equip;
 
-    [SerializeField]
-    PlayerInventory inventory;
-
-    [SerializeField]
-    PlayerSkillSlots skillSlots;
+    public PlayerSkillSlots skillSlots;
 
     [SerializeField]
     ItemDataBase itemDataBase;
+
+    public Image image;
+    public TextMeshProUGUI text;
+
+    public Transform movingItemCanvas;
+
+    [SerializeField]
+    ItemDivideWindow itemDivideWindow;
 
     public void SetItem(int? id, int count)
     {
@@ -35,9 +40,7 @@ public class EquipSlot : MonoBehaviour
             itemId = id;
             this.count = count;
 
-            Image image = GetComponent<Image>();
             image.sprite = itemDataBase.items[(int)id].icon;
-            TextMeshProUGUI text = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             text.text = count.ToString();
         }
         else
@@ -45,53 +48,100 @@ public class EquipSlot : MonoBehaviour
             itemId = null;
             count = 0;
 
-            Image image = GetComponent<Image>();
             image.sprite = null;
-            TextMeshProUGUI text = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             text.text = "";
         }
     }
 
-    public void ExchangeItem(MovingItemSlotPrefab movingItem)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        GameObject go = Instantiate(movingItemSlotPrefab);
-        go.GetComponent<MovingItemSlotPrefab>().itemId = (int)itemId;
-        go.GetComponent<MovingItemSlotPrefab>().count = count;
-        go.GetComponent<MovingItemSlotPrefab>().slotId = slotId;
-        Image image = go.GetComponent<Image>();
-        image.sprite = image.sprite;
-        state.isMovingItemOnInventory = true;
-
-        itemId = movingItem.itemId;
-        count = movingItem.count;
-
-        Destroy(movingItem.gameObject);
-        inventory.WindowUpdate();
-    }
-
-    public void SupplementItem(MovingItemSlotPrefab movingItem)
-    {
-        Item item = itemDataBase.items[(int)itemId];
-        if (count >= item.MAX_COUNT)
+        if (!state.isMovingItemOnInventory)
         {
-            return;
-        }
-        else
-        {
-            int rest = item.MAX_COUNT - count;
-
-            if (movingItem.count <= rest)
+            if (itemId == null)
             {
-                count += rest;
-                Destroy(movingItem.gameObject);
+                return;
+            }
+
+            if (itemDivideWindow.gameObject.activeSelf)
+            {
+                return;
+            }
+
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                itemDivideWindow.gameObject.SetActive(true);
+                itemDivideWindow.InitializeWindow(gameObject);
             }
             else
             {
-                count += rest;
-                movingItem.count -= rest;
-                movingItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = movingItem.count.ToString();
+                GameObject go = Instantiate(movingItemSlotPrefab);
+                MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
+                misp.itemId = (int)itemId;
+                misp.count = count;
+                misp.player = player;
+                misp.transform.SetParent(movingItemCanvas);
+                misp.image.sprite = GetComponent<Image>().sprite;
+                misp.text.text = count.ToString();
+                state.movingItem = misp;
+                state.isMovingItemOnInventory = true;
+
+                SetItem(null, 0);
             }
-            inventory.WindowUpdate();
+            equip.Equip(equip.currentEquipedSlotIndex);
+        }
+        else
+        {
+            MovingItemSlotPrefab misp = state.movingItem;
+            if (itemId == null) //빈칸
+            {
+                SetItem(misp.itemId, misp.count);
+                Destroy(misp.gameObject);
+                state.isMovingItemOnInventory = false;
+                state.movingItem = null;
+                equip.Equip(equip.currentEquipedSlotIndex);
+            }
+            else if (itemId == misp.itemId) //아이템 보충
+            {
+                Item item = itemDataBase.items[(int)itemId];
+                if (count >= item.MAX_COUNT)
+                {
+                    return;
+                }
+                else
+                {
+                    int rest = item.MAX_COUNT - count;
+
+                    if (misp.count <= rest)
+                    {
+                        count += misp.count;
+                        Destroy(misp.gameObject);
+                        state.isMovingItemOnInventory = false;
+                        state.movingItem = null;
+                        equip.Equip(equip.currentEquipedSlotIndex);
+                    }
+                    else
+                    {
+                        count += rest;
+                        misp.count -= rest;
+                        equip.Equip(equip.currentEquipedSlotIndex);
+                    }
+                }
+            }
+            else //아이템 교체
+            {
+                int nowId = (int)itemId;
+                int nowCount = count;
+
+                misp.image.sprite = GetComponent<Image>().sprite;
+                misp.text.text = count.ToString();
+
+                SetItem(misp.itemId, misp.count);
+
+                misp.itemId = nowId;
+                misp.count = nowCount;
+                
+                equip.Equip(equip.currentEquipedSlotIndex);
+            }
         }
     }
 }

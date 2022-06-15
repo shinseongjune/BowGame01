@@ -22,13 +22,28 @@ public class GameManager : MonoBehaviour
     }
     //Singleton end
 
+    [SerializeField]
+    Transform inventory;
+
     void Start()
     {
-        
-    }
+        //인벤토리 초기화 시작
+        for (int i = 0; i < inventory.childCount; i++)
+        {
+            ItemSlotUI slot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+            if (slot == null)
+            {
+                continue;
+            }
+            slot.SetItem(null, 0);
+        }
+        //인벤토리 초기화 끝
 
-    void Update()
-    {
-        
+        //TODO: 테스트용 코드
+        inventory.GetChild(0).GetComponent<ItemSlotUI>().SetItem(0, 1);
+        inventory.GetChild(1).GetComponent<ItemSlotUI>().SetItem(1, 15);
+        inventory.GetChild(2).GetComponent<ItemSlotUI>().SetItem(1, 8);
+        inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
+        //테스트용 코드 끝
     }
 }
