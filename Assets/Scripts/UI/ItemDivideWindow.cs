@@ -15,6 +15,8 @@ public class ItemDivideWindow : MonoBehaviour
 
     public Transform inventory;
 
+    public Transform movingItemCanvas;
+
     private void Start()
     {
         inputField.characterLimit = 10;
@@ -48,10 +50,10 @@ public class ItemDivideWindow : MonoBehaviour
                 MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
                 misp.itemId = (int)equipSlot.itemId;
                 misp.count = equipSlot.count;
-                misp.player = equipSlot.player;
                 misp.transform.SetParent(equipSlot.movingItemCanvas);
-                misp.image.sprite = equipSlot.GetComponent<Image>().sprite;
-                misp.text.text = equipSlot.count.ToString();
+                misp.GetComponent<Image>().sprite = equipSlot.GetComponent<Image>().sprite;
+                misp.GetComponentInChildren<TextMeshProUGUI>().text = equipSlot.count.ToString();
+                misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
                 equipSlot.state.movingItem = misp;
                 equipSlot.state.isMovingItemOnInventory = true;
 
@@ -64,10 +66,10 @@ public class ItemDivideWindow : MonoBehaviour
                 MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
                 misp.itemId = (int)equipSlot.itemId;
                 misp.count = num;
-                misp.player = equipSlot.player;
                 misp.transform.SetParent(equipSlot.movingItemCanvas);
-                misp.image.sprite = slot.GetComponent<Image>().sprite;
-                misp.text.text = num.ToString();
+                misp.GetComponent<Image>().sprite = slot.GetComponent<Image>().sprite;
+                misp.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
+                misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
                 equipSlot.state.movingItem = misp;
                 equipSlot.state.isMovingItemOnInventory = true;
 
@@ -84,10 +86,10 @@ public class ItemDivideWindow : MonoBehaviour
                 MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
                 misp.itemId = (int)itemSlot.itemId;
                 misp.count = itemSlot.count;
-                misp.player = itemSlot.player;
                 misp.transform.SetParent(itemSlot.movingItemCanvas);
-                misp.image.sprite = itemSlot.GetComponent<Image>().sprite;
-                misp.text.text = itemSlot.count.ToString();
+                misp.GetComponent<Image>().sprite = itemSlot.GetComponent<Image>().sprite;
+                misp.GetComponentInChildren<TextMeshProUGUI>().text = itemSlot.count.ToString();
+                misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
                 itemSlot.state.movingItem = misp;
                 itemSlot.state.isMovingItemOnInventory = true;
 
@@ -99,10 +101,10 @@ public class ItemDivideWindow : MonoBehaviour
                 MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
                 misp.itemId = (int)itemSlot.itemId;
                 misp.count = num;
-                misp.player = itemSlot.player;
                 misp.transform.SetParent(itemSlot.movingItemCanvas);
-                misp.image.sprite = slot.GetComponent<Image>().sprite;
-                misp.text.text = num.ToString();
+                misp.GetComponent<Image>().sprite = slot.GetComponent<Image>().sprite;
+                misp.GetComponentInChildren<TextMeshProUGUI>().text = num.ToString();
+                misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
                 itemSlot.state.movingItem = misp;
                 itemSlot.state.isMovingItemOnInventory = true;
 

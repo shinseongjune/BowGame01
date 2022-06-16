@@ -29,15 +29,22 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] Canvas buildingModeCanvas;
     [SerializeField] Canvas inventoryCanvas;
 
+    GameObject droppedItemPrefab;
+
     const float SNAP_DISTANCE = 1.1f;
 
     const float SCROLL_SPEED = 4.8f;
+
+    public const float ITEM_DROP_DISTANCE = 3.5f;
+
+    bool isAdjustingItem = false;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         state = GetComponent<PlayerState>();
         slots = GetComponent<PlayerSkillSlots>();
+        droppedItemPrefab = Resources.Load<GameObject>("Prefabs/DroppedItem");
     }
 
     void Update()
@@ -202,8 +209,13 @@ public class PlayerControlHandler : MonoBehaviour
                 }
             }
 
+            if (Input.GetMouseButtonUp(0))
+            {
+                isAdjustingItem = false;
+            }
+
             //TODO: 좌클릭 시작
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0) && !IsPointerOverUIObject() && !isAdjustingItem)
             {
                 if (!state.isMovingItemOnInventory)
                 {
@@ -224,6 +236,81 @@ public class PlayerControlHandler : MonoBehaviour
                                 //콜라이더 켜기 끝
                             }
                         }
+                    }
+                    else //아이템 습득 시작
+                    {
+                        if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
+                        {
+                            DroppedItem droppedItem = hit.transform.root.gameObject.GetComponent<DroppedItem>();
+                            Transform inventory = inventoryCanvas.transform.GetChild(0);
+                            for (int i = 0; i < inventory.childCount; i++)
+                            {
+                                ItemSlotUI itemSlot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+
+                                if (itemSlot.itemId == null)
+                                {
+                                    itemSlot.SetItem(droppedItem.itemId, droppedItem.itemCount);
+                                    Destroy(droppedItem.gameObject);
+                                    break;
+                                }
+                                else if (itemSlot.itemId == droppedItem.itemId && itemSlot.count < itemDataBase.items[(int)itemSlot.itemId].MAX_COUNT)
+                                {
+                                    int rest = itemDataBase.items[(int)itemSlot.itemId].MAX_COUNT - itemSlot.count;
+                                    if (droppedItem.itemCount <= rest)
+                                    {
+                                        itemSlot.count += droppedItem.itemCount;
+                                        itemSlot.text.text = itemSlot.count.ToString();
+
+                                        Destroy(droppedItem.gameObject);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        itemSlot.count += rest;
+                                        itemSlot.text.text = itemSlot.count.ToString();
+
+                                        droppedItem.itemCount -= rest;
+                                    }
+                                }
+                            }
+
+                            isAdjustingItem = true;
+                        }
+                    }
+                }
+                else //아이템을 옮기는 중일 때
+                {
+                    if (!IsPointerOverUIObject())
+                    {
+                        //아이템 드랍 시작
+                        if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Ground")))
+                        {
+                            MovingItemSlotPrefab misp = state.movingItem;
+
+                            GameObject go = Instantiate(droppedItemPrefab);
+                            DroppedItem item = go.GetComponent<DroppedItem>();
+                            item.SetItem(misp.itemId, misp.count);
+                            Vector3 dropPosition;
+                            if (Vector3.Distance(transform.position, hit.point) <= ITEM_DROP_DISTANCE)
+                            {
+                                dropPosition = hit.point;
+                            }
+                            else
+                            {
+                                dropPosition = transform.position + (hit.point - transform.position).normalized * ITEM_DROP_DISTANCE;
+                            }
+                            go.transform.position = dropPosition;
+
+                            state.isMovingItemOnInventory = false;
+                            state.movingItem = null;
+
+                            slots.defaultCooldown = 0.1f; //버리면서 동시에 공격이 나가지 않도록
+
+                            Destroy(misp.gameObject);
+
+                            isAdjustingItem = true;
+                        }
+                        //아이템 드랍 끝
                     }
                 }
             }
@@ -279,16 +366,55 @@ public class PlayerControlHandler : MonoBehaviour
                 }
             }
 
-            //좌클릭 시작
-            if (Input.GetMouseButton(0) && !IsPointerOverUIObject())
+            if (Input.GetMouseButtonUp(0))
             {
-                if (!state.isMovingItemOnInventory)
+                isAdjustingItem = false;
+            }
+
+            //좌클릭 시작
+            if (Input.GetMouseButton(0) && !IsPointerOverUIObject() && !isAdjustingItem)
+            {
+                if (!state.isMovingItemOnInventory) //아이템을 옮기는 중이 아닐 때
                 {
                     if (!state.isInCombat) //전투 중이 아닐 경우
                     {
                         if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
                         {
                             //TODO: 아이템 획득 시작
+                            DroppedItem droppedItem = hit.transform.root.gameObject.GetComponent<DroppedItem>();
+                            Transform inventory = inventoryCanvas.transform.GetChild(0);
+                            for (int i = 0; i < inventory.childCount; i++)
+                            {
+                                ItemSlotUI itemSlot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+
+                                if (itemSlot.itemId == null)
+                                {
+                                    itemSlot.SetItem(droppedItem.itemId, droppedItem.itemCount);
+                                    Destroy(droppedItem.gameObject);
+                                    break;
+                                }
+                                else if (itemSlot.itemId == droppedItem.itemId && itemSlot.count < itemDataBase.items[(int)itemSlot.itemId].MAX_COUNT)
+                                {
+                                    int rest = itemDataBase.items[(int)itemSlot.itemId].MAX_COUNT - itemSlot.count;
+                                    if (droppedItem.itemCount <= rest)
+                                    {
+                                        itemSlot.count += droppedItem.itemCount;
+                                        itemSlot.text.text = itemSlot.count.ToString();
+
+                                        Destroy(droppedItem.gameObject);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        itemSlot.count += rest;
+                                        itemSlot.text.text = itemSlot.count.ToString();
+
+                                        droppedItem.itemCount -= rest;
+                                    }
+                                }
+                            }
+
+                            isAdjustingItem = true;
                             //아이템 획득 끝
                         }
                         else
@@ -305,6 +431,41 @@ public class PlayerControlHandler : MonoBehaviour
                         {
                             DoBasicAttack();
                         }
+                    }
+                }
+                else //아이템을 옮기는 중일 때
+                {
+                    if (!IsPointerOverUIObject())
+                    {
+                        //아이템 드랍 시작
+                        if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("Ground")))
+                        {
+                            MovingItemSlotPrefab misp = state.movingItem;
+
+                            GameObject go = Instantiate(droppedItemPrefab);
+                            DroppedItem item = go.GetComponent<DroppedItem>();
+                            item.SetItem(misp.itemId, misp.count);
+                            Vector3 dropPosition;
+                            if (Vector3.Distance(transform.position, hit.point) <= ITEM_DROP_DISTANCE)
+                            {
+                                dropPosition = hit.point;
+                            }
+                            else
+                            {
+                                dropPosition = transform.position + (hit.point - transform.position).normalized * ITEM_DROP_DISTANCE;
+                            }
+                            go.transform.position = dropPosition;
+
+                            state.isMovingItemOnInventory = false;
+                            state.movingItem = null;
+
+                            slots.defaultCooldown = 0.1f; //버리면서 동시에 공격이 나가지 않도록
+
+                            Destroy(misp.gameObject);
+
+                            isAdjustingItem = true;
+                        }
+                        //아이템 드랍 끝
                     }
                 }
             }

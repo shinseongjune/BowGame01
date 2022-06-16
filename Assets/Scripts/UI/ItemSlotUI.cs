@@ -80,10 +80,10 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
                 MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
                 misp.itemId = (int)itemId;
                 misp.count = count;
-                misp.player = player;
                 misp.transform.SetParent(movingItemCanvas);
-                misp.image.sprite = GetComponent<Image>().sprite;
-                misp.text.text = count.ToString();
+                misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
+                misp.GetComponent<Image>().sprite = GetComponent<Image>().sprite;
+                misp.GetComponentInChildren<TextMeshProUGUI>().text = count.ToString();
                 state.movingItem = misp;
                 state.isMovingItemOnInventory = true;
 
@@ -124,7 +124,7 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
                         count += rest;
                         text.text = count.ToString();
                         misp.count -= rest;
-                        misp.text.text = misp.count.ToString();
+                        misp.GetComponentInChildren<TextMeshProUGUI>().text = misp.count.ToString();
                     }
                 }
             }
@@ -133,8 +133,8 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
                 int nowId = (int)itemId;
                 int nowCount = count;
 
-                misp.image.sprite = GetComponent<Image>().sprite;
-                misp.text.text = count.ToString();
+                misp.GetComponent<Image>().sprite = GetComponent<Image>().sprite;
+                misp.GetComponentInChildren<TextMeshProUGUI>().text = count.ToString();
 
                 SetItem(misp.itemId, misp.count);
 

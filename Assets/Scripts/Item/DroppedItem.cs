@@ -15,7 +15,7 @@ public class DroppedItem : MonoBehaviour
     //TODO: non Monobehaviour singleton으로 바꾸기
     ItemDataBase itemDataBase;
 
-    private void Start()
+    private void Awake()
     {
         itemDataBase = GameObject.Find("ItemDataBase").GetComponent<ItemDataBase>();
     }
@@ -24,8 +24,8 @@ public class DroppedItem : MonoBehaviour
     void Update()
     {
         //이름표 위치 시작
-        textBackgroundImage.rotation = Quaternion.LookRotation(textBackgroundImage.position - Camera.main.transform.position);
-        textBackgroundImage.position = textBackgroundImage.forward * - 3.0f;
+        textBackgroundImage.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+        textBackgroundImage.position = transform.position + textBackgroundImage.forward * - 3.0f;
         //이름표 위치 끝
 
         //클릭 시 아이템 획득 처리
