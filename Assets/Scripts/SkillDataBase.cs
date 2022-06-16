@@ -35,7 +35,9 @@ public class SkillDataBase : MonoBehaviour
         testAttack.name = "맨손 공격";
         testAttack.damage = 3;
         testAttack.coolDown = 0.2f;
-        testAttack.reach = 1f;
+        testAttack.reach = 2.0f;
+        testAttack.type = Aggression.Type.Attack;
+        testAttack.attackPrefab = Resources.Load<GameObject>("Prefabs/TempMeleeAttack");
         defaultSkills[0] = testAttack;
         RangedSkill testBowShot = new();
         testBowShot.id = 1;
@@ -43,6 +45,7 @@ public class SkillDataBase : MonoBehaviour
         testBowShot.damage = 10;
         testBowShot.coolDown = 0.4f;
         testBowShot.reach = 30.0f;
+        testBowShot.type = Aggression.Type.Attack;
         testBowShot.attackPrefab = Resources.Load<GameObject>("Prefabs/ArrowProjectile");
         defaultSkills[1] = testBowShot;
         DashSkill testMovement = new();

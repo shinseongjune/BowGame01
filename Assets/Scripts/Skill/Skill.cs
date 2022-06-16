@@ -15,6 +15,8 @@ public abstract class BasicSkill : ISkill
 
     public float coolDown;
 
+    public Aggression.Type type;
+
     public GameObject owner;
     public GameObject item;
     public Vector3 direction;
@@ -33,7 +35,7 @@ public class RangedSkill : BasicSkill
         //TODO: 임시 구현. owner의 발사 위치 empty object 만들어서 해당 위치에서 발사되게.
         //target 추적 등의 문제는 나중에 구현하기.
         //damage는 owner의 스탯을 받아와서 어떻게 하는게 맞는듯. 일단은 대충해놓는다.
-        Aggression aggression = new(name, Aggression.Type.Attack, damage, owner, null);
+        Aggression aggression = new(name, type, damage, owner, null);
         GameObject projectile = Object.Instantiate(attackPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
         FlyingProjectile flyingProjectile = projectile.GetComponent<FlyingProjectile>();
         flyingProjectile.aggression = aggression;
@@ -45,7 +47,13 @@ public class MeleeSkill : BasicSkill
 {
     public override void Invoke()
     {
-        Debug.Log("근접!");
+        Aggression aggression = new(name, type, damage, owner, null);
+        //TODO: 임시 이펙트 시작
+        GameObject effect = Object.Instantiate(attackPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
+        TempMeleeAttack tempMeleeAttack = effect.GetComponent<TempMeleeAttack>();
+        tempMeleeAttack.aggression = aggression;
+        tempMeleeAttack.restDistance = reach;
+        //임시 이펙트 끝
     }
 }
 
