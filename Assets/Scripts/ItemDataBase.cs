@@ -41,6 +41,11 @@ public class ItemDataBase : MonoBehaviour
         items[1].description = "목재다.";
         items[1].MAX_COUNT = 30;
         items[1].icon = Resources.Load<Sprite>("Images/Wood");
+
+        items[2].itemName = "석재";
+        items[2].description = "석재다.";
+        items[2].MAX_COUNT = 30;
+        items[2].icon = Resources.Load<Sprite>("Images/Stone");
         //Debug 임시 아이템 데이터 끝
     }
 }

@@ -36,6 +36,26 @@ public class TempMeleeAttack : MonoBehaviour
             damageable.Damaged(aggression);
         }
 
-        Destroy(gameObject);
+        PlayerItemHandler itemHandler = aggression.attacker.GetComponent<PlayerItemHandler>();
+
+        if (itemHandler != null)
+        {
+            FieldResource fieldResource = other.gameObject.transform.root.GetComponent<FieldResource>();
+
+            if (fieldResource != null)
+            {
+                if (fieldResource.rest < aggression.damage)
+                {
+                    itemHandler.GetItem(fieldResource.itemId, fieldResource.rest);
+                    fieldResource.rest = 0;
+                    Destroy(fieldResource.gameObject);
+                }
+                else
+                {
+                    itemHandler.GetItem(fieldResource.itemId, (int)aggression.damage);
+                    fieldResource.rest -= (int)aggression.damage;
+                }
+            }
+        }
     }
 }
