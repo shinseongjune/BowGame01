@@ -136,14 +136,14 @@ public class PlayerControlHandler : MonoBehaviour
                         {
                             if (state.buildingFloor == 0)
                             {
-                                if (Mathf.Approximately(line.position.y, GridManager.TILE_SIZE * 2))
+                                if (Mathf.Approximately(line.position.y, MapGenerator.TILE_HEIGHT * 2))
                                 {
                                     continue;
                                 }
                             }
                             else
                             {
-                                if (Mathf.Approximately(line.position.y, GridManager.TILE_SIZE))
+                                if (Mathf.Approximately(line.position.y, MapGenerator.TILE_HEIGHT))
                                 {
                                     continue;
                                 }
@@ -151,7 +151,7 @@ public class PlayerControlHandler : MonoBehaviour
 
                             if (Vector3.Distance(line.position, selectedConstruct.transform.position) < SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = line.position + new Vector3(0, 0.2f, 0);
+                                selectedConstruct.transform.position = line.position;
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }
@@ -167,24 +167,24 @@ public class PlayerControlHandler : MonoBehaviour
                         {
                             if (state.buildingFloor == 0)
                             {
-                                if (Mathf.Approximately(tile.y, GridManager.TILE_SIZE * 2))
+                                if (Mathf.Approximately(tile.y, MapGenerator.TILE_XZ * 2))
                                 {
                                     continue;
                                 }
                             }
                             else
                             {
-                                if (Mathf.Approximately(tile.y, GridManager.TILE_SIZE))
+                                if (Mathf.Approximately(tile.y, MapGenerator.TILE_XZ))
                                 {
                                     continue;
                                 }
                             }
 
-                            float size = GridManager.TILE_SIZE;
+                            float size = MapGenerator.TILE_XZ;
                             Vector3 tilePosition = new((tile.x * size) + size / 2, tile.y, (tile.z * size) + size / 2);
                             if (Vector3.Distance(tilePosition, selectedConstruct.transform.position) <= SNAP_DISTANCE)
                             {
-                                selectedConstruct.transform.position = tilePosition + new Vector3(0, 0.35f, 0);
+                                selectedConstruct.transform.position = tilePosition;
                                 selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped = true;
                                 break;
                             }

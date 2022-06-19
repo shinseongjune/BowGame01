@@ -14,14 +14,19 @@ public class GridManager : MonoBehaviour
 
     public GameObject buildingGuideLinePrefab;
 
-    public const float TILE_SIZE = 4.4f;
+    public float TILE_XZ;
+    public float TILE_HEIGHT;
     public const int GRID_X = 256;
     public const int GRID_Y = 256;
 
+    private void Start()
+    {
+        TILE_XZ = MapGenerator.TILE_XZ;
+        TILE_HEIGHT = MapGenerator.TILE_HEIGHT;
+    }
+
     public void GenerateGrid()
     {
-        MapPiece[,] heightMap = mapGenerator.heightMap;
-
         //tile grid
         for (int z = 0; z < GRID_Y; z++)
         {
@@ -30,11 +35,11 @@ public class GridManager : MonoBehaviour
                 float y;
                 if (mapGenerator.heightMap[x,z].y == 0)
                 {
-                    y = TILE_SIZE / 2;
+                    y = TILE_HEIGHT / 2;
                 }
                 else
                 {
-                    y = TILE_SIZE * 1.5f;
+                    y = TILE_HEIGHT * 1.5f;
                 }
                 Tile tile = new(x, y, z);
                 grid[x, z] = tile;
@@ -47,21 +52,21 @@ public class GridManager : MonoBehaviour
             {
                 Tile tile = grid[x, z];
 
-                Vector3 tilePosition = new(tile.x * TILE_SIZE + TILE_SIZE / 2, tile.y, tile.z * TILE_SIZE + TILE_SIZE / 2);
-                TileLine top = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z + TILE_SIZE / 2), true);
-                TileLine right = new(new(tilePosition.x + TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
+                Vector3 tilePosition = new(tile.x * TILE_XZ + TILE_XZ / 2, tile.y, tile.z * TILE_XZ + TILE_XZ / 2);
+                TileLine top = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z + TILE_XZ / 2), true);
+                TileLine right = new(new(tilePosition.x + TILE_XZ / 2, tilePosition.y + 0.3f, tilePosition.z), false);
 
                 horizontalLines.Add(top);
                 verticalLines.Add(right);
 
                 if (tile.x == 0 || grid[x - 1, z].y != tile.y)
                 {
-                    TileLine left = new(new(tilePosition.x - TILE_SIZE / 2, tilePosition.y + 0.3f, tilePosition.z), false);
+                    TileLine left = new(new(tilePosition.x - TILE_XZ / 2, tilePosition.y + 0.3f, tilePosition.z), false);
                     verticalLines.Add(left);
                 }
                 if (tile.z == 0 || grid[x, z - 1].y != tile.y)
                 {
-                    TileLine bottom = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z - TILE_SIZE / 2), true);
+                    TileLine bottom = new(new(tilePosition.x, tilePosition.y + 0.3f, tilePosition.z - TILE_XZ / 2), true);
                     horizontalLines.Add(bottom);
                 }
             }
@@ -71,12 +76,12 @@ public class GridManager : MonoBehaviour
         {
             GameObject go = Instantiate(buildingGuideLinePrefab);
             LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x - TILE_SIZE / 2, line.position.y, line.position.z);
-            Vector3 to = new(line.position.x + TILE_SIZE / 2, line.position.y, line.position.z);
+            Vector3 from = new(line.position.x - TILE_XZ / 2, line.position.y, line.position.z);
+            Vector3 to = new(line.position.x + TILE_XZ / 2, line.position.y, line.position.z);
             renderer.SetPosition(0, from);
             renderer.SetPosition(1, to);
 
-            if (Mathf.Approximately(line.position.y, TILE_SIZE / 2 + 0.3f))
+            if (Mathf.Approximately(line.position.y, TILE_HEIGHT / 2 + 0.3f))
             {
                 go.transform.SetParent(transform.GetChild(0));
             }
@@ -90,12 +95,12 @@ public class GridManager : MonoBehaviour
         {
             GameObject go = Instantiate(buildingGuideLinePrefab);
             LineRenderer renderer = go.GetComponent<LineRenderer>();
-            Vector3 from = new(line.position.x, line.position.y, line.position.z - TILE_SIZE / 2);
-            Vector3 to = new(line.position.x, line.position.y, line.position.z + TILE_SIZE / 2);
+            Vector3 from = new(line.position.x, line.position.y, line.position.z - TILE_XZ / 2);
+            Vector3 to = new(line.position.x, line.position.y, line.position.z + TILE_XZ / 2);
             renderer.SetPosition(0, from);
             renderer.SetPosition(1, to);
 
-            if (Mathf.Approximately(line.position.y, TILE_SIZE / 2 + 0.3f))
+            if (Mathf.Approximately(line.position.y, TILE_HEIGHT / 2 + 0.3f))
             {
                 go.transform.SetParent(transform.GetChild(0));
             }

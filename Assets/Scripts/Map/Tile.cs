@@ -6,7 +6,6 @@ public class Tile
     public float y;
     public int z;
 
-
     public Tile(int x, float y, int z)
     {
         this.x = x;

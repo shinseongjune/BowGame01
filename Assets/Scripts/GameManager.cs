@@ -22,8 +22,12 @@ public class GameManager : MonoBehaviour
     }
     //Singleton end
 
-    [SerializeField]
-    Transform inventory;
+    [SerializeField] ItemDataBase itemDataBase;
+    [SerializeField] SkillDataBase skillDataBase;
+    [SerializeField] BuildingDataBase buildingDataBase;
+    [SerializeField] GridManager gridManager;
+    [SerializeField] MapGenerator mapGenerator;
+    [SerializeField] Transform inventory;
 
     void Start()
     {
@@ -45,5 +49,8 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(2).GetComponent<ItemSlotUI>().SetItem(1, 8);
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
         //테스트용 코드 끝
+
+        mapGenerator.GenerateMap();
+        gridManager.GenerateGrid();
     }
 }
