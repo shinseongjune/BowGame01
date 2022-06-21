@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -42,6 +43,8 @@ public class MapGenerator : MonoBehaviour
     public static float TILE_HEIGHT;
     public const int GRID_X = 256;
     public const int GRID_Y = 256;
+
+    List<Room> rooms;
 
     private void Start()
     {
@@ -134,7 +137,7 @@ public class MapGenerator : MonoBehaviour
 
         SmoothingMap();
 
-        List<Room> rooms = GetRooms();
+        rooms = GetRooms();
 
         List<StairPoint> points = MakeStairsPositions(rooms);
 
@@ -269,9 +272,20 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
+            int tryCount = 0;
             bool isMakingPoint = true;
             while (isMakingPoint)
             {
+                tryCount++;
+                if (tryCount >= 50)
+                {
+                    foreach(MapPiece p in room.mapPieces)
+                    {
+                        p.y = 0;
+                    }
+                    room.edges.Clear();
+                    break;
+                }
                 int index = Random.Range(0, room.edges.Count);
                 
                 MapPiece piece = room.edges[index];
@@ -442,6 +456,14 @@ public class MapGenerator : MonoBehaviour
                     heightMap[x, z].y = 0;
                 }
             }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        foreach (Room room in rooms)
+        {
+            Handles.Label(room.mapPieces[0].GetPosition(TILE_XZ, TILE_HEIGHT), room.edges.Count.ToString());
         }
     }
 }

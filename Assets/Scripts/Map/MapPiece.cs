@@ -19,8 +19,8 @@ public class MapPiece
 
     public Direction direction = Direction.None;
 
-    public Vector3 GetPosition(float tileSize)
+    public Vector3 GetPosition(float tileXZ, float tileY)
     {
-        return new Vector3((x * tileSize) + tileSize / 2, (y * tileSize) + tileSize / 2, (z * tileSize) + tileSize / 2);
+        return new Vector3((x * tileXZ) + tileXZ / 2, y * tileY, (z * tileXZ) + tileXZ / 2);
     }
 }
