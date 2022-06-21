@@ -6,12 +6,28 @@ using UnityEngine.AI;
 
 public class MapGenerator : MonoBehaviour
 {
-    class Room
+    public class Room
     {
         public List<MapPiece> mapPieces = new List<MapPiece>();
         public List<MapPiece> edges = new List<MapPiece>();
 
-        public List<Room> connectedRooms = new List<Room>();
+        public HashSet<Room> connectedRooms = new HashSet<Room>();
+
+        public bool isMainRoom = false;
+
+        public HashSet<Room> connectionRequiredRooms = new();
+
+        public void ConnectRoom(Room room)
+        {
+            if (!connectedRooms.Contains(room))
+            {
+                connectedRooms.Add(room);
+            }
+            foreach (Room r in room.connectedRooms)
+            {
+                connectedRooms.Add(r);
+            }
+        }
 
         public bool IsConnected(Room room)
         {
@@ -138,7 +154,7 @@ public class MapGenerator : MonoBehaviour
         SmoothingMap();
 
         rooms = GetRooms();
-
+        GetEdgeTiles();
         List<StairPoint> points = MakeStairsPositions(rooms);
 
         for (int x = 0; x < GRID_X; x++)
@@ -157,33 +173,6 @@ public class MapGenerator : MonoBehaviour
         
                 GameObject mapPiece = Instantiate(prefab, new Vector3(x * TILE_XZ + TILE_XZ / 2, heightMap[x, z].y * TILE_HEIGHT, z * TILE_XZ + TILE_XZ / 2), Quaternion.identity);
                 mapPiece.transform.SetParent(transform, false);
-
-                //TODO: delete this. 테스트 시작
-                if (heightMap[x, z].y == 1)
-                {
-                    bool isRed = false;
-                    foreach (Room room in rooms)
-                    {
-                        if (room.mapPieces[0].y != heightMap[x, z].y)
-                        {
-                            continue;
-                        }
-
-                        if (room.edges.Contains(heightMap[x, z]))
-                        {
-                            isRed = true;
-                        }
-                    }
-                    if (isRed)
-                    {
-                        mapPiece.GetComponent<MeshRenderer>().material.color = Color.red;
-                    }
-                    else
-                    {
-                        mapPiece.GetComponent<MeshRenderer>().material.color = Color.blue;
-                    }
-                }
-                //테스트 끝
             }
         }
 
@@ -220,41 +209,14 @@ public class MapGenerator : MonoBehaviour
 
     private List<StairPoint> MakeStairsPositions(List<Room> rooms)
     {
+        Room mainRoom = rooms[0];
+        int maxSize = mainRoom.mapPieces.Count;
         foreach (Room room in rooms)
         {
-            if (room.mapPieces[0].y == 0)
+            if (maxSize < room.mapPieces.Count)
             {
-                continue;
-            }
-
-            foreach (MapPiece piece in room.mapPieces)
-            {
-                int y = piece.y;
-
-                if (piece.x > 0 && heightMap[piece.x - 1, piece.z].y != y) //왼쪽
-                {
-                    piece.direction |= MapPiece.Direction.West;
-                }
-                
-                if (piece.x < GRID_X - 1 && heightMap[piece.x + 1, piece.z].y != y) //오른쪽
-                {
-                    piece.direction |= MapPiece.Direction.East;
-                }
-
-                if (piece.z < GRID_Y - 1 && heightMap[piece.x, piece.z + 1].y != y) //위
-                {
-                    piece.direction |= MapPiece.Direction.North;
-                }
-
-                if (piece.z > 0 && heightMap[piece.x, piece.z - 1].y != y) //아래
-                {
-                    piece.direction |= MapPiece.Direction.South;
-                }
-
-                if ((piece.direction & (MapPiece.Direction)0b1111) > 0)
-                {
-                    room.edges.Add(piece);
-                }
+                maxSize = room.mapPieces.Count;
+                mainRoom = room;
             }
         }
 
@@ -272,20 +234,8 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
-            int tryCount = 0;
-            bool isMakingPoint = true;
-            while (isMakingPoint)
+            while (room.connectionRequiredRooms.Count > 0)
             {
-                tryCount++;
-                if (tryCount >= 50)
-                {
-                    foreach(MapPiece p in room.mapPieces)
-                    {
-                        p.y = 0;
-                    }
-                    room.edges.Clear();
-                    break;
-                }
                 int index = Random.Range(0, room.edges.Count);
                 
                 MapPiece piece = room.edges[index];
@@ -299,19 +249,45 @@ public class MapGenerator : MonoBehaviour
                         point.z = piece.z + 1;
                         point.direction = MapPiece.Direction.North;
                         points.Add(point);
-                        isMakingPoint = false;
+                        Room connectedRoom = heightMap[point.x, point.z].room;
+                        room.connectionRequiredRooms.Remove(connectedRoom);
+                        room.ConnectRoom(connectedRoom);
+                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
+                        foreach(MapPiece edge in edgesCopy)
+                        {
+                            if (edge.nearRoom == connectedRoom)
+                            {
+                                if (room.edges.Contains(edge))
+                                {
+                                    room.edges.Remove(edge);
+                                }
+                            }
+                        }
                     }
                 }
                 else if ((piece.direction & MapPiece.Direction.West) > 0)
                 {
-                    if (piece.x - 2 >= 0 && heightMap[piece.x - 1, piece.z].y != piece.y)
+                    if (piece.x - 2 >= 0 && heightMap[piece.x - 2, piece.z].y != piece.y)
                     {
                         StairPoint point = new();
                         point.x = piece.x - 1;
                         point.z = piece.z;
                         point.direction = MapPiece.Direction.West;
                         points.Add(point);
-                        isMakingPoint = false;
+                        Room connectedRoom = heightMap[point.x, point.z].room;
+                        room.connectionRequiredRooms.Remove(connectedRoom);
+                        room.ConnectRoom(connectedRoom);
+                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
+                        foreach (MapPiece edge in edgesCopy)
+                        {
+                            if (edge.nearRoom == connectedRoom)
+                            {
+                                if (room.edges.Contains(edge))
+                                {
+                                    room.edges.Remove(edge);
+                                }
+                            }
+                        }
                     }
                 }
                 else if ((piece.direction & MapPiece.Direction.East) > 0)
@@ -323,7 +299,20 @@ public class MapGenerator : MonoBehaviour
                         point.z = piece.z;
                         point.direction = MapPiece.Direction.East;
                         points.Add(point);
-                        isMakingPoint = false;
+                        Room connectedRoom = heightMap[point.x, point.z].room;
+                        room.connectionRequiredRooms.Remove(connectedRoom);
+                        room.ConnectRoom(connectedRoom);
+                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
+                        foreach (MapPiece edge in edgesCopy)
+                        {
+                            if (edge.nearRoom == connectedRoom)
+                            {
+                                if (room.edges.Contains(edge))
+                                {
+                                    room.edges.Remove(edge);
+                                }
+                            }
+                        }
                     }
                 }
                 else if ((piece.direction & MapPiece.Direction.South) > 0)
@@ -335,7 +324,20 @@ public class MapGenerator : MonoBehaviour
                         point.z = piece.z - 1;
                         point.direction = MapPiece.Direction.South;
                         points.Add(point);
-                        isMakingPoint = false;
+                        Room connectedRoom = heightMap[point.x, point.z].room;
+                        room.connectionRequiredRooms.Remove(connectedRoom);
+                        room.ConnectRoom(connectedRoom);
+                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
+                        foreach (MapPiece edge in edgesCopy)
+                        {
+                            if (edge.nearRoom == connectedRoom)
+                            {
+                                if (room.edges.Contains(edge))
+                                {
+                                    room.edges.Remove(edge);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -344,20 +346,64 @@ public class MapGenerator : MonoBehaviour
         return points;
     }
 
+    private void GetEdgeTiles()
+    {
+        foreach (Room room in rooms)
+        {
+            if (room.mapPieces[0].y == 0)
+            {
+                continue;
+            }
+
+            foreach (MapPiece piece in room.mapPieces)
+            {
+                if (piece.x > 0 && heightMap[piece.x - 1, piece.z].room != piece.room) //왼쪽
+                {
+                    piece.direction |= MapPiece.Direction.West;
+                    room.connectionRequiredRooms.Add(heightMap[piece.x - 1, piece.z].room);
+                    piece.nearRoom = heightMap[piece.x - 1, piece.z].room;
+                }
+
+                if (piece.x < GRID_X - 1 && heightMap[piece.x + 1, piece.z].room != piece.room) //오른쪽
+                {
+                    piece.direction |= MapPiece.Direction.East;
+                    room.connectionRequiredRooms.Add(heightMap[piece.x + 1, piece.z].room);
+                    piece.nearRoom = heightMap[piece.x + 1, piece.z].room;
+                }
+
+                if (piece.z < GRID_Y - 1 && heightMap[piece.x, piece.z + 1].room != piece.room) //위
+                {
+                    piece.direction |= MapPiece.Direction.North;
+                    room.connectionRequiredRooms.Add(heightMap[piece.x, piece.z + 1].room);
+                    piece.nearRoom = heightMap[piece.x, piece.z + 1].room;
+                }
+
+                if (piece.z > 0 && heightMap[piece.x, piece.z - 1].room != piece.room) //아래
+                {
+                    piece.direction |= MapPiece.Direction.South;
+                    room.connectionRequiredRooms.Add(heightMap[piece.x, piece.z - 1].room);
+                    piece.nearRoom = heightMap[piece.x, piece.z - 1].room;
+                }
+
+                if ((piece.direction | MapPiece.Direction.None) > 0)
+                {
+                    room.edges.Add(piece);
+                }
+            }
+        }
+    }
+
     private List<Room> GetRooms()
     {
         List<Room> rooms = new();
 
-        int[,] flags = new int[GRID_X, GRID_Y];
 
         for (int x = 0; x < GRID_X; x++)
         {
             for (int z = 0; z < GRID_Y; z++)
             {
-                if (flags[x, z] == 0)
+                if (heightMap[x, z].room == null)
                 {
-                    flags[x, z] = 1;
-
                     Room room = new();
 
                     Queue<MapPiece> checkNow = new();
@@ -370,6 +416,7 @@ public class MapGenerator : MonoBehaviour
                         MapPiece piece = checkNow.Dequeue();
                         int y = piece.y;
                         room.mapPieces.Add(piece);
+                        piece.room = room;
 
                         for (int offsetX = piece.x - 1; offsetX <= piece.x + 1; offsetX++)
                         {
@@ -383,16 +430,14 @@ public class MapGenerator : MonoBehaviour
                                 {
                                     continue;
                                 }
-                                if (flags[offsetX, offsetZ] == 1)
+                                if (heightMap[offsetX, offsetZ].room != null)
                                 {
                                     continue;
                                 }
 
                                 if (offsetX == piece.x || offsetZ == piece.z)
                                 {
-                                    flags[offsetX, offsetZ] = 1;
-
-                                    if (heightMap[offsetX, offsetZ].y == y)
+                                    if (heightMap[offsetX, offsetZ].y == y && !checkNow.Contains(heightMap[offsetX, offsetZ]) && !checkNext.Contains(heightMap[offsetX, offsetZ]))
                                     {
                                         checkNext.Enqueue(heightMap[offsetX, offsetZ]);
                                     }
@@ -459,11 +504,45 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    bool HasSpaceForStairs(MapPiece piece)
     {
-        foreach (Room room in rooms)
+        int x = piece.x;
+        int z = piece.z;
+
+        MapPiece.Direction direction = piece.direction;
+
+        if ((direction & MapPiece.Direction.North) > 0)
         {
-            Handles.Label(room.mapPieces[0].GetPosition(TILE_XZ, TILE_HEIGHT), room.edges.Count.ToString());
+            if (z + 2 < GRID_Y && heightMap[x, z + 2].y != piece.y)
+            {
+                return true;
+            }
         }
+
+        if ((direction & MapPiece.Direction.South) > 0)
+        {
+            if (z - 2 >= 0 && heightMap[x, z - 2].y != piece.y)
+            {
+                return true;
+            }
+        }
+
+        if ((direction & MapPiece.Direction.East) > 0)
+        {
+            if (x + 2 < GRID_X && heightMap[x + 2, z].y != piece.y)
+            {
+                return true;
+            }
+        }
+
+        if ((direction & MapPiece.Direction.West) > 0)
+        {
+            if (x - 2 >= 0 && heightMap[x - 2, z].y != piece.y)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

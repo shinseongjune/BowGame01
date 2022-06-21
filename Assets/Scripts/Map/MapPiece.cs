@@ -19,6 +19,9 @@ public class MapPiece
 
     public Direction direction = Direction.None;
 
+    public MapGenerator.Room room = null;
+    public MapGenerator.Room nearRoom = null;
+
     public Vector3 GetPosition(float tileXZ, float tileY)
     {
         return new Vector3((x * tileXZ) + tileXZ / 2, y * tileY, (z * tileXZ) + tileXZ / 2);
