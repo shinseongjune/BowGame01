@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,9 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] Canvas buildingModeCanvas;
     [SerializeField] Canvas inventoryCanvas;
 
+    Transform playerCanvas;
+    [SerializeField] GameObject notEnoughtMaterialsTextUIPrefab;
+
     const float SNAP_DISTANCE = 1.1f;
 
     const float SCROLL_SPEED = 4.8f;
@@ -37,6 +41,7 @@ public class PlayerControlHandler : MonoBehaviour
     const float ITEM_TAKE_DISTANCE = 3.5f;
 
     bool isAdjustingItem = false;
+    bool isConstructing = false;
 
     private void Start()
     {
@@ -44,6 +49,7 @@ public class PlayerControlHandler : MonoBehaviour
         state = GetComponent<PlayerState>();
         slots = GetComponent<PlayerSkillSlots>();
         itemHandler = GetComponent<PlayerItemHandler>();
+        playerCanvas = transform.GetChild(1);
     }
 
     void Update()
@@ -211,10 +217,11 @@ public class PlayerControlHandler : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 isAdjustingItem = false;
+                isConstructing = false;
             }
 
             //TODO: 좌클릭 시작
-            if (Input.GetMouseButton(0) && !IsPointerOverUIObject() && !isAdjustingItem)
+            if (Input.GetMouseButton(0) && !IsPointerOverUIObject() && !isAdjustingItem && !isConstructing)
             {
                 if (!state.isMovingItemOnInventory)
                 {
@@ -222,17 +229,29 @@ public class PlayerControlHandler : MonoBehaviour
                     {
                         if (!IsPointerOverUIObject() && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isSnapped && selectedConstruct.GetComponentInChildren<BuildingConstructs>().isConstructable) //마우스가 ui 위에 있지 않을 경우 && 지정된 위치에 스냅됐을 경우
                         {
-                            GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
-                            building.transform.position = selectedConstruct.transform.position;
-                            building.transform.rotation = selectedConstruct.transform.rotation;
-                            Destroy(building.GetComponentInChildren<BuildingConstructs>());
+                            isConstructing = true;
 
-                            if (constructId == 0)
+                            if (itemHandler.HasEnoughMaterials((int)constructId)) //건축 재료가 충분할 경우
                             {
-                                //벽일 경우 양 옆 기둥 콜라이더 켜기
-                                building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
-                                building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
-                                //콜라이더 켜기 끝
+                                itemHandler.SpendMaterials((int)constructId);
+
+                                GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
+                                building.transform.position = selectedConstruct.transform.position;
+                                building.transform.rotation = selectedConstruct.transform.rotation;
+                                Destroy(building.GetComponentInChildren<BuildingConstructs>());
+
+                                if (constructId == 0)
+                                {
+                                    //벽일 경우 양 옆 기둥 콜라이더 켜기
+                                    building.transform.GetChild(1).GetComponentInChildren<BoxCollider>().enabled = true;
+                                    building.transform.GetChild(2).GetComponentInChildren<BoxCollider>().enabled = true;
+                                    //콜라이더 켜기 끝
+                                }
+                            }
+                            else //건축 재료가 부족할 경우
+                            {
+                                GameObject go = Instantiate(notEnoughtMaterialsTextUIPrefab, playerCanvas);
+                                go.GetComponent<RectTransform>().position = RectTransformUtility.WorldToScreenPoint(Camera.main, selectedConstruct.transform.position);
                             }
                         }
                     }
@@ -322,10 +341,11 @@ public class PlayerControlHandler : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 isAdjustingItem = false;
+                isConstructing = false;
             }
 
             //좌클릭 시작
-            if (Input.GetMouseButton(0) && !IsPointerOverUIObject() && !isAdjustingItem)
+            if (Input.GetMouseButton(0) && !IsPointerOverUIObject() && !isAdjustingItem && !isConstructing)
             {
                 if (!state.isMovingItemOnInventory) //아이템을 옮기는 중이 아닐 때
                 {

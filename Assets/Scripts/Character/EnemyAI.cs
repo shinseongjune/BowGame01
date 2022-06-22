@@ -8,9 +8,8 @@ public class EnemyAI : MonoBehaviour
     public GameObject target;
     public NavMeshAgent agent;
 
-    public void GameStart()
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.SetDestination(target.transform.position);
     }
 }

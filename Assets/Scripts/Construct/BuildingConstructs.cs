@@ -6,12 +6,17 @@ public class BuildingConstructs : MonoBehaviour
 {
     MeshRenderer meshRenderer;
     public bool isSnapped = false;
-    public bool isConstructable = true;
+    public bool isConstructable = false;
 
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.material.color = Color.cyan;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        meshRenderer.material.color = Color.red;
+        isConstructable = false;
     }
 
     private void OnTriggerStay(Collider other)
@@ -24,10 +29,5 @@ public class BuildingConstructs : MonoBehaviour
     {
         meshRenderer.material.color = Color.cyan;
         isConstructable = true;
-    }
-
-    private void OnDestroy()
-    {
-        meshRenderer.material.color = Color.white;
     }
 }

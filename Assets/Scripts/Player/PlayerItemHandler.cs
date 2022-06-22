@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class PlayerItemHandler : MonoBehaviour
 
     public Transform inventory;
     public ItemDataBase itemDataBase;
+    public BuildingDataBase buildingDataBase;
     public GameObject droppedItemPrefab;
 
     public const float ITEM_DROP_DISTANCE = 3.5f;
@@ -116,5 +118,81 @@ public class PlayerItemHandler : MonoBehaviour
         state.movingItem = null;
 
         Destroy(misp.gameObject);
+    }
+
+    internal bool HasEnoughMaterials(int constructId)
+    {
+        Dictionary<int, int> cost = buildingDataBase.costs[constructId];
+
+        bool hasEnoughAllMaterials = true;
+        
+        bool hasEnoughMaterial = false;
+
+        foreach(KeyValuePair<int, int> c in cost)
+        {
+            int itemId = c.Key;
+            int itemCount = c.Value;
+
+            for (int i = 0; i < inventory.childCount; i++)
+            {
+                ItemSlotUI itemSlot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+
+                if (itemSlot.itemId == itemId)
+                {
+                    itemCount -= itemSlot.count;
+                }
+
+                if (itemCount <= 0)
+                {
+                    hasEnoughMaterial = true;
+                    break;
+                }
+
+                hasEnoughMaterial = false;
+            }
+
+            if (!hasEnoughMaterial)
+            {
+                hasEnoughAllMaterials = false;
+            }
+        }
+
+        return hasEnoughAllMaterials;
+    }
+
+    internal void SpendMaterials(int constructId)
+    {
+        Dictionary<int, int> cost = buildingDataBase.costs[constructId];
+
+        foreach (KeyValuePair<int, int> c in cost)
+        {
+            int itemId = c.Key;
+            int itemCount = c.Value;
+
+            for (int i = 0; i < inventory.childCount; i++)
+            {
+                ItemSlotUI itemSlot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+
+                if (itemSlot.itemId == itemId)
+                {
+                    if (itemSlot.count >= itemCount)
+                    {
+                        itemSlot.count -= itemCount;
+                        itemSlot.SetItem(itemId, itemSlot.count);
+                        itemCount = 0;
+                    }
+                    else
+                    {
+                        itemCount -= itemSlot.count;
+                        itemSlot.SetItem(null, 0);
+                    }
+                }
+
+                if (itemCount == 0)
+                {
+                    break;
+                }
+            }
+        }
     }
 }

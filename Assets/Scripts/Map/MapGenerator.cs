@@ -331,7 +331,7 @@ public class MapGenerator : MonoBehaviour
                             bool isAvailable = true;
                             foreach (StairPoint p in points)
                             {
-                                if ((p.x == piece.x - 1 && p.z == piece.z) || (p.x == piece.x - 1 && p.z == piece.z))
+                                if ((p.x == piece.x - 1 && p.z == piece.z) || (p.x == piece.x - 2 && p.z == piece.z))
                                 {
                                     isAvailable = false;
                                     break;
