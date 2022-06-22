@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapPiece
@@ -17,10 +18,9 @@ public class MapPiece
     public int y;
     public int z;
 
-    public Direction direction = Direction.None;
+    public Dictionary<MapGenerator.Room, Direction> direction = new();
 
     public MapGenerator.Room room = null;
-    public MapGenerator.Room nearRoom = null;
 
     public Vector3 GetPosition(float tileXZ, float tileY)
     {

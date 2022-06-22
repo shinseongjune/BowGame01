@@ -9,13 +9,11 @@ public class MapGenerator : MonoBehaviour
     public class Room
     {
         public List<MapPiece> mapPieces = new List<MapPiece>();
-        public List<MapPiece> edges = new List<MapPiece>();
+        public Dictionary<Room, List<MapPiece>> edges = new();
 
         public HashSet<Room> connectedRooms = new HashSet<Room>();
 
         public bool isMainRoom = false;
-
-        public HashSet<Room> connectionRequiredRooms = new();
 
         public void ConnectRoom(Room room)
         {
@@ -57,8 +55,8 @@ public class MapGenerator : MonoBehaviour
 
     public static float TILE_XZ;
     public static float TILE_HEIGHT;
-    public const int GRID_X = 256;
-    public const int GRID_Y = 256;
+    public const int GRID_X = 100;
+    public const int GRID_Y = 100;
 
     List<Room> rooms;
 
@@ -229,114 +227,176 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
-            if (room.edges.Count == 0)
+            foreach (Room room2 in rooms)
             {
-                continue;
-            }
+                if (room == room2)
+                {
+                    continue;
+                }
 
-            while (room.connectionRequiredRooms.Count > 0)
-            {
-                int index = Random.Range(0, room.edges.Count);
-                
-                MapPiece piece = room.edges[index];
+                List<MapPiece> edges = room.edges[room2];
 
-                if ((piece.direction & MapPiece.Direction.North) > 0)
+                int stairsCount = Mathf.Max(edges.Count / 3, 1);
+
+                for (int i = 0; i < stairsCount; i++)
                 {
-                    if (piece.z + 2 < GRID_Y && heightMap[piece.x, piece.z + 2].y != piece.y)
+                    if (edges.Count <= 0)
                     {
-                        StairPoint point = new();
-                        point.x = piece.x;
-                        point.z = piece.z + 1;
-                        point.direction = MapPiece.Direction.North;
-                        points.Add(point);
-                        Room connectedRoom = heightMap[point.x, point.z].room;
-                        room.connectionRequiredRooms.Remove(connectedRoom);
-                        room.ConnectRoom(connectedRoom);
-                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
-                        foreach(MapPiece edge in edgesCopy)
+                        break;
+                    }
+
+                    int index = Random.Range(0, edges.Count);
+                    MapPiece piece = edges[index];
+
+                    if ((piece.direction[room2] & MapPiece.Direction.North) > 0)
+                    {
+                        if (piece.z + 2 < GRID_Y && heightMap[piece.x, piece.z + 2].y != piece.y)
                         {
-                            if (edge.nearRoom == connectedRoom)
+                            bool isAvailable = true;
+                            foreach (StairPoint p in points)
                             {
-                                if (room.edges.Contains(edge))
+                                if ((p.x == piece.x && p.z == piece.z + 1) || (p.x == piece.x && p.z == piece.z + 2))
                                 {
-                                    room.edges.Remove(edge);
+                                    isAvailable = false;
+                                    break;
                                 }
+                            }
+
+                            if (isAvailable)
+                            {
+                                StairPoint point = new();
+                                point.x = piece.x;
+                                point.z = piece.z + 1;
+                                point.direction = MapPiece.Direction.North;
+                                points.Add(point);
+                                Room connectedRoom = heightMap[point.x, point.z].room;
+                                room.ConnectRoom(connectedRoom);
+                                edges.RemoveAt(index);
+                            }
+                            else
+                            {
+                                edges.RemoveAt(index);
+                                i--;
                             }
                         }
-                    }
-                }
-                else if ((piece.direction & MapPiece.Direction.West) > 0)
-                {
-                    if (piece.x - 2 >= 0 && heightMap[piece.x - 2, piece.z].y != piece.y)
-                    {
-                        StairPoint point = new();
-                        point.x = piece.x - 1;
-                        point.z = piece.z;
-                        point.direction = MapPiece.Direction.West;
-                        points.Add(point);
-                        Room connectedRoom = heightMap[point.x, point.z].room;
-                        room.connectionRequiredRooms.Remove(connectedRoom);
-                        room.ConnectRoom(connectedRoom);
-                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
-                        foreach (MapPiece edge in edgesCopy)
+                        else
                         {
-                            if (edge.nearRoom == connectedRoom)
-                            {
-                                if (room.edges.Contains(edge))
-                                {
-                                    room.edges.Remove(edge);
-                                }
-                            }
+                            edges.RemoveAt(index);
+                            i--;
                         }
                     }
-                }
-                else if ((piece.direction & MapPiece.Direction.East) > 0)
-                {
-                    if (piece.x + 2 < GRID_X && heightMap[piece.x + 2, piece.z].y != piece.y)
+
+                    if ((piece.direction[room2] & MapPiece.Direction.East) > 0)
                     {
-                        StairPoint point = new();
-                        point.x = piece.x + 1;
-                        point.z = piece.z;
-                        point.direction = MapPiece.Direction.East;
-                        points.Add(point);
-                        Room connectedRoom = heightMap[point.x, point.z].room;
-                        room.connectionRequiredRooms.Remove(connectedRoom);
-                        room.ConnectRoom(connectedRoom);
-                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
-                        foreach (MapPiece edge in edgesCopy)
+                        if (piece.x + 2 < GRID_X && heightMap[piece.x + 2, piece.z].y != piece.y)
                         {
-                            if (edge.nearRoom == connectedRoom)
+                            bool isAvailable = true;
+                            foreach (StairPoint p in points)
                             {
-                                if (room.edges.Contains(edge))
+                                if ((p.x == piece.x + 1 && p.z == piece.z) || (p.x == piece.x + 2 && p.z == piece.z))
                                 {
-                                    room.edges.Remove(edge);
+                                    isAvailable = false;
+                                    break;
                                 }
+                            }
+
+                            if (isAvailable)
+                            {
+                                StairPoint point = new();
+                                point.x = piece.x + 1;
+                                point.z = piece.z;
+                                point.direction = MapPiece.Direction.East;
+                                points.Add(point);
+                                Room connectedRoom = heightMap[point.x, point.z].room;
+                                room.ConnectRoom(connectedRoom);
+                                edges.RemoveAt(index);
+                            }
+                            else
+                            {
+                                edges.RemoveAt(index);
+                                i--;
                             }
                         }
-                    }
-                }
-                else if ((piece.direction & MapPiece.Direction.South) > 0)
-                {
-                    if (piece.z - 2 >= 0 && heightMap[piece.x, piece.z - 2].y != piece.y)
-                    {
-                        StairPoint point = new();
-                        point.x = piece.x;
-                        point.z = piece.z - 1;
-                        point.direction = MapPiece.Direction.South;
-                        points.Add(point);
-                        Room connectedRoom = heightMap[point.x, point.z].room;
-                        room.connectionRequiredRooms.Remove(connectedRoom);
-                        room.ConnectRoom(connectedRoom);
-                        List<MapPiece> edgesCopy = new List<MapPiece>(room.edges);
-                        foreach (MapPiece edge in edgesCopy)
+                        else
                         {
-                            if (edge.nearRoom == connectedRoom)
+                            edges.RemoveAt(index);
+                            i--;
+                        }
+                    }
+
+                    if ((piece.direction[room2] & MapPiece.Direction.West) > 0)
+                    {
+                        if (piece.x - 2 >= 0 && heightMap[piece.x - 2, piece.z].y != piece.y)
+                        {
+                            bool isAvailable = true;
+                            foreach (StairPoint p in points)
                             {
-                                if (room.edges.Contains(edge))
+                                if ((p.x == piece.x - 1 && p.z == piece.z) || (p.x == piece.x - 1 && p.z == piece.z))
                                 {
-                                    room.edges.Remove(edge);
+                                    isAvailable = false;
+                                    break;
                                 }
                             }
+
+                            if (isAvailable)
+                            {
+                                StairPoint point = new();
+                                point.x = piece.x - 1;
+                                point.z = piece.z;
+                                point.direction = MapPiece.Direction.West;
+                                points.Add(point);
+                                Room connectedRoom = heightMap[point.x, point.z].room;
+                                room.ConnectRoom(connectedRoom);
+                                edges.RemoveAt(index);
+                            }
+                            else
+                            {
+                                edges.RemoveAt(index);
+                                i--;
+                            }
+                        }
+                        else
+                        {
+                            edges.RemoveAt(index);
+                            i--;
+                        }
+                    }
+
+                    if ((piece.direction[room2] & MapPiece.Direction.South) > 0)
+                    {
+                        if (piece.z - 2 >= 0 && heightMap[piece.x, piece.z - 2].y != piece.y)
+                        {
+                            bool isAvailable = true;
+                            foreach (StairPoint p in points)
+                            {
+                                if ((p.x == piece.x && p.z == piece.z - 1) || (p.x == piece.x && p.z == piece.z - 2))
+                                {
+                                    isAvailable = false;
+                                    break;
+                                }
+                            }
+
+                            if (isAvailable)
+                            {
+                                StairPoint point = new();
+                                point.x = piece.x;
+                                point.z = piece.z - 1;
+                                point.direction = MapPiece.Direction.South;
+                                points.Add(point);
+                                Room connectedRoom = heightMap[point.x, point.z].room;
+                                room.ConnectRoom(connectedRoom);
+                                edges.RemoveAt(index);
+                            }
+                            else
+                            {
+                                edges.RemoveAt(index);
+                                i--;
+                            }
+                        }
+                        else
+                        {
+                            edges.RemoveAt(index);
+                            i--;
                         }
                     }
                 }
@@ -350,6 +410,19 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (Room room in rooms)
         {
+            foreach (Room room2 in rooms)
+            {
+                if (room == room2)
+                {
+                    continue;
+                }
+
+                room.edges.Add(room2, new());
+            }
+        }
+
+        foreach (Room room in rooms)
+        {
             if (room.mapPieces[0].y == 0)
             {
                 continue;
@@ -359,35 +432,42 @@ public class MapGenerator : MonoBehaviour
             {
                 if (piece.x > 0 && heightMap[piece.x - 1, piece.z].room != piece.room) //왼쪽
                 {
-                    piece.direction |= MapPiece.Direction.West;
-                    room.connectionRequiredRooms.Add(heightMap[piece.x - 1, piece.z].room);
-                    piece.nearRoom = heightMap[piece.x - 1, piece.z].room;
+                    MapPiece nearPiece = heightMap[piece.x - 1, piece.z];
+                    if (!piece.direction.ContainsKey(nearPiece.room))
+                    {
+                        piece.direction.Add(nearPiece.room, MapPiece.Direction.West);
+                        room.edges[nearPiece.room].Add(piece);
+                    }
                 }
 
                 if (piece.x < GRID_X - 1 && heightMap[piece.x + 1, piece.z].room != piece.room) //오른쪽
                 {
-                    piece.direction |= MapPiece.Direction.East;
-                    room.connectionRequiredRooms.Add(heightMap[piece.x + 1, piece.z].room);
-                    piece.nearRoom = heightMap[piece.x + 1, piece.z].room;
+                    MapPiece nearPiece = heightMap[piece.x + 1, piece.z];
+                    if (!piece.direction.ContainsKey(nearPiece.room))
+                    {
+                        piece.direction.Add(nearPiece.room, MapPiece.Direction.East);
+                        room.edges[nearPiece.room].Add(piece);
+                    }
                 }
 
                 if (piece.z < GRID_Y - 1 && heightMap[piece.x, piece.z + 1].room != piece.room) //위
                 {
-                    piece.direction |= MapPiece.Direction.North;
-                    room.connectionRequiredRooms.Add(heightMap[piece.x, piece.z + 1].room);
-                    piece.nearRoom = heightMap[piece.x, piece.z + 1].room;
+                    MapPiece nearPiece = heightMap[piece.x, piece.z + 1];
+                    if (!piece.direction.ContainsKey(nearPiece.room))
+                    {
+                        piece.direction.Add(nearPiece.room, MapPiece.Direction.North);
+                        room.edges[nearPiece.room].Add(piece);
+                    }
                 }
 
                 if (piece.z > 0 && heightMap[piece.x, piece.z - 1].room != piece.room) //아래
                 {
-                    piece.direction |= MapPiece.Direction.South;
-                    room.connectionRequiredRooms.Add(heightMap[piece.x, piece.z - 1].room);
-                    piece.nearRoom = heightMap[piece.x, piece.z - 1].room;
-                }
-
-                if ((piece.direction | MapPiece.Direction.None) > 0)
-                {
-                    room.edges.Add(piece);
+                    MapPiece nearPiece = heightMap[piece.x, piece.z - 1];
+                    if (!piece.direction.ContainsKey(nearPiece.room))
+                    {
+                        piece.direction.Add(nearPiece.room, MapPiece.Direction.South);
+                        room.edges[nearPiece.room].Add(piece);
+                    }
                 }
             }
         }
@@ -463,8 +543,8 @@ public class MapGenerator : MonoBehaviour
 
     public void SmoothingMap()
     {
-        int width = GridManager.GRID_X;
-        int height = GridManager.GRID_Y;
+        int width = GRID_X;
+        int height = GRID_Y;
 
         for (int x = 0; x < width; x++)
         {
@@ -502,47 +582,5 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-    }
-
-    bool HasSpaceForStairs(MapPiece piece)
-    {
-        int x = piece.x;
-        int z = piece.z;
-
-        MapPiece.Direction direction = piece.direction;
-
-        if ((direction & MapPiece.Direction.North) > 0)
-        {
-            if (z + 2 < GRID_Y && heightMap[x, z + 2].y != piece.y)
-            {
-                return true;
-            }
-        }
-
-        if ((direction & MapPiece.Direction.South) > 0)
-        {
-            if (z - 2 >= 0 && heightMap[x, z - 2].y != piece.y)
-            {
-                return true;
-            }
-        }
-
-        if ((direction & MapPiece.Direction.East) > 0)
-        {
-            if (x + 2 < GRID_X && heightMap[x + 2, z].y != piece.y)
-            {
-                return true;
-            }
-        }
-
-        if ((direction & MapPiece.Direction.West) > 0)
-        {
-            if (x - 2 >= 0 && heightMap[x - 2, z].y != piece.y)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

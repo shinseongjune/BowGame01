@@ -12,4 +12,7 @@ public class Item
 
     public int? defaultSkill;
     public int? subSkill;
+
+    public float dropRate;
+    public int dropCount;
 }

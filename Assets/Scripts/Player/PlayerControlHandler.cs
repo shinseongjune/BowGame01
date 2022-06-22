@@ -34,6 +34,7 @@ public class PlayerControlHandler : MonoBehaviour
 
     const float SCROLL_SPEED = 4.8f;
 
+    const float ITEM_TAKE_DISTANCE = 3.5f;
 
     bool isAdjustingItem = false;
 
@@ -235,12 +236,15 @@ public class PlayerControlHandler : MonoBehaviour
                             }
                         }
                     }
-                    else //æ∆¿Ã≈€ Ω¿µÊ Ω√¿€
+                    else //æ∆¿Ã≈€ »πµÊ Ω√¿€
                     {
                         if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
                         {
                             DroppedItem droppedItem = hit.transform.root.gameObject.GetComponent<DroppedItem>();
-                            itemHandler.GetItem(droppedItem);
+                            if (Vector3.Distance(transform.position, droppedItem.transform.position) < ITEM_TAKE_DISTANCE)
+                            {
+                                itemHandler.GetItem(droppedItem);
+                            }
 
                             isAdjustingItem = true;
                         }
@@ -329,9 +333,12 @@ public class PlayerControlHandler : MonoBehaviour
                     {
                         if (Physics.Raycast(ray, out hit, 1000, 1 << LayerMask.NameToLayer("DroppedItem")))
                         {
-                            //TODO: æ∆¿Ã≈€ »πµÊ Ω√¿€
+                            //æ∆¿Ã≈€ »πµÊ Ω√¿€
                             DroppedItem droppedItem = hit.transform.root.gameObject.GetComponent<DroppedItem>();
-                            itemHandler.GetItem(droppedItem);
+                            if (Vector3.Distance(transform.position, droppedItem.transform.position) < ITEM_TAKE_DISTANCE)
+                            {
+                                itemHandler.GetItem(droppedItem);
+                            }
 
                             isAdjustingItem = true;
                             //æ∆¿Ã≈€ »πµÊ ≥°

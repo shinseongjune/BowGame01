@@ -23,13 +23,14 @@ public class ItemDropTable : MonoBehaviour
     //Singleton end
 
     //<적 id, (아이템 id, 수량)>
-    public Dictionary<int, (int, int)> dropTables = new();
+    public Dictionary<int, List<int>> dropTables = new();
 
     private void Start()
     {
         //TODO: test코드 시작
-        dropTables.Add(0, (1, 10));
-        dropTables.Add(0, (2, 8));
+        dropTables.Add(1, new());
+        dropTables[1].Add(1);
+        dropTables[1].Add(2);
         //test코드 끝
     }
 }

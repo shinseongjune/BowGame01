@@ -200,19 +200,7 @@ public class Stats : MonoBehaviour
         ItemDroppable droppable = GetComponent<ItemDroppable>();
         if (droppable != null)
         {
-            ItemDataBase itemDataBase = GameObject.Find("ItemDataBase").GetComponent<ItemDataBase>();
-            ItemDropTable dropTable = GameObject.Find("ItemDropTable").GetComponent<ItemDropTable>();
-
-            GameObject droppedItemPrefab = Resources.Load<GameObject>("Prefabs/droppedItem");
-
-            if (dropTable.dropTables.ContainsKey(characterId))
-            {
-                int itemId = itemDataBase.items[dropTable.dropTables[characterId].Item1].id;
-                float rand = Random.Range(0.8f, 1.2f);
-                int count = (int)(dropTable.dropTables[characterId].Item2 * rand);
-                GameObject go = Instantiate(droppedItemPrefab, transform.position, Quaternion.identity);
-                go.GetComponent<DroppedItem>().SetItem(itemId, count);
-            }
+            droppable.DropItem(characterId);
         }
 
         Destroy(gameObject);

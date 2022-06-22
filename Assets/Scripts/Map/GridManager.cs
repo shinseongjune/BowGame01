@@ -16,8 +16,8 @@ public class GridManager : MonoBehaviour
 
     public float TILE_XZ;
     public float TILE_HEIGHT;
-    public const int GRID_X = 256;
-    public const int GRID_Y = 256;
+    public const int GRID_X = 100;
+    public const int GRID_Y = 100;
 
     private void Start()
     {
