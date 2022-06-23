@@ -47,6 +47,7 @@ public class SkillDataBase : MonoBehaviour
         testBowShot.reach = 30.0f;
         testBowShot.type = Aggression.Type.Attack;
         testBowShot.attackPrefab = Resources.Load<GameObject>("Prefabs/ArrowProjectile");
+        testBowShot.costs.Add(3, 1);
         defaultSkills[1] = testBowShot;
         DashSkill testMovement = new();
         testMovement.id = 0;

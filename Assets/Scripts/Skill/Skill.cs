@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface ISkill
@@ -24,6 +25,9 @@ public abstract class BasicSkill : ISkill
     public float reach;
 
     public GameObject attackPrefab;
+
+    //아이템 id, 소모 수량
+    public Dictionary<int, int> costs = new();
 
     public abstract void Invoke();
 }

@@ -255,7 +255,7 @@ public class MapGenerator : MonoBehaviour
                             bool isAvailable = true;
                             foreach (StairPoint p in points)
                             {
-                                if ((p.x == piece.x && p.z == piece.z + 1) || (p.x == piece.x && p.z == piece.z + 2))
+                                if ((p.x == piece.x && p.z == piece.z + 1) || (p.x == piece.x && p.z == piece.z + 2) || (p.x == piece.x + 1 && p.z == piece.z + 1 && p.direction == MapPiece.Direction.West) || (p.x == piece.x - 1 && p.z == piece.z + 1 && p.direction == MapPiece.Direction.East))
                                 {
                                     isAvailable = false;
                                     break;
@@ -293,7 +293,7 @@ public class MapGenerator : MonoBehaviour
                             bool isAvailable = true;
                             foreach (StairPoint p in points)
                             {
-                                if ((p.x == piece.x + 1 && p.z == piece.z) || (p.x == piece.x + 2 && p.z == piece.z))
+                                if ((p.x == piece.x + 1 && p.z == piece.z) || (p.x == piece.x + 2 && p.z == piece.z) || (p.x == piece.x + 1 && p.z == piece.z - 1 && p.direction == MapPiece.Direction.North) || (p.x == piece.x + 1 && p.z == piece.z + 1 && p.direction == MapPiece.Direction.South))
                                 {
                                     isAvailable = false;
                                     break;
@@ -331,7 +331,7 @@ public class MapGenerator : MonoBehaviour
                             bool isAvailable = true;
                             foreach (StairPoint p in points)
                             {
-                                if ((p.x == piece.x - 1 && p.z == piece.z) || (p.x == piece.x - 1 && p.z == piece.z))
+                                if ((p.x == piece.x - 1 && p.z == piece.z) || (p.x == piece.x - 2 && p.z == piece.z) || (p.x == piece.x - 1 && p.z == piece.z - 1 && p.direction == MapPiece.Direction.North) || (p.x == piece.x - 1 && p.z == piece.z + 1 && p.direction == MapPiece.Direction.South))
                                 {
                                     isAvailable = false;
                                     break;
@@ -369,7 +369,7 @@ public class MapGenerator : MonoBehaviour
                             bool isAvailable = true;
                             foreach (StairPoint p in points)
                             {
-                                if ((p.x == piece.x && p.z == piece.z - 1) || (p.x == piece.x && p.z == piece.z - 2))
+                                if ((p.x == piece.x && p.z == piece.z - 1) || (p.x == piece.x && p.z == piece.z - 2) || (p.x == piece.x + 1 && p.z == piece.z - 1 && p.direction == MapPiece.Direction.West) || (p.x == piece.x - 1 && p.z == piece.z - 1 && p.direction == MapPiece.Direction.East))
                                 {
                                     isAvailable = false;
                                     break;

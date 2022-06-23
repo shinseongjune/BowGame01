@@ -45,6 +45,14 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
             image.sprite = null;
             text.text = "";
         }
+        else if (count == 0)
+        {
+            this.itemId = null;
+            this.count = 0;
+
+            image.sprite = null;
+            text.text = "";
+        }
         else
         {
             this.itemId = itemId;
