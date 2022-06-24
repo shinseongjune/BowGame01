@@ -20,8 +20,6 @@ public class EquipSlot : MonoBehaviour, IPointerClickHandler
 
     public PlayerEquip equip;
 
-    public PlayerSkillSlots skillSlots;
-
     [SerializeField]
     ItemDataBase itemDataBase;
 

@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
             if (state.skillMovingTime <= 0)
             {
                 state.isSkillMoving = false;
-                body.constraints = RigidbodyConstraints.FreezeRotation;
+                body.velocity -= new Vector3(0, body.velocity.y, 0);
                 //TODO: 테스트 코드. 지울것
                 GetComponentInChildren<MeshRenderer>().material.color = Color.white;
                 //테스트 코드 끝

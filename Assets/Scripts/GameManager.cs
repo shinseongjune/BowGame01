@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GridManager gridManager;
     [SerializeField] MapGenerator mapGenerator;
     [SerializeField] Transform inventory;
+    [SerializeField] MovementSkillSlot movementSkillSlot;
 
     void Start()
     {
@@ -48,6 +49,8 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(1).GetComponent<ItemSlotUI>().SetItem(1, 15);
         inventory.GetChild(2).GetComponent<ItemSlotUI>().SetItem(1, 8);
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
+
+        movementSkillSlot.SetSkill(0);
         //테스트용 코드 끝
 
         mapGenerator.GenerateMap();

@@ -12,8 +12,13 @@ public class PlayerControlHandler : MonoBehaviour
     Rigidbody rb;
     
     PlayerState state;
-    PlayerSkillSlots slots;
     PlayerItemHandler itemHandler;
+
+    [SerializeField] MovementSkillSlot movementSkillSlot;
+    [SerializeField] DefaultSkillSlot defaultSkillSlot;
+    [SerializeField] BasicSkillSlot QSkillSlot;
+    [SerializeField] BasicSkillSlot ESkillSlot;
+    [SerializeField] UltSkillSlot ultSkillSlot;
 
     [SerializeField]
     SkillDataBase skillDataBase;
@@ -47,7 +52,6 @@ public class PlayerControlHandler : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         state = GetComponent<PlayerState>();
-        slots = GetComponent<PlayerSkillSlots>();
         itemHandler = GetComponent<PlayerItemHandler>();
         playerCanvas = transform.GetChild(1);
     }
@@ -365,17 +369,17 @@ public class PlayerControlHandler : MonoBehaviour
                         }
                         else
                         {
-                            if (slots.defaultCooldown <= 0)
+                            if (!defaultSkillSlot.isOnCooldown)
                             {
-                                DoBasicAttack();
+                                DoDefaultSkill();
                             }
                         }
                     }
                     else //전투 중일 경우
                     {
-                        if (slots.defaultCooldown <= 0)
+                        if (!defaultSkillSlot.isOnCooldown)
                         {
-                            DoBasicAttack();
+                            DoDefaultSkill();
                         }
                     }
                 }
@@ -399,9 +403,9 @@ public class PlayerControlHandler : MonoBehaviour
             //좌클릭 끝
 
             //쉬프트 시작
-            if (Input.GetKey(KeyCode.LeftShift) && slots.movementSkillCooldown <= 0)
+            if (Input.GetKey(KeyCode.LeftShift) && !movementSkillSlot.isOnCooldown)
             {
-                MovementSkill skill = skillDataBase.movementSkills[slots.movementSkill];
+                MovementSkill skill = skillDataBase.movementSkills[(int)movementSkillSlot.skillId];
                 if (skill is DashSkill)
                 {
                     if (state.isMovable)
@@ -421,15 +425,14 @@ public class PlayerControlHandler : MonoBehaviour
         }
     }
 
-    void DoBasicAttack()
+    void DoDefaultSkill()
     {
         if (state.isAttackable)
         {
-            BasicSkill skill;
-            skill = skillDataBase.defaultSkills[slots.defaultSkill];
+            BasicSkill skill = skillDataBase.defaultSkills[(int)defaultSkillSlot.skillId];
 
             skill.owner = gameObject;
-            slots.defaultCooldown = skill.coolDown;
+            defaultSkillSlot.SetCooldown(skill.coolDown);
             skill.Invoke();
         }
     }
@@ -440,7 +443,7 @@ public class PlayerControlHandler : MonoBehaviour
         skill.direction = gameObject.transform.forward;
         state.isSkillMoving = true;
         state.skillMovingTime = skill.movingTime;
-        slots.movementSkillCooldown = skill.coolDown;
+        movementSkillSlot.SetCooldown(skill.coolDown);
         skill.Invoke();
     }
     

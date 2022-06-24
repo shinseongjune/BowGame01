@@ -9,7 +9,8 @@ public class PlayerEquip : MonoBehaviour
     [SerializeField]
     SkillDataBase skillDataBase;
 
-    PlayerSkillSlots skillSlots;
+    [SerializeField]
+    DefaultSkillSlot defaultSkillSlot;
 
     public Transform equipSlots;
 
@@ -17,8 +18,6 @@ public class PlayerEquip : MonoBehaviour
 
     private void Start()
     {
-        skillSlots = GetComponent<PlayerSkillSlots>();
-
         //초기화 시작
         for (int i = 0; i < 10; i++)
         {
@@ -101,16 +100,16 @@ public class PlayerEquip : MonoBehaviour
             Item item = itemDataBase.items[(int)slot.itemId];
             if (item.defaultSkill.HasValue)
             {
-                skillSlots.defaultSkill = (int)item.defaultSkill;
+                defaultSkillSlot.SetSkill(item.defaultSkill);
             }
             else
             {
-                skillSlots.defaultSkill = 0;
+                defaultSkillSlot.SetSkill(null);
             }
         }
         else
         {
-            skillSlots.defaultSkill = 0;
+            defaultSkillSlot.SetSkill(null);
         }
     }
 }

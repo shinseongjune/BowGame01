@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MovementSkillSlot : MonoBehaviour, IPointerClickHandler
+public class UltSkillSlot : MonoBehaviour, IPointerClickHandler
 {
     public int? skillId;
 
@@ -38,7 +38,7 @@ public class MovementSkillSlot : MonoBehaviour, IPointerClickHandler
         {
             this.skillId = skillId;
 
-            image.sprite = skillDataBase.movementSkills[(int)skillId].skillIcon;
+            image.sprite = skillDataBase.ults[(int)skillId].skillIcon;
         }
     }
 
@@ -66,6 +66,6 @@ public class MovementSkillSlot : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        
+
     }
 }

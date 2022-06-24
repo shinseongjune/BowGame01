@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerItemHandler : MonoBehaviour
 {
     PlayerState state;
-    PlayerSkillSlots slots;
 
     public Transform inventory;
     public ItemDataBase itemDataBase;
@@ -18,7 +17,6 @@ public class PlayerItemHandler : MonoBehaviour
     private void Start()
     {
         state = GetComponent<PlayerState>();
-        slots = GetComponent<PlayerSkillSlots>();
         droppedItemPrefab = Resources.Load<GameObject>("Prefabs/DroppedItem");
     }
 

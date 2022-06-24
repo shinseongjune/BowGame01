@@ -96,7 +96,6 @@ public class DashSkill : MovementSkill
     public override void Invoke()
     {
         Rigidbody rb = owner.GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
         rb.velocity = owner.transform.forward * power;
 
         //TODO:테스트용. 지울것
