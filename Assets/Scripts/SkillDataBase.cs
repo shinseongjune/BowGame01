@@ -38,6 +38,7 @@ public class SkillDataBase : MonoBehaviour
         testAttack.reach = 2.0f;
         testAttack.type = Aggression.Type.Attack;
         testAttack.attackPrefab = Resources.Load<GameObject>("Prefabs/TempMeleeAttack");
+        testAttack.skillIcon = Resources.Load<Sprite>("Images/meleeAttack");
         defaultSkills[0] = testAttack;
         RangedSkill testBowShot = new();
         testBowShot.id = 1;
@@ -48,6 +49,7 @@ public class SkillDataBase : MonoBehaviour
         testBowShot.type = Aggression.Type.Attack;
         testBowShot.attackPrefab = Resources.Load<GameObject>("Prefabs/ArrowProjectile");
         testBowShot.costs.Add(3, 1);
+        testBowShot.skillIcon = Resources.Load<Sprite>("Images/ArrowAttack");
         defaultSkills[1] = testBowShot;
         DashSkill testMovement = new();
         testMovement.id = 0;
@@ -55,6 +57,7 @@ public class SkillDataBase : MonoBehaviour
         testMovement.power = 60.0f;
         testMovement.movingTime = 0.16f;
         testMovement.color = Color.black;
+        testMovement.skillIcon = Resources.Load<Sprite>("Images/DashSkill");
         movementSkills[0] = testMovement;
         //Debug: 테스트 코드 끝
     }

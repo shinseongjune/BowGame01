@@ -26,6 +26,8 @@ public abstract class BasicSkill : ISkill
 
     public GameObject attackPrefab;
 
+    public Sprite skillIcon;
+
     //아이템 id, 소모 수량
     public Dictionary<int, int> costs = new();
 
@@ -80,6 +82,8 @@ public abstract class MovementSkill : ISkill
 
     public float movingTime;
 
+    public Sprite skillIcon;
+
     //TODO:테스트용. 지울것
     public Color color;
     //테스트용 끝
@@ -112,6 +116,9 @@ public class BlinkSkill : MovementSkill
 public abstract class Ult : ISkill
 {
     protected int id;
+
+    public Sprite skillIcon;
+
     public abstract void Invoke();
 }
 
