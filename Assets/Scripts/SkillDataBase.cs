@@ -40,6 +40,7 @@ public class SkillDataBase : MonoBehaviour
         testAttack.attackPrefab = Resources.Load<GameObject>("Prefabs/TempMeleeAttack");
         testAttack.skillIcon = Resources.Load<Sprite>("Images/meleeAttack");
         defaultSkills[0] = testAttack;
+
         RangedSkill testBowShot = new();
         testBowShot.id = 1;
         testBowShot.name = "화살 공격";
@@ -51,6 +52,7 @@ public class SkillDataBase : MonoBehaviour
         testBowShot.costs.Add(3, 1);
         testBowShot.skillIcon = Resources.Load<Sprite>("Images/ArrowAttack");
         defaultSkills[1] = testBowShot;
+
         DashSkill testMovement = new();
         testMovement.id = 0;
         testMovement.coolDown = 5.0f;
@@ -58,7 +60,18 @@ public class SkillDataBase : MonoBehaviour
         testMovement.movingTime = 0.16f;
         testMovement.color = Color.black;
         testMovement.skillIcon = Resources.Load<Sprite>("Images/DashSkill");
+        testMovement.effect = Resources.Load<GameObject>("Prefabs/DashTrail");
         movementSkills[0] = testMovement;
+
+        BlinkSkill testBlink = new();
+        testBlink.id = 1;
+        testBlink.coolDown = 7.0f;
+        testBlink.power = 1.2f;
+        testBlink.movingTime = 0.1f;
+        testBlink.color = Color.blue;
+        testBlink.skillIcon = Resources.Load<Sprite>("Images/BlinkSkill");
+        testBlink.effect = Resources.Load<GameObject>("Prefabs/BlinkParticle");
+        movementSkills[1] = testBlink;
         //Debug: 테스트 코드 끝
     }
 }

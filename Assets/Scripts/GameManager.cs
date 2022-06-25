@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform inventory;
     [SerializeField] MovementSkillSlot movementSkillSlot;
 
+    [SerializeField] PlayerSkills playerSkills;
+
     void Start()
     {
         //인벤토리 초기화 시작
@@ -51,6 +53,13 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
 
         movementSkillSlot.SetSkill(0);
+
+        //playerSkills.basicSkills.Add(0);
+        //playerSkills.basicSkills.Add(1);
+        //playerSkills.basicSkills.Add(2);
+
+        playerSkills.movementSkills.Add(0);
+        playerSkills.movementSkills.Add(1);
         //테스트용 코드 끝
 
         mapGenerator.GenerateMap();

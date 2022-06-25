@@ -35,6 +35,7 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] Canvas basicModeCanvas;
     [SerializeField] Canvas buildingModeCanvas;
     [SerializeField] Canvas inventoryCanvas;
+    [SerializeField] Canvas skillMenuCanvas;
 
     Transform playerCanvas;
     [SerializeField] GameObject notEnoughtMaterialsTextUIPrefab;
@@ -76,10 +77,26 @@ public class PlayerControlHandler : MonoBehaviour
             }
             else
             {
+                skillMenuCanvas.enabled = false;
                 inventoryCanvas.enabled = true;
             }
         }
         //인벤토리 끝
+
+        //스킬메뉴 시작
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (skillMenuCanvas.enabled)
+            {
+                skillMenuCanvas.enabled = false;
+            }
+            else
+            {
+                inventoryCanvas.enabled = false;
+                skillMenuCanvas.enabled = true;
+            }
+        }
+        //스킬메뉴 끝
 
         if (state.isBuilding) //건설 모드일 경우
         {

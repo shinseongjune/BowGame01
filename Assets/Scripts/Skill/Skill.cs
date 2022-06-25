@@ -84,6 +84,8 @@ public abstract class MovementSkill : ISkill
 
     public Sprite skillIcon;
 
+    public GameObject effect;
+
     //TODO:테스트용. 지울것
     public Color color;
     //테스트용 끝
@@ -95,6 +97,18 @@ public class DashSkill : MovementSkill
 {
     public override void Invoke()
     {
+        if (effect != null)
+        {
+            GameObject go = Object.Instantiate(effect, owner.transform.position, Quaternion.identity);
+
+            TrailRenderer trailRenderer = go.GetComponentInChildren<TrailRenderer>();
+            if (trailRenderer != null)
+            {
+                trailRenderer.transform.SetParent(owner.transform);
+            }
+            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+        }
+
         Rigidbody rb = owner.GetComponent<Rigidbody>();
         rb.velocity = owner.transform.forward * power;
 
@@ -108,7 +122,22 @@ public class BlinkSkill : MovementSkill
 {
     public override void Invoke()
     {
-        Debug.Log("점멸!");
+        if (effect != null)
+        {
+            GameObject go = Object.Instantiate(effect, owner.transform.position, Quaternion.identity);
+
+            TrailRenderer trailRenderer = go.GetComponent<TrailRenderer>();
+            if (trailRenderer != null)
+            {
+                trailRenderer.transform.SetParent(owner.transform);
+            }
+            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+        }
+
+        //TODO: 점멸구현
+
+        owner.GetComponentInChildren<MeshRenderer>().material.color = color;
+
     }
 }
 
