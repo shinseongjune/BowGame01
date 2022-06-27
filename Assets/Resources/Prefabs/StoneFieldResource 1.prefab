@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 199802743146747511}
   - component: {fileID: 199802743146747510}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StoneFieldResource 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4278983000644313951}
   - component: {fileID: 4158084480982009099}
   - component: {fileID: 4282844228202964738}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: StoneFieldResource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 4278983003023024115}
   - component: {fileID: 4258444777924155543}
   - component: {fileID: 4268712883818230907}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rock_04_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 4278983001771938239}
   - component: {fileID: 4258444778574827549}
   - component: {fileID: 4268712883594408881}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rock_04_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,7 +300,7 @@ GameObject:
   - component: {fileID: 4278983003271949479}
   - component: {fileID: 4258444779276987525}
   - component: {fileID: 4268712883450567351}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rock_04_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

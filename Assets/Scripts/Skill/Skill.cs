@@ -106,7 +106,7 @@ public class DashSkill : MovementSkill
             {
                 trailRenderer.transform.SetParent(owner.transform);
             }
-            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+            Object.Destroy(go, 0.2f);
         }
 
         Rigidbody rb = owner.GetComponent<Rigidbody>();
@@ -120,6 +120,18 @@ public class DashSkill : MovementSkill
 
 public class BlinkSkill : MovementSkill
 {
+    class ObstaclePoints
+    {
+        public Vector3 enter;
+        public Vector3 exit;
+
+        public ObstaclePoints(Vector3 enter, Vector3 exit)
+        {
+            this.enter = enter;
+            this.exit = exit;
+        }
+    }
+
     public override void Invoke()
     {
         if (effect != null)
@@ -131,10 +143,62 @@ public class BlinkSkill : MovementSkill
             {
                 trailRenderer.transform.SetParent(owner.transform);
             }
-            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+            Object.Destroy(go, 0.2f);
         }
 
-        //TODO: Á¡¸ê±¸Çö
+        //TODO: blink
+        Vector3 destination = owner.transform.position + owner.transform.forward * power;
+        int layer = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("FieldResources") | 1 << LayerMask.NameToLayer("Enemy");
+        
+        if (Physics.OverlapSphere(destination + new Vector3(0, 0.51f, 0), 1f).Length != 0)
+        {
+            RaycastHit[] hits = Physics.RaycastAll(new Ray(owner.transform.position + new Vector3(0, 0.1f, 0), owner.transform.forward), power + 3.0f, layer);
+            RaycastHit[] hits2 = Physics.RaycastAll(new Ray(destination + owner.transform.forward * 3.0f + new Vector3(0, 0.1f, 0), -owner.transform.forward), power + 3.0f, layer);
+
+            List<ObstaclePoints> obs = new();
+
+            foreach(RaycastHit h in hits)
+            {
+                foreach(RaycastHit h2 in hits2)
+                {
+                    if (h.collider == h2.collider)
+                    {
+                        ObstaclePoints ob = new(h.point, h2.point);
+                        obs.Add(ob);
+                    }
+                }
+            }
+
+            bool isThereSpace = false;
+
+            if (obs.Count > 0)
+            {
+                float ownerLocalSize = owner.transform.localScale.x;
+                float ownerColliderSize = owner.GetComponentInChildren<CapsuleCollider>().bounds.extents.x;
+
+                for (int i = 0; i < obs.Count - 1; i++)
+                {
+                    if (Vector3.Distance(obs[i].exit, obs[i + 1].enter) > ownerLocalSize * ownerColliderSize * 2)
+                    {
+                        destination = Vector3.Lerp(obs[i].exit, obs[i + 1].enter, 0.5f);
+                        isThereSpace = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                isThereSpace = true;
+            }
+
+            if (!isThereSpace)
+            {
+                destination = hits[0].point;
+            }
+        }
+
+
+        owner.transform.position = destination;
 
         owner.GetComponentInChildren<MeshRenderer>().material.color = color;
 
