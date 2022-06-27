@@ -106,7 +106,7 @@ public class DashSkill : MovementSkill
             {
                 trailRenderer.transform.SetParent(owner.transform);
             }
-            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+            Object.Destroy(go, 0.2f);
         }
 
         Rigidbody rb = owner.GetComponent<Rigidbody>();
@@ -131,10 +131,11 @@ public class BlinkSkill : MovementSkill
             {
                 trailRenderer.transform.SetParent(owner.transform);
             }
-            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+            Object.Destroy(go, 0.2f);
         }
 
-        //TODO: Á¡¸ê±¸Çö
+        //TODO: blink
+        
 
         owner.GetComponentInChildren<MeshRenderer>().material.color = color;
 

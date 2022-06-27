@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(2).GetComponent<ItemSlotUI>().SetItem(1, 8);
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
 
-        movementSkillSlot.SetSkill(0);
+        movementSkillSlot.SetSkill(1);
 
         //playerSkills.basicSkills.Add(0);
         //playerSkills.basicSkills.Add(1);

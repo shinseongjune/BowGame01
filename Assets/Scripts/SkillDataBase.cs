@@ -66,7 +66,7 @@ public class SkillDataBase : MonoBehaviour
         BlinkSkill testBlink = new();
         testBlink.id = 1;
         testBlink.coolDown = 7.0f;
-        testBlink.power = 1.2f;
+        testBlink.power = 5.0f;
         testBlink.movingTime = 0.1f;
         testBlink.color = Color.blue;
         testBlink.skillIcon = Resources.Load<Sprite>("Images/BlinkSkill");

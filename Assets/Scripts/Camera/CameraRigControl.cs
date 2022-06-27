@@ -10,6 +10,9 @@ public class CameraRigControl : MonoBehaviour
     public PlayerState state;
 
     public const float OFFSET_Y = 1.0f;
+    public float SMOOTH_FACTOR = 0.1f;
+
+    bool isSkillMoved = false;
 
     void Start()
     {
@@ -17,8 +20,26 @@ public class CameraRigControl : MonoBehaviour
         transform.position = player.position + new Vector3(0, OFFSET_Y, 0);
     }
 
-    void Update()
+    void LateUpdate()
     {
-        transform.position = player.position + new Vector3(0, OFFSET_Y, 0);
+        if (state.isSkillMoving)
+        {
+            isSkillMoved = true;
+        }
+
+        if (isSkillMoved)
+        {
+            transform.position = Vector3.Slerp(transform.position, player.position + new Vector3(0, OFFSET_Y, 0), SMOOTH_FACTOR);
+            SMOOTH_FACTOR += 0.1f;
+            if (Vector3.Distance(transform.position, player.position + new Vector3(0, 1, 0)) < 0.1f) {
+                isSkillMoved = false;
+                SMOOTH_FACTOR = 0.05f;
+            }
+        }
+        else
+        {
+            transform.position = player.position + new Vector3(0, OFFSET_Y, 0);
+        }
+
     }
 }
