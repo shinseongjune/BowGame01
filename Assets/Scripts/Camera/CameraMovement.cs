@@ -25,7 +25,7 @@ public class CameraMovement : MonoBehaviour
         mouseMovementY = transform.eulerAngles.x;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (Input.GetMouseButton(1))
         {

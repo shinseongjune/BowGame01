@@ -106,7 +106,7 @@ public class DashSkill : MovementSkill
             {
                 trailRenderer.transform.SetParent(owner.transform);
             }
-            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+            Object.Destroy(go, 0.2f);
         }
 
         Rigidbody rb = owner.GetComponent<Rigidbody>();
@@ -120,6 +120,18 @@ public class DashSkill : MovementSkill
 
 public class BlinkSkill : MovementSkill
 {
+    class ObstaclePoints
+    {
+        public Vector3 enter;
+        public Vector3 exit;
+
+        public ObstaclePoints(Vector3 enter, Vector3 exit)
+        {
+            this.enter = enter;
+            this.exit = exit;
+        }
+    }
+
     public override void Invoke()
     {
         if (effect != null)
@@ -131,10 +143,32 @@ public class BlinkSkill : MovementSkill
             {
                 trailRenderer.transform.SetParent(owner.transform);
             }
-            go.GetComponent<DestroyEffectGameObject>().DestroyEffect(movingTime);
+            Object.Destroy(go, 0.2f);
         }
 
-        //TODO: Á¡¸ê±¸Çö
+        Vector3 destination = owner.transform.position + owner.transform.forward * power;
+
+        int layer = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("FieldResources") | 1 << LayerMask.NameToLayer("Enemy");
+
+        if (Physics.OverlapSphere(destination + new Vector3(0, 0.51f, 0), 0.5f, layer).Length != 0)
+        {
+            Vector3 checker = owner.transform.position + new Vector3(0, 0.51f, 0);
+            float distance = 0f;
+            destination = owner.transform.position;
+
+            while (distance <= power + 0.2f)
+            {
+                if (Physics.OverlapSphere(checker, 0.5f, layer).Length == 0)
+                {
+                    destination = checker - new Vector3(0, 0.51f, 0);
+                }
+
+                checker += owner.transform.forward * 0.1f;
+                distance += owner.transform.forward.magnitude * 0.1f;
+            }
+        }
+
+        owner.transform.position = destination;
 
         owner.GetComponentInChildren<MeshRenderer>().material.color = color;
 

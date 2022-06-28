@@ -40,6 +40,8 @@ public class MapGenerator : MonoBehaviour
         public MapPiece.Direction direction = MapPiece.Direction.None;
     }
 
+    public Transform player;
+
     public GameObject groundPrefab;
     public GameObject stairsPrefab;
     public GameObject rockPrefab;
@@ -155,6 +157,7 @@ public class MapGenerator : MonoBehaviour
         GetEdgeTiles();
         List<StairPoint> points = MakeStairsPositions(rooms);
 
+        //지형 시작
         for (int x = 0; x < GRID_X; x++)
         {
             for (int z = 0; z < GRID_Y; z++)
@@ -174,7 +177,39 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        foreach(StairPoint point in points)
+        //테두리 시작
+        GameObject endLineCollider1 = Instantiate(groundPrefab, new Vector3(TILE_XZ * GRID_X / 2f, 5f, -TILE_XZ / 2), Quaternion.identity);
+        endLineCollider1.transform.localScale = new Vector3(GRID_X * TILE_XZ + TILE_XZ * 2, 10f, TILE_XZ);
+        Destroy(endLineCollider1.GetComponent<MeshRenderer>());
+        Destroy(endLineCollider1.GetComponent<MeshFilter>());
+        Destroy(endLineCollider1.GetComponent<NavMeshSurface>());
+        endLineCollider1.transform.SetParent(transform, false);
+
+        GameObject endLineCollider2 = Instantiate(groundPrefab, new Vector3(-TILE_XZ / 2, 5f, TILE_XZ * GRID_Y / 2f), Quaternion.identity);
+        endLineCollider2.transform.localScale = new Vector3(TILE_XZ, 10f, GRID_Y * TILE_XZ);
+        Destroy(endLineCollider2.GetComponent<MeshRenderer>());
+        Destroy(endLineCollider2.GetComponent<MeshFilter>());
+        Destroy(endLineCollider2.GetComponent<NavMeshSurface>());
+        endLineCollider2.transform.SetParent(transform, false);
+
+        GameObject endLineCollider3 = Instantiate(groundPrefab, new Vector3(TILE_XZ * GRID_X + TILE_XZ / 2, 5f, TILE_XZ * GRID_Y / 2f), Quaternion.identity);
+        endLineCollider3.transform.localScale = new Vector3(TILE_XZ, 10f, GRID_Y * TILE_XZ);
+        Destroy(endLineCollider3.GetComponent<MeshRenderer>());
+        Destroy(endLineCollider3.GetComponent<MeshFilter>());
+        Destroy(endLineCollider3.GetComponent<NavMeshSurface>());
+        endLineCollider3.transform.SetParent(transform, false);
+
+        GameObject endLineCollider4 = Instantiate(groundPrefab, new Vector3(TILE_XZ * GRID_X / 2f, 5f, TILE_XZ * GRID_Y + TILE_XZ / 2f), Quaternion.identity);
+        endLineCollider4.transform.localScale = new Vector3(GRID_X * TILE_XZ + TILE_XZ * 2, 10f,TILE_XZ);
+        Destroy(endLineCollider4.GetComponent<MeshRenderer>());
+        Destroy(endLineCollider4.GetComponent<MeshFilter>());
+        Destroy(endLineCollider4.GetComponent<NavMeshSurface>());
+        endLineCollider4.transform.SetParent(transform, false);
+        //테두리 끝
+        //지형 끝
+
+        //계단 시작
+        foreach (StairPoint point in points)
         {
             float angle = 0f;
         
@@ -197,12 +232,31 @@ public class MapGenerator : MonoBehaviour
             GameObject stairs = Instantiate(stairsPrefab, new Vector3(point.x * TILE_XZ + TILE_XZ / 2, TILE_HEIGHT / 2, point.z * TILE_XZ + TILE_XZ / 2), Quaternion.AngleAxis(angle, Vector3.up));
             stairs.transform.SetParent(transform, false);
         }
+        //계단 끝
 
+        //플레이어 배치 시작
+        while(true)
+        {
+            int x = Random.Range(0, GRID_X);
+            int z = Random.Range(0, GRID_Y);
+            
+            if (heightMap[x, z].y == 1)
+            {
+                continue;
+            }
+
+            player.transform.position = new Vector3(x * TILE_XZ + TILE_XZ / 2, 3f, z * TILE_XZ + TILE_XZ / 2);
+            break;
+        }
+        //플레이어 배치 끝
+
+        //내비게이션 시작
         NavMeshSurface navMeshSurface = transform.GetChild(0).GetComponent<NavMeshSurface>();
         if (navMeshSurface != null)
         {
             navMeshSurface.BuildNavMesh();
         }
+        //내비게이션 끝
     }
 
     private List<StairPoint> MakeStairsPositions(List<Room> rooms)
@@ -229,6 +283,10 @@ public class MapGenerator : MonoBehaviour
 
             foreach (Room room2 in rooms)
             {
+                if (room2.mapPieces.Contains(heightMap[0, 0]))
+                {
+                    continue;
+                }
                 if (room == room2)
                 {
                     continue;
