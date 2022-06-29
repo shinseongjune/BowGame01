@@ -45,6 +45,7 @@ public class MapGenerator : MonoBehaviour
     public GameObject groundPrefab;
     public GameObject stairsPrefab;
     public GameObject rockPrefab;
+    public GameObject endLinePrefab;
 
     public GridManager gridManager;
 
@@ -59,6 +60,7 @@ public class MapGenerator : MonoBehaviour
     public static float TILE_HEIGHT;
     public const int GRID_X = 100;
     public const int GRID_Y = 100;
+    public const float ENDLINE_THICKNESS = 20f;
 
     List<Room> rooms;
 
@@ -178,32 +180,20 @@ public class MapGenerator : MonoBehaviour
         }
 
         //테두리 시작
-        GameObject endLineCollider1 = Instantiate(groundPrefab, new Vector3(TILE_XZ * GRID_X / 2f, 5f, -TILE_XZ / 2), Quaternion.identity);
-        endLineCollider1.transform.localScale = new Vector3(GRID_X * TILE_XZ + TILE_XZ * 2, 10f, TILE_XZ);
-        Destroy(endLineCollider1.GetComponent<MeshRenderer>());
-        Destroy(endLineCollider1.GetComponent<MeshFilter>());
-        Destroy(endLineCollider1.GetComponent<NavMeshSurface>());
+        GameObject endLineCollider1 = Instantiate(endLinePrefab, new Vector3(TILE_XZ * GRID_X / 2f, 5f, -ENDLINE_THICKNESS / 2), Quaternion.identity);
+        endLineCollider1.transform.localScale = new Vector3(GRID_X * TILE_XZ + ENDLINE_THICKNESS * 2, 10f, ENDLINE_THICKNESS);
         endLineCollider1.transform.SetParent(transform, false);
 
-        GameObject endLineCollider2 = Instantiate(groundPrefab, new Vector3(-TILE_XZ / 2, 5f, TILE_XZ * GRID_Y / 2f), Quaternion.identity);
-        endLineCollider2.transform.localScale = new Vector3(TILE_XZ, 10f, GRID_Y * TILE_XZ);
-        Destroy(endLineCollider2.GetComponent<MeshRenderer>());
-        Destroy(endLineCollider2.GetComponent<MeshFilter>());
-        Destroy(endLineCollider2.GetComponent<NavMeshSurface>());
+        GameObject endLineCollider2 = Instantiate(endLinePrefab, new Vector3(-ENDLINE_THICKNESS / 2, 5f, TILE_XZ * GRID_Y / 2f), Quaternion.identity);
+        endLineCollider2.transform.localScale = new Vector3(ENDLINE_THICKNESS, 10f, GRID_Y * TILE_XZ);
         endLineCollider2.transform.SetParent(transform, false);
 
-        GameObject endLineCollider3 = Instantiate(groundPrefab, new Vector3(TILE_XZ * GRID_X + TILE_XZ / 2, 5f, TILE_XZ * GRID_Y / 2f), Quaternion.identity);
-        endLineCollider3.transform.localScale = new Vector3(TILE_XZ, 10f, GRID_Y * TILE_XZ);
-        Destroy(endLineCollider3.GetComponent<MeshRenderer>());
-        Destroy(endLineCollider3.GetComponent<MeshFilter>());
-        Destroy(endLineCollider3.GetComponent<NavMeshSurface>());
+        GameObject endLineCollider3 = Instantiate(endLinePrefab, new Vector3(TILE_XZ * GRID_X + ENDLINE_THICKNESS / 2, 5f, TILE_XZ * GRID_Y / 2f), Quaternion.identity);
+        endLineCollider3.transform.localScale = new Vector3(ENDLINE_THICKNESS, 10f, GRID_Y * TILE_XZ);
         endLineCollider3.transform.SetParent(transform, false);
 
-        GameObject endLineCollider4 = Instantiate(groundPrefab, new Vector3(TILE_XZ * GRID_X / 2f, 5f, TILE_XZ * GRID_Y + TILE_XZ / 2f), Quaternion.identity);
-        endLineCollider4.transform.localScale = new Vector3(GRID_X * TILE_XZ + TILE_XZ * 2, 10f,TILE_XZ);
-        Destroy(endLineCollider4.GetComponent<MeshRenderer>());
-        Destroy(endLineCollider4.GetComponent<MeshFilter>());
-        Destroy(endLineCollider4.GetComponent<NavMeshSurface>());
+        GameObject endLineCollider4 = Instantiate(endLinePrefab, new Vector3(TILE_XZ * GRID_X / 2f, 5f, TILE_XZ * GRID_Y + ENDLINE_THICKNESS / 2f), Quaternion.identity);
+        endLineCollider4.transform.localScale = new Vector3(GRID_X * TILE_XZ + ENDLINE_THICKNESS * 2, 10f, ENDLINE_THICKNESS);
         endLineCollider4.transform.SetParent(transform, false);
         //테두리 끝
         //지형 끝

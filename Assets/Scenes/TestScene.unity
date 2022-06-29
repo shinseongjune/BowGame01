@@ -2684,6 +2684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efff423b322a3064c92020e7ea8a070e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current: 0
+  playerSkills: {fileID: 1307857261}
 --- !u!1 &373223735
 GameObject:
   m_ObjectHideFlags: 0
@@ -8479,6 +8481,7 @@ MonoBehaviour:
   groundPrefab: {fileID: 3210944260837629098, guid: 26b6b8e783d23b54984a538bebb972f7, type: 3}
   stairsPrefab: {fileID: 8489194658524002924, guid: 935c7f90792a36b4081f3c93dacd6ed7, type: 3}
   rockPrefab: {fileID: 942252193179296279, guid: f3b52a6f2d9f943429053ce9b54c5ecc, type: 3}
+  endLinePrefab: {fileID: 150599739422501207, guid: 1aef52ed4aa516f49a6f07e6adeb9930, type: 3}
   gridManager: {fileID: 1643823731}
 --- !u!4 &1096421407
 Transform:
@@ -10566,8 +10569,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSkillSlot: {fileID: 845701110}
   defaultSkillSlot: {fileID: 553004737}
-  QSkillSlot: {fileID: 769513518}
-  ESkillSlot: {fileID: 29029314}
+  qSkillSlot: {fileID: 769513518}
+  eSkillSlot: {fileID: 29029314}
   ultSkillSlot: {fileID: 1016139173}
   skillDataBase: {fileID: 262127298}
   buildingDataBase: {fileID: 1051659465}
@@ -10577,6 +10580,7 @@ MonoBehaviour:
   buildingModeCanvas: {fileID: 149572419}
   inventoryCanvas: {fileID: 202688117}
   skillMenuCanvas: {fileID: 1183775988}
+  skillMenu: {fileID: 372794770}
   notEnoughtMaterialsTextUIPrefab: {fileID: 2708576395305787329, guid: 320d0d9bcbd6f0543975bfe9949988f4, type: 3}
 --- !u!114 &1307857260
 MonoBehaviour:
@@ -13166,6 +13170,7 @@ MonoBehaviour:
   mapGenerator: {fileID: 1096421406}
   inventory: {fileID: 1035250579}
   movementSkillSlot: {fileID: 845701110}
+  basicSkillSlot1: {fileID: 769513518}
   playerSkills: {fileID: 1307857261}
 --- !u!4 &1713239894
 Transform:

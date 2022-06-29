@@ -16,8 +16,8 @@ public class PlayerControlHandler : MonoBehaviour
 
     [SerializeField] MovementSkillSlot movementSkillSlot;
     [SerializeField] DefaultSkillSlot defaultSkillSlot;
-    [SerializeField] BasicSkillSlot QSkillSlot;
-    [SerializeField] BasicSkillSlot ESkillSlot;
+    [SerializeField] BasicSkillSlot qSkillSlot;
+    [SerializeField] BasicSkillSlot eSkillSlot;
     [SerializeField] UltSkillSlot ultSkillSlot;
 
     [SerializeField]
@@ -36,6 +36,8 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] Canvas buildingModeCanvas;
     [SerializeField] Canvas inventoryCanvas;
     [SerializeField] Canvas skillMenuCanvas;
+
+    [SerializeField] SkillMenu skillMenu;
 
     Transform playerCanvas;
     [SerializeField] GameObject notEnoughtMaterialsTextUIPrefab;
@@ -94,6 +96,7 @@ public class PlayerControlHandler : MonoBehaviour
             {
                 inventoryCanvas.enabled = false;
                 skillMenuCanvas.enabled = true;
+                skillMenu.GetSkills();
             }
         }
         //스킬메뉴 끝
@@ -439,6 +442,17 @@ public class PlayerControlHandler : MonoBehaviour
                 }
             }
             //쉬프트 끝
+
+            //Q, E 시작
+            if (Input.GetKeyDown(KeyCode.Q) && !qSkillSlot.isOnCooldown)
+            {
+                DoBasicSkill(0);
+            }
+            if (Input.GetKeyDown(KeyCode.E) && !eSkillSlot.isOnCooldown)
+            {
+                DoBasicSkill(1);
+            }
+            //Q, E 끝
         }
     }
 
@@ -449,8 +463,10 @@ public class PlayerControlHandler : MonoBehaviour
             BasicSkill skill = skillDataBase.defaultSkills[(int)defaultSkillSlot.skillId];
 
             skill.owner = gameObject;
-            defaultSkillSlot.SetCooldown(skill.coolDown);
-            skill.Invoke();
+            if (skill.Invoke())
+            {
+                defaultSkillSlot.SetCooldown(skill.coolDown);
+            }
         }
     }
 
@@ -460,10 +476,38 @@ public class PlayerControlHandler : MonoBehaviour
         skill.direction = gameObject.transform.forward;
         state.isSkillMoving = true;
         state.skillMovingTime = skill.movingTime;
-        movementSkillSlot.SetCooldown(skill.coolDown);
-        skill.Invoke();
+        if (skill.Invoke())
+        {
+            movementSkillSlot.SetCooldown(skill.coolDown);
+        }
     }
     
+    void DoBasicSkill(int idx)
+    {
+        int skillId;
+        BasicSkillSlot skillSlot;
+        if (idx == 0)
+        {
+            skillId = qSkillSlot.skillId.Value;
+            skillSlot = qSkillSlot;
+        }
+        else
+        {
+            skillId = eSkillSlot.skillId.Value;
+            skillSlot = eSkillSlot;
+        }
+
+        if (state.isAttackable)
+        {
+            BasicSkill skill = skillDataBase.basicSkills[skillId];
+            skill.owner = gameObject;
+            if (skill.Invoke())
+            {
+                skillSlot.SetCooldown(skill.coolDown);
+            }
+        }
+    }
+
     public void SelectConstructPrefab(int id)
     {
         if (selectedConstruct != null)

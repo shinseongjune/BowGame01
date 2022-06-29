@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] MapGenerator mapGenerator;
     [SerializeField] Transform inventory;
     [SerializeField] MovementSkillSlot movementSkillSlot;
+    [SerializeField] BasicSkillSlot basicSkillSlot1;
 
     [SerializeField] PlayerSkills playerSkills;
 
@@ -53,10 +54,11 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
 
         movementSkillSlot.SetSkill(1);
+        basicSkillSlot1.SetSkill(0);
 
-        //playerSkills.basicSkills.Add(0);
-        //playerSkills.basicSkills.Add(1);
-        //playerSkills.basicSkills.Add(2);
+        playerSkills.basicSkills.Add(0);
+        playerSkills.basicSkills.Add(1);
+        playerSkills.basicSkills.Add(2);
 
         playerSkills.movementSkills.Add(0);
         playerSkills.movementSkills.Add(1);
