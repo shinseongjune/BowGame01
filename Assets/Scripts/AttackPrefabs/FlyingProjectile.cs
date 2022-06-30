@@ -8,6 +8,8 @@ public class FlyingProjectile : MonoBehaviour
     public float restTime = 8;
     public float restDistance = 30;
 
+    public GameObject afterEffect;
+
     void Update()
     {
         transform.position += transform.forward * speed * Time.deltaTime;
@@ -20,12 +22,18 @@ public class FlyingProjectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         if (other.transform.IsChildOf(aggression.attacker.transform))
         {
             return;
         }
+
+        if (other.gameObject.CompareTag(aggression.attacker.tag))
+        {
+            return;
+        }
+
         Damageable damageable = other.gameObject.transform.root.GetComponent<Damageable>();
 
         if (damageable != null)
@@ -34,7 +42,17 @@ public class FlyingProjectile : MonoBehaviour
             damageable.Damaged(aggression);
         }
 
-        //TODO: 화살 박히는건 나중에 생각할것. 안해도 무방함.
+        if (afterEffect != null)
+        {
+            DoAfterEffect();
+        }
+
         Destroy(gameObject);
+    }
+
+    public virtual void DoAfterEffect()
+    {
+        GameObject go = Instantiate(afterEffect, transform.position, transform.rotation);
+        go.GetComponent<AfterEffect>().aggression = aggression;
     }
 }

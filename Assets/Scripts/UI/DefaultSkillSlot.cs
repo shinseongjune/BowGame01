@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
-public class DefaultSkillSlot : MonoBehaviour, IPointerClickHandler
+public class DefaultSkillSlot : MonoBehaviour
 {
     public int? skillId;
 
@@ -62,10 +61,5 @@ public class DefaultSkillSlot : MonoBehaviour, IPointerClickHandler
         cooldownMask.fillAmount = 1;
 
         isOnCooldown = true;
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-
     }
 }
