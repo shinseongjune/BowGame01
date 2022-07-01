@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7439919280309167430}
   - component: {fileID: 6178509466539652783}
   - component: {fileID: 8243094187862414114}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 8985317695172227723}
   - component: {fileID: 7363338199513692367}
   - component: {fileID: 4313252688177165651}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AutoTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 9156983044994542891}
   - component: {fileID: 328971590226255029}
   - component: {fileID: 5113613705327447186}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 4564950414044791895}
   - component: {fileID: 1720273246031361225}
   - component: {fileID: 5932954820904713176}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +448,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1739949021402369924}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

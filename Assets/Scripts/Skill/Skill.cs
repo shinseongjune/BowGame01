@@ -128,7 +128,7 @@ public class EmplaceSkill : BasicSkill
             }
         }
 
-        layer = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("FieldResources");
+        layer = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("FieldResources") | 1 << LayerMask.NameToLayer("Construct") | 1 << LayerMask.NameToLayer("Installations");
 
         Vector3 checker = owner.transform.position + new Vector3(0, 0.51f, 0);
         float distance = 0f;
@@ -287,7 +287,7 @@ public class BlinkSkill : MovementSkill
 
         Vector3 destination = owner.transform.position + owner.transform.forward * power;
 
-        int layer = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("FieldResources") | 1 << LayerMask.NameToLayer("Enemy");
+        int layer = 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("FieldResources") | 1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Construct");
 
         if (Physics.OverlapSphere(destination + new Vector3(0, 0.51f, 0), 0.5f, layer).Length != 0)
         {

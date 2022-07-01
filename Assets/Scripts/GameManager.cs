@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
         playerSkills.basicSkills.Add(0);
         playerSkills.basicSkills.Add(1);
-        playerSkills.basicSkills.Add(2);
+        //playerSkills.basicSkills.Add(2);
 
         playerSkills.movementSkills.Add(0);
         playerSkills.movementSkills.Add(1);

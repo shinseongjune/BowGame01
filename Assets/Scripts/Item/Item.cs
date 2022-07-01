@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Item
@@ -11,8 +12,24 @@ public class Item
     public int MAX_COUNT;
 
     public int? defaultSkill;
-    public int? subSkill;
 
     public float dropRate;
     public int dropCount;
+}
+
+public class Equipment : Item
+{
+    public enum Type
+    {
+        Head,
+        Shoulder,
+        Hand,
+        Leg,
+        Feet,
+    }
+
+    public Type type;
+    public Dictionary<Stat.Type, float> stats = new();
+
+    public List<SpecialEffect> effects = new();
 }

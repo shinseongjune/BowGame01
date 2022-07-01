@@ -95,6 +95,8 @@ public class Stats : MonoBehaviour
 
     public Stat[] stats = new Stat[(int)Stat.Type.__COUNT];
 
+    List<SpecialEffect> specialEffects = new();
+
     private void Start()
     {
         for (int i = 0; i < (int)Stat.Type.__COUNT; i++)
@@ -184,7 +186,7 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public void RemoveStatModifierFromSource(GameObject source)
+    public void RemoveStatModifierFromSource(object source)
     {
         foreach(Stat stat in stats)
         {
@@ -208,5 +210,54 @@ public class Stats : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    public void AddSpecialEffect(SpecialEffect effect)
+    {
+        if (effect.isUnique)
+        {
+            foreach (SpecialEffect e in specialEffects)
+            {
+                if (e.name == effect.name)
+                {
+                    return;
+                }
+            }
+        }
+
+        specialEffects.Add(effect);
+        
+        foreach (var mods in effect.modifiers)
+        {
+            Stat.Type type = mods.Key;
+            stats[(int)type].modifiers.Add(mods.Value);
+        }
+    }
+
+    public void RemoveSpecialEffect(SpecialEffect effect)
+    {
+        foreach (Stat stat in stats)
+        {
+            foreach (StatModifier mod in stat.modifiers)
+            {
+                if (mod.source == effect)
+                {
+                    stat.modifiers.Remove(mod);
+                }
+            }
+        }
+
+        specialEffects.Remove(effect);
+    }
+
+    public void RemoveSpecialEffectFromSource(object source)
+    {
+        foreach (SpecialEffect effect in specialEffects)
+        {
+            if (effect.source == source)
+            {
+                RemoveSpecialEffect(effect);
+            }
+        }
     }
 }

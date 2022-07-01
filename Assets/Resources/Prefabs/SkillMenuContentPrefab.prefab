@@ -362,6 +362,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c020c56aa220d2a42aa6b646fdff922d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillId: 0
+  icon: {fileID: 1416602833192036310}
+  nameText: {fileID: 1416602831785208890}
+  description: {fileID: 1416602831518609382}
+  parent: {fileID: 0}
+  skillSlots: {fileID: 0}
 --- !u!1 &1416602833192036308
 GameObject:
   m_ObjectHideFlags: 0
