@@ -51,9 +51,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterId: 1
-  hp: 0
+  hp: 100
   mp: 0
   stats:
+  - baseValue: 0
+    isDirty: 0
+    type: 0
+  - baseValue: 0
+    isDirty: 0
+    type: 0
+  - baseValue: 0
+    isDirty: 0
+    type: 0
+  - baseValue: 0
+    isDirty: 0
+    type: 0
   - baseValue: 0
     isDirty: 0
     type: 0

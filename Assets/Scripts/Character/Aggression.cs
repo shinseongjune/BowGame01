@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,16 +13,13 @@ public class Aggression
     }
 
     public string name;
-    public Type type;
-    public float damage;
+    public Dictionary<Type, float> damages;
     public GameObject attacker;
     public GameObject target;
 
-    public Aggression(string name, Type type, float damage, GameObject attacker, GameObject target)
+    public Aggression(string name, GameObject attacker, GameObject target)
     {
         this.name = name;
-        this.type = type;
-        this.damage = damage;
         this.attacker = attacker;
         this.target = target;
     }

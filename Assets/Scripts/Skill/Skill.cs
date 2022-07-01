@@ -8,12 +8,12 @@ public interface ISkill
 
 public abstract class BasicSkill : ISkill
 {
+    public Dictionary<Aggression.Type, float> damages = new();
+
     public int id;
 
     public string name;
     public string description;
-
-    public float damage;
 
     public float coolDown;
 
@@ -44,14 +44,15 @@ public class RangedSkill : BasicSkill
         //TODO: 임시 구현. owner의 발사 위치 empty object 만들어서 해당 위치에서 발사되게.
         //target 추적 등의 문제는 나중에 구현하기.
         //damage는 owner의 스탯을 받아와서 어떻게 하는게 맞는듯. 일단은 대충해놓는다.
-        Aggression aggression = new(name, type, damage, owner, null);
+        Aggression aggression = new(name, owner, null);
         GameObject projectile = Object.Instantiate(skillPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
         FlyingProjectile flyingProjectile = projectile.GetComponent<FlyingProjectile>();
         flyingProjectile.aggression = aggression;
         flyingProjectile.restDistance = reach;
+        flyingProjectile.damages = new(damages);
         if (afterEffect != null)
         {
-            flyingProjectile.afterEffect = afterEffect;
+            flyingProjectile.afterEffectPrefab = afterEffect;
         }
         return true;
         //TODO: 자원 소모, 자원 부족 시 실패 return false
@@ -62,10 +63,11 @@ public class MeleeSkill : BasicSkill
 {
     public override bool Invoke()
     {
-        Aggression aggression = new(name, type, damage, owner, null);
+        Aggression aggression = new(name, owner, null);
         //TODO: 임시 이펙트 시작
         GameObject effect = Object.Instantiate(skillPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
         TempMeleeAttack tempMeleeAttack = effect.GetComponent<TempMeleeAttack>();
+        tempMeleeAttack.damages = new(damages);
         tempMeleeAttack.aggression = aggression;
         tempMeleeAttack.restDistance = reach;
         //임시 이펙트 끝
@@ -77,6 +79,8 @@ public class EmplaceSkill : BasicSkill
 {
     public override bool Invoke()
     {
+        Aggression aggression = new(name, owner, null);
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layer = 1 << LayerMask.NameToLayer("Ground");
         RaycastHit hit;
@@ -176,10 +180,19 @@ public class EmplaceSkill : BasicSkill
         if (isThereSpace)
         {
             GameObject go = Object.Instantiate(skillPrefab, targetPoint, Quaternion.identity);
-            foreach (Transform t in go.transform)
+            Transform[] allChildren = go.GetComponentsInChildren<Transform>();
+            foreach (Transform t in allChildren)
             {
                 t.gameObject.tag = owner.tag;
             }
+
+            Installation installation = go.GetComponent<Installation>();
+            if (installation != null)
+            {
+                installation.aggression = aggression;
+                installation.damages = new(damages);
+            }
+
             //TODO: 설치 위치에 데미지 주기
             return true;
         }

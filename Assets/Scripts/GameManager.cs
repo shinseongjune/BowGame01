@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     }
     //Singleton end
 
+    [SerializeField] GameObject player;
+
     [SerializeField] ItemDataBase itemDataBase;
     [SerializeField] SkillDataBase skillDataBase;
     [SerializeField] BuildingDataBase buildingDataBase;
@@ -68,5 +70,30 @@ public class GameManager : MonoBehaviour
 
         mapGenerator.GenerateMap();
         gridManager.GenerateGrid();
+
+        Stats playerStat = player.GetComponent<Stats>();
+
+        playerStat.stats[(int)Stat.Type.MaxHP].baseValue = 200;
+        playerStat.hp = 200;
+        playerStat.stats[(int)Stat.Type.MaxMP].baseValue = 100;
+        playerStat.mp = 100;
+        playerStat.stats[(int)Stat.Type.Attack].baseValue = 10;
+        playerStat.stats[(int)Stat.Type.Fire].baseValue = 8;
+        playerStat.stats[(int)Stat.Type.Ice].baseValue = 8;
+        playerStat.stats[(int)Stat.Type.Lightning].baseValue = 10;
+        playerStat.stats[(int)Stat.Type.Armor].baseValue = 10;
+        playerStat.stats[(int)Stat.Type.FireResistance].baseValue = 5;
+        playerStat.stats[(int)Stat.Type.IceResistance].baseValue = 5;
+        playerStat.stats[(int)Stat.Type.LightningResistance].baseValue = 5;
+        playerStat.stats[(int)Stat.Type.ArmorPenetration].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.FirePenetration].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.IcePenetration].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.LightningPenetration].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.MovementSpeed].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.CooldownReduction].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.AttackCriticalChance].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.AttackCriticalDamage].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.SpellCriticalChance].baseValue = 0;
+        playerStat.stats[(int)Stat.Type.SpellCriticalDamage].baseValue = 0;
     }
 }

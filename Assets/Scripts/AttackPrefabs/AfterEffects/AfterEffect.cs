@@ -13,19 +13,22 @@ public class AfterEffect : MonoBehaviour
     public Type type;
 
     public float lifeTime = 0;
+    public float maxLifeTime = 1f;
 
     public Aggression aggression;
 
     public List<GameObject> hitObjects = new();
 
+    public Dictionary<Aggression.Type, float> damages = new();
+
     void Update()
     {
         if (type == Type.Explosion)
         {
-            transform.localScale += new Vector3(3.7f, 3.7f, 3.7f) * Time.deltaTime;
+            transform.localScale += new Vector3(5f, 5f, 5f) * Time.deltaTime;
         }
         lifeTime += Time.deltaTime;
-        if (lifeTime > 0.1f)
+        if (lifeTime > maxLifeTime)
         {
             Destroy(gameObject);
         }
@@ -48,7 +51,7 @@ public class AfterEffect : MonoBehaviour
             Damageable damageable = other.GetComponent<Damageable>();
             if (damageable != null)
             {
-                damageable.Damaged(aggression);
+                damageable.Damaged(aggression, damages);
             }
         }
     }

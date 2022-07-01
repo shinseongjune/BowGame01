@@ -8,6 +8,10 @@ public class Stat
     {
         MaxHP,
         MaxMP,
+        Attack,
+        Fire,
+        Ice,
+        Lightning,
         Armor,
         FireResistance,
         IceResistance,

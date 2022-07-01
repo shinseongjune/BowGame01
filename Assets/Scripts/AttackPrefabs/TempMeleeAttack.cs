@@ -7,6 +7,8 @@ public class TempMeleeAttack : MonoBehaviour
     public float speed;
     public Aggression aggression;
 
+    public Dictionary<Aggression.Type, float> damages;
+
     public float restTime = 8;
     public float restDistance = 30;
 
@@ -33,7 +35,7 @@ public class TempMeleeAttack : MonoBehaviour
         if (damageable != null)
         {
             aggression.target = other.gameObject;
-            damageable.Damaged(aggression);
+            damageable.Damaged(aggression, damages);
         }
 
         PlayerItemHandler itemHandler = aggression.attacker.GetComponent<PlayerItemHandler>();
@@ -44,7 +46,31 @@ public class TempMeleeAttack : MonoBehaviour
 
             if (fieldResource != null)
             {
-                if (fieldResource.rest < aggression.damage)
+                float totalDamage = 0;
+                float damage = 0;
+
+                Stats stats = aggression.attacker.GetComponent<Stats>();
+                foreach (var damageRate in damages)
+                {
+                    switch (damageRate.Key)
+                    {
+                        case Aggression.Type.Attack:
+                            damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
+                            break;
+                        case Aggression.Type.Fire:
+                            damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
+                            break;
+                        case Aggression.Type.Ice:
+                            damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
+                            break;
+                        case Aggression.Type.Lightning:
+                            damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
+                            break;
+                    }
+                    totalDamage += damage;
+                }
+
+                if (fieldResource.rest < totalDamage)
                 {
                     itemHandler.GetItem(fieldResource.itemId, fieldResource.rest);
                     fieldResource.rest = 0;
@@ -52,8 +78,8 @@ public class TempMeleeAttack : MonoBehaviour
                 }
                 else
                 {
-                    itemHandler.GetItem(fieldResource.itemId, (int)aggression.damage);
-                    fieldResource.rest -= (int)aggression.damage;
+                    itemHandler.GetItem(fieldResource.itemId, (int)totalDamage);
+                    fieldResource.rest -= (int)totalDamage;
                 }
             }
         }

@@ -36,7 +36,7 @@ public class SkillDataBase : MonoBehaviour
         testAttack.id = 0;
         testAttack.name = "맨손 공격";
         testAttack.description = "맨손 공격입니다.";
-        testAttack.damage = 3;
+        testAttack.damages.Add(Aggression.Type.Attack, 1f);
         testAttack.coolDown = 0.2f;
         testAttack.reach = 2.0f;
         testAttack.type = Aggression.Type.Attack;
@@ -48,7 +48,7 @@ public class SkillDataBase : MonoBehaviour
         testBowShot.id = 1;
         testBowShot.name = "화살 공격";
         testBowShot.description = "화살을 발사합니다.";
-        testBowShot.damage = 10;
+        testBowShot.damages.Add(Aggression.Type.Attack, 1.7f);
         testBowShot.coolDown = 0.4f;
         testBowShot.reach = 30.0f;
         testBowShot.type = Aggression.Type.Attack;
@@ -87,7 +87,8 @@ public class SkillDataBase : MonoBehaviour
         testEmplace.name = "자동 포탑";
         testEmplace.description = "자동 포탑을 설치합니다.";
         testEmplace.coolDown = 13.0f;
-        testEmplace.damage = 0;
+        testEmplace.damages.Add(Aggression.Type.Attack, 0.7f);
+        testEmplace.damages.Add(Aggression.Type.Fire, 0.7f);
         testEmplace.reach = 5.0f;
         testEmplace.type = Aggression.Type.Attack;
         testEmplace.skillPrefab = Resources.Load<GameObject>("Prefabs/AutoTurret");
@@ -100,7 +101,8 @@ public class SkillDataBase : MonoBehaviour
         testMagicMissile.id = 1;
         testMagicMissile.name = "매직 미사일";
         testMagicMissile.description = "매직 미사일을 발사합니다.";
-        testMagicMissile.damage = 0;
+        testMagicMissile.damages.Add(Aggression.Type.Fire, 1.2f);
+        testMagicMissile.damages.Add(Aggression.Type.Lightning, 1.2f);
         testMagicMissile.coolDown = 1.2f;
         testMagicMissile.reach = 30.0f;
         testMagicMissile.type = Aggression.Type.Lightning;
@@ -110,5 +112,12 @@ public class SkillDataBase : MonoBehaviour
         basicSkills[1] = testMagicMissile;
 
         //Debug: 테스트 코드 끝
+    }
+
+    public void SetAfterEffectDamages()
+    {
+        AfterEffect explosion = afterEffects[1].GetComponent<AfterEffect>();
+        explosion.damages.Add(Aggression.Type.Fire, 1.2f);
+        explosion.damages.Add(Aggression.Type.Lightning, 1.2f);
     }
 }

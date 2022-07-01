@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FlyingProjectile : MonoBehaviour
@@ -8,7 +9,9 @@ public class FlyingProjectile : MonoBehaviour
     public float restTime = 8;
     public float restDistance = 30;
 
-    public GameObject afterEffect;
+    public Dictionary<Aggression.Type, float> damages = new();
+
+    public GameObject afterEffectPrefab;
 
     void Update()
     {
@@ -39,20 +42,25 @@ public class FlyingProjectile : MonoBehaviour
         if (damageable != null)
         {
             aggression.target = other.gameObject;
-            damageable.Damaged(aggression);
+            damageable.Damaged(aggression, damages);
         }
 
-        if (afterEffect != null)
-        {
-            DoAfterEffect();
-        }
+        DoAfterEffect(other);
 
         Destroy(gameObject);
     }
 
-    public virtual void DoAfterEffect()
+    public virtual void DoAfterEffect(Collider other)
     {
-        GameObject go = Instantiate(afterEffect, transform.position, transform.rotation);
-        go.GetComponent<AfterEffect>().aggression = aggression;
+        if (afterEffectPrefab != null)
+        {
+            GameObject go = Instantiate(afterEffectPrefab, transform.position, transform.rotation);
+            AfterEffect afterEffect = go.GetComponent<AfterEffect>();
+            if (afterEffect != null)
+            {
+                afterEffect.aggression = aggression;
+                afterEffect.hitObjects.Add(other.gameObject);
+            }
+        }
     }
 }
