@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
 
         Stats playerStat = player.GetComponent<Stats>();
 
+        playerStat.characterId = -1;
         playerStat.stats[(int)Stat.Type.MaxHP].baseValue = 200;
         playerStat.hp = 200;
         playerStat.stats[(int)Stat.Type.MaxMP].baseValue = 100;

@@ -28,14 +28,38 @@ public class SkillMenuContentPrefab : MonoBehaviour, IPointerClickHandler
         switch (parent.current)
         {
             case 0:
-                BasicSkillSlot qBasic = skillSlots.GetChild(2).GetComponent<BasicSkillSlot>();
+                {
+                    BasicSkillSlot qBasic = skillSlots.GetChild(2).GetComponent<BasicSkillSlot>();
+                    BasicSkillSlot eBasic = skillSlots.GetChild(3).GetComponent<BasicSkillSlot>();
 
-                qBasic.SetSkill(skillId);
+                    if (eBasic.skillId == skillId)
+                    {
+                        int? eSkillId = eBasic.skillId;
+                        eBasic.SetSkill(skillId);
+                        qBasic.SetSkill(eSkillId);
+                    }
+                    else
+                    {
+                        qBasic.SetSkill(skillId);
+                    }
                 break;
+                }
             case 1:
-                BasicSkillSlot eBasic = skillSlots.GetChild(3).GetComponent<BasicSkillSlot>();
+                {
+                    BasicSkillSlot qBasic = skillSlots.GetChild(2).GetComponent<BasicSkillSlot>();
+                    BasicSkillSlot eBasic = skillSlots.GetChild(3).GetComponent<BasicSkillSlot>();
 
-                eBasic.SetSkill(skillId);
+                    if (qBasic.skillId == skillId)
+                    {
+                        int? qSkillId = qBasic.skillId;
+                        qBasic.SetSkill(skillId);
+                        eBasic.SetSkill(qSkillId);
+                    }
+                    else
+                    {
+                        eBasic.SetSkill(skillId);
+                    }
+                }
                 break;
             case 2:
                 MovementSkillSlot movement = skillSlots.GetChild(0).GetComponent<MovementSkillSlot>();
