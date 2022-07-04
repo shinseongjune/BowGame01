@@ -29,6 +29,9 @@ public class Stat
         __COUNT,
     }
 
+    public string name;
+    public string description;
+
     public float baseValue;
     public bool isDirty;
     float totalValue;
@@ -95,7 +98,7 @@ public class Stats : MonoBehaviour
 
     public Stat[] stats = new Stat[(int)Stat.Type.__COUNT];
 
-    List<SpecialEffect> specialEffects = new();
+    public List<SpecialEffect> specialEffects = new();
 
     private void Start()
     {
@@ -106,10 +109,47 @@ public class Stats : MonoBehaviour
             stats[i].isDirty = true;
             //TODO: 게임매니저에서 value 데이터 가져오기.
         }
-        //Debug: 테스트용 코드
-        stats[(int)Stat.Type.MaxHP].baseValue = 100;
-        hp = stats[(int)Stat.Type.MaxHP].Value;
-        mp = stats[(int)Stat.Type.MaxMP].Value;
+        stats[(int)Stat.Type.MaxHP].name = "최대 체력";
+        stats[(int)Stat.Type.MaxMP].name = "최대 마력";
+        stats[(int)Stat.Type.Attack].name = "물리 공격력";
+        stats[(int)Stat.Type.Fire].name = "화염 공격력";
+        stats[(int)Stat.Type.Ice].name = "냉기 공격력";
+        stats[(int)Stat.Type.Lightning].name = "번개 공격력";
+        stats[(int)Stat.Type.Armor].name = "방어력";
+        stats[(int)Stat.Type.FireResistance].name = "화염 저항";
+        stats[(int)Stat.Type.IceResistance].name = "냉기 저항";
+        stats[(int)Stat.Type.LightningResistance].name = "번개 저항";
+        stats[(int)Stat.Type.ArmorPenetration].name = "방어 관통";
+        stats[(int)Stat.Type.FirePenetration].name = "화염 관통";
+        stats[(int)Stat.Type.IcePenetration].name = "냉기 관통";
+        stats[(int)Stat.Type.LightningPenetration].name = "번개 관통";
+        stats[(int)Stat.Type.MovementSpeed].name = "이동 속도";
+        stats[(int)Stat.Type.CooldownReduction].name = "쿨타임 감소";
+        stats[(int)Stat.Type.AttackCriticalChance].name = "공격 치명타 확률";
+        stats[(int)Stat.Type.AttackCriticalDamage].name = "공격 치명타 피해";
+        stats[(int)Stat.Type.SpellCriticalChance].name = "주문 치명타 확률";
+        stats[(int)Stat.Type.SpellCriticalDamage].name = "주문 치명타 피해";
+
+        stats[(int)Stat.Type.MaxHP].description = "체력 최대치입니다.";
+        stats[(int)Stat.Type.MaxMP].description = "마력 최대치입니다.";
+        stats[(int)Stat.Type.Attack].description = "물리 속성 공격을 할 때 적용되는 공격력입니다.";
+        stats[(int)Stat.Type.Fire].description = "화염 속성 공격을 할 때 적용되는 공격력입니다.";
+        stats[(int)Stat.Type.Ice].description = "냉기 속성 공격을 할 때 적용되는 공격력입니다.";
+        stats[(int)Stat.Type.Lightning].description = "번개 속성 공격을 할 때 적용되는 공격력입니다.";
+        stats[(int)Stat.Type.Armor].description = "물리 속성 피해를 감소시킵니다.";
+        stats[(int)Stat.Type.FireResistance].description = "화염 속성 피해를 감소시킵니다.";
+        stats[(int)Stat.Type.IceResistance].description = "냉기 속성 피해를 감소시킵니다.";
+        stats[(int)Stat.Type.LightningResistance].description = "번개 속성 피해를 감소시킵니다.";
+        stats[(int)Stat.Type.ArmorPenetration].description = "방어력을 무시합니다.";
+        stats[(int)Stat.Type.FirePenetration].description = "화염 저항을 무시합니다.";
+        stats[(int)Stat.Type.IcePenetration].description = "냉기 저항을 무시합니다.";
+        stats[(int)Stat.Type.LightningPenetration].description = "번개 저항을 무시합니다";
+        stats[(int)Stat.Type.MovementSpeed].description = "캐릭터가 이동하는 속도입니다.";
+        stats[(int)Stat.Type.CooldownReduction].description = "기술 쿨타임을 감소시킵니다.";
+        stats[(int)Stat.Type.AttackCriticalChance].description = "공격 시 치명타가 발생할 확률입니다.";
+        stats[(int)Stat.Type.AttackCriticalDamage].description = "공격 치명타의 피해 배율입니다.";
+        stats[(int)Stat.Type.SpellCriticalChance].description = "주문 시전 시 치명타가 발생할 확률입니다.";
+        stats[(int)Stat.Type.SpellCriticalDamage].description = "주문 치명타의 피해 배율입니다.";
     }
 
     private void Update()
@@ -117,6 +157,24 @@ public class Stats : MonoBehaviour
         if (hp <= 0)
         {
             Die();
+        }
+
+        for (int i = specialEffects.Count - 1; i >= 0; i--)
+        {
+            SpecialEffect effect = specialEffects[i];
+            if (effect.restTime == null)
+            {
+                continue;
+            }
+            else
+            {
+                effect.restTime -= Time.deltaTime;
+
+                if (effect.restTime <= 0)
+                {
+                    RemoveSpecialEffect(effect);
+                }
+            }
         }
     }
 
@@ -190,8 +248,9 @@ public class Stats : MonoBehaviour
     {
         foreach(Stat stat in stats)
         {
-            foreach(StatModifier mod in stat.modifiers)
+            for (int i = stat.modifiers.Count - 1; i >= 0; i--)
             {
+                StatModifier mod = stat.modifiers[i];
                 if (mod.source == source)
                 {
                     RemoveStatModifier(stat.type, mod);
@@ -236,10 +295,12 @@ public class Stats : MonoBehaviour
 
     public void RemoveSpecialEffect(SpecialEffect effect)
     {
-        foreach (Stat stat in stats)
+        for (int i = 0; i < (int)Stat.Type.__COUNT; i++)
         {
-            foreach (StatModifier mod in stat.modifiers)
+            Stat stat = stats[i];
+            for (int j = stat.modifiers.Count - 1; j >= 0; j--)
             {
+                StatModifier mod = stat.modifiers[j];
                 if (mod.source == effect)
                 {
                     stat.modifiers.Remove(mod);
@@ -252,8 +313,9 @@ public class Stats : MonoBehaviour
 
     public void RemoveSpecialEffectFromSource(object source)
     {
-        foreach (SpecialEffect effect in specialEffects)
+        for (int i = specialEffects.Count - 1; i >= 0; i--)
         {
+            SpecialEffect effect = specialEffects[i];
             if (effect.source == source)
             {
                 RemoveSpecialEffect(effect);

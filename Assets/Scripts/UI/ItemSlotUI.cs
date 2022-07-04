@@ -7,7 +7,6 @@ using TMPro;
 
 public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
 {
-    public int slotId;
     public int? itemId;
     public int count;
 
@@ -15,11 +14,10 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
     GameObject movingItemSlotPrefab;
 
     public PlayerState state;
+    public PlayerItemHandler playerItemHandler;
 
     [SerializeField]
     ItemDataBase itemDataBase;
-
-    public GameObject player;
 
     Image image;
     public TextMeshProUGUI text;
@@ -65,90 +63,126 @@ public class ItemSlotUI : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!state.isMovingItemOnInventory)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (itemId == null)
+            if (!state.isMovingItemOnInventory)
             {
-                return;
-            }
-
-            if (itemDivideWindow.gameObject.activeSelf)
-            {
-                return;
-            }
-
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                itemDivideWindow.gameObject.SetActive(true);
-                itemDivideWindow.InitializeWindow(gameObject);
-            }
-            else
-            {
-                GameObject go = Instantiate(movingItemSlotPrefab);
-                MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
-                misp.itemId = (int)itemId;
-                misp.count = count;
-                misp.transform.SetParent(movingItemCanvas);
-                misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
-                misp.GetComponent<Image>().sprite = GetComponent<Image>().sprite;
-                misp.GetComponentInChildren<TextMeshProUGUI>().text = count.ToString();
-                state.movingItem = misp;
-                state.isMovingItemOnInventory = true;
-
-                SetItem(null, 0);
-            }
-        }
-        else
-        {
-            MovingItemSlotPrefab misp = state.movingItem;
-            if (itemId == null) //빈칸
-            {
-                SetItem(misp.itemId, misp.count);
-                Destroy(misp.gameObject);
-                state.isMovingItemOnInventory = false;
-                state.movingItem = null;
-            }
-            else if (itemId == misp.itemId) //아이템 보충
-            {
-                Item item = itemDataBase.items[(int)itemId];
-                if (count >= item.MAX_COUNT)
+                if (itemId == null)
                 {
                     return;
                 }
+
+                if (itemDivideWindow.gameObject.activeSelf)
+                {
+                    return;
+                }
+
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    itemDivideWindow.gameObject.SetActive(true);
+                    itemDivideWindow.InitializeWindow(gameObject);
+                }
                 else
                 {
-                    int rest = item.MAX_COUNT - count;
+                    GameObject go = Instantiate(movingItemSlotPrefab);
+                    MovingItemSlotPrefab misp = go.GetComponent<MovingItemSlotPrefab>();
+                    misp.itemId = (int)itemId;
+                    misp.count = count;
+                    misp.transform.SetParent(movingItemCanvas);
+                    misp.movingItemCanvas = movingItemCanvas.GetComponent<Canvas>();
+                    misp.GetComponent<Image>().sprite = GetComponent<Image>().sprite;
+                    misp.GetComponentInChildren<TextMeshProUGUI>().text = count.ToString();
+                    state.movingItem = misp;
+                    state.isMovingItemOnInventory = true;
 
-                    if (misp.count <= rest)
+                    SetItem(null, 0);
+                }
+            }
+            else
+            {
+                MovingItemSlotPrefab misp = state.movingItem;
+                if (itemId == null) //빈칸
+                {
+                    SetItem(misp.itemId, misp.count);
+                    Destroy(misp.gameObject);
+                    state.isMovingItemOnInventory = false;
+                    state.movingItem = null;
+                }
+                else if (itemId == misp.itemId) //아이템 보충
+                {
+                    Item item = itemDataBase.items[(int)itemId];
+                    if (count >= item.MAX_COUNT)
                     {
-                        count += misp.count;
-                        Destroy(misp.gameObject);
-                        text.text = count.ToString();
-                        state.isMovingItemOnInventory = false;
-                        state.movingItem = null;
+                        return;
                     }
                     else
                     {
-                        count += rest;
-                        text.text = count.ToString();
-                        misp.count -= rest;
-                        misp.GetComponentInChildren<TextMeshProUGUI>().text = misp.count.ToString();
+                        int rest = item.MAX_COUNT - count;
+
+                        if (misp.count <= rest)
+                        {
+                            count += misp.count;
+                            Destroy(misp.gameObject);
+                            text.text = count.ToString();
+                            state.isMovingItemOnInventory = false;
+                            state.movingItem = null;
+                        }
+                        else
+                        {
+                            count += rest;
+                            text.text = count.ToString();
+                            misp.count -= rest;
+                            misp.GetComponentInChildren<TextMeshProUGUI>().text = misp.count.ToString();
+                        }
                     }
                 }
-            }
-            else //아이템 교체
-            {
-                int nowId = (int)itemId;
-                int nowCount = count;
+                else //아이템 교체
+                {
+                    int nowId = (int)itemId;
+                    int nowCount = count;
 
-                misp.GetComponent<Image>().sprite = GetComponent<Image>().sprite;
-                misp.GetComponentInChildren<TextMeshProUGUI>().text = count.ToString();
+                    misp.GetComponent<Image>().sprite = GetComponent<Image>().sprite;
+                    misp.GetComponentInChildren<TextMeshProUGUI>().text = count.ToString();
 
-                SetItem(misp.itemId, misp.count);
+                    SetItem(misp.itemId, misp.count);
 
-                misp.itemId = nowId;
-                misp.count = nowCount;
+                    misp.itemId = nowId;
+                    misp.count = nowCount;
+                }
             }
         }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (itemId.HasValue)
+            {
+                if (itemDataBase.items[(int)itemId] is Consumable)
+                {
+                    UseItem();
+                }
+                else if (itemDataBase.items[(int)itemId] is Equipment)
+                {
+                    EquipItem();
+                }
+            }
+        }
+    }
+
+    public void UseItem()
+    {
+        Consumable item = itemDataBase.items[(int)itemId] as Consumable;
+        if (item != null)
+        {
+            item.Consume();
+            count--;
+            if (count <= 0)
+            {
+                SetItem(null, 0);
+            }
+        }
+    }
+
+    public void EquipItem()
+    {
+        playerItemHandler.EquipItem(this);
     }
 }

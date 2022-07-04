@@ -36,6 +36,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] PlayerSkills playerSkills;
 
+    [SerializeField] Light directionalLight;
+
+    public float currentTime;
+
+    public const float DAY_NIGHT_PERIOD = 60f * 10f;
+
     void Start()
     {
         //인벤토리 초기화 시작
@@ -55,6 +61,9 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(1).GetComponent<ItemSlotUI>().SetItem(1, 15);
         inventory.GetChild(2).GetComponent<ItemSlotUI>().SetItem(1, 8);
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
+        inventory.GetChild(4).GetComponent<ItemSlotUI>().SetItem(2, 10);
+        inventory.GetChild(5).GetComponent<ItemSlotUI>().SetItem(3, 1);
+        inventory.GetChild(6).GetComponent<ItemSlotUI>().SetItem(3, 1);
 
         movementSkillSlot.SetSkill(1);
         qBasicSkillSlot.SetSkill(0);
@@ -96,5 +105,19 @@ public class GameManager : MonoBehaviour
         playerStat.stats[(int)Stat.Type.AttackCriticalDamage].baseValue = 0;
         playerStat.stats[(int)Stat.Type.SpellCriticalChance].baseValue = 0;
         playerStat.stats[(int)Stat.Type.SpellCriticalDamage].baseValue = 0;
+
+        currentTime = 60f * 3f;
+        directionalLight.transform.eulerAngles = new Vector3(currentTime * 0.3f, 0, 0);
+    }
+
+    private void Update()
+    {
+        currentTime += Time.deltaTime;
+        if (currentTime >= DAY_NIGHT_PERIOD * 2)
+        {
+            currentTime -= DAY_NIGHT_PERIOD * 2;
+        }
+        directionalLight.transform.eulerAngles = new Vector3(currentTime * 0.3f, 0, 0);
+
     }
 }

@@ -6,17 +6,23 @@ using UnityEngine;
 public class PlayerItemHandler : MonoBehaviour
 {
     PlayerState state;
+    Stats stats;
 
     public Transform inventory;
     public ItemDataBase itemDataBase;
     public BuildingDataBase buildingDataBase;
     public GameObject droppedItemPrefab;
 
+    public Transform armorSlots;
+
+    public ArmorCanvasDetails details;
+
     public const float ITEM_DROP_DISTANCE = 3.5f;
 
     private void Start()
     {
         state = GetComponent<PlayerState>();
+        stats = GetComponent<Stats>();
         droppedItemPrefab = Resources.Load<GameObject>("Prefabs/DroppedItem");
     }
 
@@ -192,5 +198,85 @@ public class PlayerItemHandler : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void EquipItem(int id)
+    {
+        Equipment equippingItem = itemDataBase.items[id] as Equipment;
+
+        foreach (var mods in equippingItem.stats)
+        {
+            StatModifier mod = new(StatModifier.Type.BaseFlat, mods.Value, equippingItem);
+            stats.AddStatModifier(mods.Key, mod);
+        }
+
+        foreach (var effect in equippingItem.effects)
+        {
+            stats.AddSpecialEffect(effect);
+        }
+
+        details.UpdateContent();
+    }
+
+    public void EquipItem(ItemSlotUI itemSlot)
+    {
+        Equipment equippingItem = itemDataBase.items[(int)itemSlot.itemId] as Equipment;
+
+        ArmorSlot armorSlot = null;
+
+        switch (equippingItem.type)
+        {
+            case Equipment.Type.Head:
+                armorSlot = armorSlots.GetChild(1).GetComponent<ArmorSlot>();
+                break;
+            case Equipment.Type.Body:
+                armorSlot = armorSlots.GetChild(2).GetComponent<ArmorSlot>();
+                break;
+            case Equipment.Type.Hand:
+                armorSlot = armorSlots.GetChild(3).GetComponent<ArmorSlot>();
+                break;
+            case Equipment.Type.Leg:
+                armorSlot = armorSlots.GetChild(4).GetComponent<ArmorSlot>();
+                break;
+            case Equipment.Type.Feet:
+                armorSlot = armorSlots.GetChild(5).GetComponent<ArmorSlot>();
+                break;
+        }
+
+        if (armorSlot.itemId.HasValue)
+        {
+            int equipped = armorSlot.itemId.Value;
+            UnequipItem(equipped);
+            armorSlot.SetItem(equippingItem.id);
+            itemSlot.SetItem(null, 0);
+            GetItem(equipped, 1);
+        }
+        else
+        {
+            armorSlot.SetItem(equippingItem.id);
+            itemSlot.SetItem(null, 0);
+        }
+
+        foreach(var mods in equippingItem.stats)
+        {
+            StatModifier mod = new(StatModifier.Type.BaseFlat, mods.Value, equippingItem);
+            stats.AddStatModifier(mods.Key, mod);
+        }
+
+        foreach(var effect in equippingItem.effects)
+        {
+            stats.AddSpecialEffect(effect);
+        }
+
+        details.UpdateContent();
+    }
+
+    public void UnequipItem(int id)
+    {
+        Equipment equippedItem = itemDataBase.items[id] as Equipment;
+        stats.RemoveSpecialEffectFromSource(equippedItem);
+        stats.RemoveStatModifierFromSource(equippedItem);
+
+        details.UpdateContent();
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
@@ -27,19 +28,31 @@ public class CameraMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Input.GetMouseButton(1))
+        if (!IsPointerOverUIObject())
         {
-            mouseMovementX += Input.GetAxis("Mouse X") * MOUSE_MOVEMENT_SPEED;
-            mouseMovementY -= Input.GetAxis("Mouse Y") * MOUSE_MOVEMENT_SPEED;
+            if (Input.GetMouseButton(1))
+            {
+                mouseMovementX += Input.GetAxis("Mouse X") * MOUSE_MOVEMENT_SPEED;
+                mouseMovementY -= Input.GetAxis("Mouse Y") * MOUSE_MOVEMENT_SPEED;
 
-            mouseMovementY = Mathf.Clamp(mouseMovementY, MOUSE_MOVEMENT_Y_MIN, MOUSE_MOVEMENT_Y_MAX);
+                mouseMovementY = Mathf.Clamp(mouseMovementY, MOUSE_MOVEMENT_Y_MIN, MOUSE_MOVEMENT_Y_MAX);
+            }
+
+            Quaternion rotation = Quaternion.Euler(mouseMovementY, mouseMovementX, 0);
+
+            Vector3 distanceVector3 = new(0, 0, -DISTANCE_TO_RIG);
+
+            transform.position = rotation * distanceVector3 + cameraRig.position;
+            transform.rotation = rotation;
         }
+    }
 
-        Quaternion rotation = Quaternion.Euler(mouseMovementY, mouseMovementX, 0);
-
-        Vector3 distanceVector3 = new(0, 0, -DISTANCE_TO_RIG);
-
-        transform.position = rotation * distanceVector3 + cameraRig.position;
-        transform.rotation = rotation;
+    bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 }

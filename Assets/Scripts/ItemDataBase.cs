@@ -63,19 +63,14 @@ public class ItemDataBase : MonoBehaviour
         helmet.itemName = "스파르탄 헬멧";
         helmet.description = "튼튼한 헬멧이다.";
         helmet.MAX_COUNT = 1;
-        helmet.icon = Resources.Load<Sprite>("Images/Items/Armors/Helmet/Helmet-Spartan");
+        helmet.icon = Resources.Load<Sprite>("Images/Items/Armors/Head/Head-Spartan");
         helmet.dropRate = 0.1f;
         helmet.dropCount = 1;
         helmet.type = Equipment.Type.Head;
         helmet.stats.Add(Stat.Type.Armor, 10f);
-        SpecialEffect helmetEffect = new();
-        helmetEffect.name = "안전 제일";
-        helmetEffect.description = "머리를 든든히 보호합시다.";
-        helmetEffect.isDisplayed = true;
-        helmetEffect.isUnique = true;
+        SpecialEffect helmetEffect = new("안전 제일", "머리를 든든히 보호합시다.", true, true, null, helmet);
         StatModifier helmetEffectMod = new(StatModifier.Type.TotalFlat, 5, helmetEffect);
         helmetEffect.modifiers.Add(Stat.Type.Armor, helmetEffectMod);
-        helmetEffect.source = helmetEffect;
         helmet.effects.Add(helmetEffect);
         items.Add(helmet.id, helmet);
         //Debug 임시 아이템 데이터 끝

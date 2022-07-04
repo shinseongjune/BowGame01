@@ -16,6 +16,16 @@ public class SpecialEffect
 
     public object source;
 
+    public SpecialEffect(string name, string description, bool isDisplayed, bool isUnique, float? restTime, object source)
+    {
+        this.name = name;
+        this.description = description;
+        this.isDisplayed = isDisplayed;
+        this.isUnique = isUnique;
+        this.restTime = restTime;
+        this.source = source;
+    }
+
     public virtual void Invoke()
     {
 

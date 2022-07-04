@@ -17,12 +17,20 @@ public class Item
     public int dropCount;
 }
 
+public class Consumable : Item
+{
+    public void Consume()
+    {
+
+    }
+}
+
 public class Equipment : Item
 {
     public enum Type
     {
         Head,
-        Shoulder,
+        Body,
         Hand,
         Leg,
         Feet,

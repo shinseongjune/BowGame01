@@ -36,6 +36,7 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] Canvas buildingModeCanvas;
     [SerializeField] Canvas inventoryCanvas;
     [SerializeField] Canvas skillMenuCanvas;
+    [SerializeField] Canvas armorCanvas;
 
     [SerializeField] SkillMenu skillMenu;
 
@@ -69,6 +70,21 @@ public class PlayerControlHandler : MonoBehaviour
             rb.MoveRotation(Quaternion.LookRotation(new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position, Vector3.up));
         }
         //회전 끝
+
+        //장비탭 시작
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (armorCanvas.enabled)
+            {
+                armorCanvas.transform.GetChild(1).gameObject.SetActive(false);
+                armorCanvas.enabled = false;
+            }
+            else
+            {
+                armorCanvas.enabled = true;
+            }
+        }
+        //장비탭 끝
 
         //인벤토리 시작
         if (Input.GetKeyDown(KeyCode.I))
@@ -330,12 +346,15 @@ public class PlayerControlHandler : MonoBehaviour
         }
         else //일반 모드
         {
-            float scrollDelta = Input.mouseScrollDelta.y;
-
-            if (scrollDelta != 0)
+            if (!IsPointerOverUIObject())
             {
-                float fov = Camera.main.fieldOfView - scrollDelta * SCROLL_SPEED;
-                Camera.main.fieldOfView = Mathf.Clamp(fov, 20.0f, 60.0f);
+                float scrollDelta = Input.mouseScrollDelta.y;
+
+                if (scrollDelta != 0)
+                {
+                    float fov = Camera.main.fieldOfView - scrollDelta * SCROLL_SPEED;
+                    Camera.main.fieldOfView = Mathf.Clamp(fov, 20.0f, 60.0f);
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.B)) //건설 모드 시작
