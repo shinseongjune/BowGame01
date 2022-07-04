@@ -77,6 +77,7 @@ public class PlayerControlHandler : MonoBehaviour
             if (armorCanvas.enabled)
             {
                 armorCanvas.transform.GetChild(1).gameObject.SetActive(false);
+                armorCanvas.transform.GetChild(2).gameObject.SetActive(false);
                 armorCanvas.enabled = false;
             }
             else
@@ -271,9 +272,9 @@ public class PlayerControlHandler : MonoBehaviour
                         {
                             isConstructing = true;
 
-                            if (itemHandler.HasEnoughMaterials((int)constructId)) //건축 재료가 충분할 경우
+                            if (itemHandler.HasEnoughMaterialsForConstruct((int)constructId)) //건축 재료가 충분할 경우
                             {
-                                itemHandler.SpendMaterials((int)constructId);
+                                itemHandler.SpendMaterialsForConstruct((int)constructId);
 
                                 GameObject building = Instantiate(buildingDataBase.constructsPrefabs[(int)constructId]);
                                 building.transform.position = selectedConstruct.transform.position;

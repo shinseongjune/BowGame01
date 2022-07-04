@@ -11,7 +11,7 @@ public class DetailsDescriptionWindow : MonoBehaviour
         rect = GetComponent<RectTransform>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         float rectWidth = (rect.anchorMax.x - rect.anchorMin.x) * Screen.width;
         float rectHeight = (rect.anchorMax.y - rect.anchorMin.y) * Screen.height;
@@ -20,6 +20,7 @@ public class DetailsDescriptionWindow : MonoBehaviour
 
     private void OnEnable()
     {
+        rect = GetComponent<RectTransform>();
         float rectWidth = (rect.anchorMax.x - rect.anchorMin.x) * Screen.width;
         float rectHeight = (rect.anchorMax.y - rect.anchorMin.y) * Screen.height;
         transform.position = Input.mousePosition + new Vector3(rectWidth + 5, -rectHeight , 0);

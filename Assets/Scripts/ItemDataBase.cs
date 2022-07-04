@@ -58,8 +58,18 @@ public class ItemDataBase : MonoBehaviour
         stone.dropCount = 8;
         items.Add(stone.id, stone);
 
+        Item woodenArrow = new();
+        woodenArrow.id = 3;
+        woodenArrow.itemName = "나무 화살";
+        woodenArrow.description = "나무로 만든 화살.";
+        woodenArrow.MAX_COUNT = 200;
+        woodenArrow.icon = Resources.Load<Sprite>("Images/Items/Projectiles/WoodenArrow");
+        woodenArrow.dropRate = 0.1f;
+        woodenArrow.dropCount = 5;
+        items.Add(woodenArrow.id, woodenArrow);
+
         Equipment helmet = new();
-        helmet.id = 3;
+        helmet.id = 100;
         helmet.itemName = "스파르탄 헬멧";
         helmet.description = "튼튼한 헬멧이다.";
         helmet.MAX_COUNT = 1;
@@ -68,7 +78,8 @@ public class ItemDataBase : MonoBehaviour
         helmet.dropCount = 1;
         helmet.type = Equipment.Type.Head;
         helmet.stats.Add(Stat.Type.Armor, 10f);
-        SpecialEffect helmetEffect = new("안전 제일", "머리를 든든히 보호합시다.", true, true, null, helmet);
+        Sprite sp = Resources.Load<Sprite>("Images/SpecialEffects/SaftyHelmet");
+        SpecialEffect helmetEffect = new("안전 제일", "머리를 든든히 보호합시다.", true, true, null, sp, helmet);
         StatModifier helmetEffectMod = new(StatModifier.Type.TotalFlat, 5, helmetEffect);
         helmetEffect.modifiers.Add(Stat.Type.Armor, helmetEffectMod);
         helmet.effects.Add(helmetEffect);

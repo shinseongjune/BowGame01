@@ -12,6 +12,7 @@ public class PlayerItemHandler : MonoBehaviour
     public ItemDataBase itemDataBase;
     public BuildingDataBase buildingDataBase;
     public GameObject droppedItemPrefab;
+    public SkillDataBase skillDataBase;
 
     public Transform armorSlots;
 
@@ -124,7 +125,7 @@ public class PlayerItemHandler : MonoBehaviour
         Destroy(misp.gameObject);
     }
 
-    internal bool HasEnoughMaterials(int constructId)
+    public bool HasEnoughMaterialsForConstruct(int constructId)
     {
         Dictionary<int, int> cost = buildingDataBase.costs[constructId];
 
@@ -164,10 +165,82 @@ public class PlayerItemHandler : MonoBehaviour
         return hasEnoughAllMaterials;
     }
 
-    internal void SpendMaterials(int constructId)
+    public void SpendMaterialsForConstruct(int constructId)
     {
         Dictionary<int, int> cost = buildingDataBase.costs[constructId];
 
+        foreach (KeyValuePair<int, int> c in cost)
+        {
+            int itemId = c.Key;
+            int itemCount = c.Value;
+
+            for (int i = 0; i < inventory.childCount; i++)
+            {
+                ItemSlotUI itemSlot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+
+                if (itemSlot.itemId == itemId)
+                {
+                    if (itemSlot.count >= itemCount)
+                    {
+                        itemSlot.count -= itemCount;
+                        itemSlot.SetItem(itemId, itemSlot.count);
+                        itemCount = 0;
+                    }
+                    else
+                    {
+                        itemCount -= itemSlot.count;
+                        itemSlot.SetItem(null, 0);
+                    }
+                }
+
+                if (itemCount == 0)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    public bool HasEnoughMaterialsForSkill(Dictionary<int, int> cost)
+    {
+        bool hasEnoughAllMaterials = true;
+
+        bool hasEnoughMaterial = false;
+
+        foreach (KeyValuePair<int, int> c in cost)
+        {
+            int itemId = c.Key;
+            int itemCount = c.Value;
+
+            for (int i = 0; i < inventory.childCount; i++)
+            {
+                ItemSlotUI itemSlot = inventory.GetChild(i).GetComponent<ItemSlotUI>();
+
+                if (itemSlot.itemId == itemId)
+                {
+                    itemCount -= itemSlot.count;
+                }
+
+                if (itemCount <= 0)
+                {
+                    hasEnoughMaterial = true;
+                    break;
+                }
+
+                hasEnoughMaterial = false;
+            }
+
+            if (!hasEnoughMaterial)
+            {
+                hasEnoughAllMaterials = false;
+            }
+        }
+
+        return hasEnoughAllMaterials;
+    }
+
+    public void SpendMaterialsForSkill(Dictionary<int, int> cost)
+    {
         foreach (KeyValuePair<int, int> c in cost)
         {
             int itemId = c.Key;

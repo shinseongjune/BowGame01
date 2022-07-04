@@ -56,10 +56,19 @@ public class BasicSkillSlot : MonoBehaviour
 
     public void SetCooldown(float cooldown)
     {
-        adaptedCooldown = cooldown;
-        this.cooldown = adaptedCooldown;
-        cooldownMask.fillAmount = 1;
+        if (cooldown <= 0)
+        {
+            this.cooldown = 0;
+            cooldownMask.fillAmount = 0;
+            isOnCooldown = false;
+        }
+        else
+        {
+            adaptedCooldown = cooldown;
+            this.cooldown = adaptedCooldown;
+            cooldownMask.fillAmount = 1;
 
-        isOnCooldown = true;
+            isOnCooldown = true;
+        }
     }
 }

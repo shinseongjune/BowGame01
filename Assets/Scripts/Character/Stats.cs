@@ -100,6 +100,8 @@ public class Stats : MonoBehaviour
 
     public List<SpecialEffect> specialEffects = new();
 
+    public bool isSpecialEffectsUpdated = false;
+
     private void Start()
     {
         for (int i = 0; i < (int)Stat.Type.__COUNT; i++)
@@ -291,6 +293,8 @@ public class Stats : MonoBehaviour
             Stat.Type type = mods.Key;
             stats[(int)type].modifiers.Add(mods.Value);
         }
+
+        isSpecialEffectsUpdated = true;
     }
 
     public void RemoveSpecialEffect(SpecialEffect effect)
@@ -309,6 +313,8 @@ public class Stats : MonoBehaviour
         }
 
         specialEffects.Remove(effect);
+
+        isSpecialEffectsUpdated = true;
     }
 
     public void RemoveSpecialEffectFromSource(object source)
@@ -321,5 +327,7 @@ public class Stats : MonoBehaviour
                 RemoveSpecialEffect(effect);
             }
         }
+
+        isSpecialEffectsUpdated = true;
     }
 }

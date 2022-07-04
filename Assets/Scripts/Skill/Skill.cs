@@ -41,9 +41,22 @@ public class RangedSkill : BasicSkill
 {
     public override bool Invoke()
     {
-        //TODO: 임시 구현. owner의 발사 위치 empty object 만들어서 해당 위치에서 발사되게.
-        //target 추적 등의 문제는 나중에 구현하기.
-        //damage는 owner의 스탯을 받아와서 어떻게 하는게 맞는듯. 일단은 대충해놓는다.
+        //자원 소모 시작
+        PlayerItemHandler itemHandler = owner.GetComponent<PlayerItemHandler>();
+        if (itemHandler != null)
+        {
+            if (itemHandler.HasEnoughMaterialsForSkill(costs))
+            {
+                itemHandler.SpendMaterialsForSkill(costs);
+            }
+            else
+            {
+                //TODO: 자원 부족 문구 띄우기
+                return false;
+            }
+        }
+        //자원 소모 끝
+
         Aggression aggression = new(name, owner, null);
         GameObject projectile = Object.Instantiate(skillPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
         FlyingProjectile flyingProjectile = projectile.GetComponent<FlyingProjectile>();
@@ -55,7 +68,6 @@ public class RangedSkill : BasicSkill
             flyingProjectile.afterEffectPrefab = afterEffect;
         }
         return true;
-        //TODO: 자원 소모, 자원 부족 시 실패 return false
     }
 }
 
@@ -242,8 +254,12 @@ public class DashSkill : MovementSkill
             if (trailRenderer != null)
             {
                 trailRenderer.transform.SetParent(owner.transform);
+                Object.Destroy(trailRenderer.gameObject, 0.2f);
             }
-            Object.Destroy(go, 0.2f);
+            else
+            {
+                Object.Destroy(go, 0.2f);
+            }
         }
 
         Rigidbody rb = owner.GetComponent<Rigidbody>();
@@ -281,8 +297,12 @@ public class BlinkSkill : MovementSkill
             if (trailRenderer != null)
             {
                 trailRenderer.transform.SetParent(owner.transform);
+                Object.Destroy(trailRenderer.gameObject, 0.2f);
             }
-            Object.Destroy(go, 0.2f);
+            else
+            {
+                Object.Destroy(go, 0.2f);
+            }
         }
 
         Vector3 destination = owner.transform.position + owner.transform.forward * power;

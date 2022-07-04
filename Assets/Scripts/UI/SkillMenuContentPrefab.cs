@@ -32,11 +32,19 @@ public class SkillMenuContentPrefab : MonoBehaviour, IPointerClickHandler
                     BasicSkillSlot qBasic = skillSlots.GetChild(2).GetComponent<BasicSkillSlot>();
                     BasicSkillSlot eBasic = skillSlots.GetChild(3).GetComponent<BasicSkillSlot>();
 
-                    if (eBasic.skillId == skillId)
+                    if (eBasic.skillId.Value == skillId)
                     {
-                        int? eSkillId = eBasic.skillId;
-                        eBasic.SetSkill(skillId);
-                        qBasic.SetSkill(eSkillId);
+                        eBasic.SetSkill(qBasic.skillId);
+                        qBasic.SetSkill(skillId);
+
+                        if (qBasic.isOnCooldown)
+                        {
+                            eBasic.isOnCooldown = true;
+                            eBasic.cooldown = qBasic.cooldown;
+                            eBasic.adaptedCooldown = qBasic.adaptedCooldown;
+
+                            qBasic.SetCooldown(0);
+                        }
                     }
                     else
                     {
@@ -49,11 +57,19 @@ public class SkillMenuContentPrefab : MonoBehaviour, IPointerClickHandler
                     BasicSkillSlot qBasic = skillSlots.GetChild(2).GetComponent<BasicSkillSlot>();
                     BasicSkillSlot eBasic = skillSlots.GetChild(3).GetComponent<BasicSkillSlot>();
 
-                    if (qBasic.skillId == skillId)
+                    if (qBasic.skillId.Value == skillId)
                     {
-                        int? qSkillId = qBasic.skillId;
-                        qBasic.SetSkill(skillId);
-                        eBasic.SetSkill(qSkillId);
+                        qBasic.SetSkill(eBasic.skillId);
+                        eBasic.SetSkill(skillId);
+
+                        if (eBasic.isOnCooldown)
+                        {
+                            qBasic.isOnCooldown = true;
+                            qBasic.cooldown = eBasic.cooldown;
+                            qBasic.adaptedCooldown = eBasic.adaptedCooldown;
+
+                            eBasic.SetCooldown(0);
+                        }
                     }
                     else
                     {

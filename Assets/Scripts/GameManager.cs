@@ -62,8 +62,9 @@ public class GameManager : MonoBehaviour
         inventory.GetChild(2).GetComponent<ItemSlotUI>().SetItem(1, 8);
         inventory.GetChild(3).GetComponent<ItemSlotUI>().SetItem(1, 25);
         inventory.GetChild(4).GetComponent<ItemSlotUI>().SetItem(2, 10);
-        inventory.GetChild(5).GetComponent<ItemSlotUI>().SetItem(3, 1);
-        inventory.GetChild(6).GetComponent<ItemSlotUI>().SetItem(3, 1);
+        inventory.GetChild(5).GetComponent<ItemSlotUI>().SetItem(100, 1);
+        inventory.GetChild(6).GetComponent<ItemSlotUI>().SetItem(100, 1);
+        inventory.GetChild(7).GetComponent<ItemSlotUI>().SetItem(3, 200);
 
         movementSkillSlot.SetSkill(1);
         qBasicSkillSlot.SetSkill(0);
