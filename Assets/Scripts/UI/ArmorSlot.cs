@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class ArmorSlot : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public int? itemId;
+    
+
+
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
     void Update()
     {
         
