@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ArmorCanvasDetails : MonoBehaviour
 {
@@ -49,7 +50,11 @@ public class ArmorCanvasDetails : MonoBehaviour
             GameObject go = Instantiate(detailsContentPrefab, content);
             TextMeshProUGUI text = go.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             text.text = effect.name;
-
+            if (effect.icon != null)
+            {
+                Image image = go.transform.GetChild(1).GetComponent<Image>();
+                image.sprite = effect.icon;
+            }
             DetailsContentPrefab dcp = go.GetComponent<DetailsContentPrefab>();
             StringBuilder desc = new(string.Format("{0}\n------------\n", effect.description));
 

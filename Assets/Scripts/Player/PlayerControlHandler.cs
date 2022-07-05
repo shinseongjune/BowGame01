@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -41,7 +42,7 @@ public class PlayerControlHandler : MonoBehaviour
     [SerializeField] SkillMenu skillMenu;
 
     Transform playerCanvas;
-    [SerializeField] GameObject notEnoughtMaterialsTextUIPrefab;
+    [SerializeField] GameObject fieldTextPrefab;
 
     const float SNAP_DISTANCE = 1.1f;
 
@@ -291,7 +292,8 @@ public class PlayerControlHandler : MonoBehaviour
                             }
                             else //건축 재료가 부족할 경우
                             {
-                                GameObject go = Instantiate(notEnoughtMaterialsTextUIPrefab, playerCanvas);
+                                GameObject go = Instantiate(fieldTextPrefab, playerCanvas);
+                                go.GetComponent<TextMeshProUGUI>().text = "재료 부족!";
                                 go.GetComponent<RectTransform>().position = RectTransformUtility.WorldToScreenPoint(Camera.main, selectedConstruct.transform.position);
                             }
                         }

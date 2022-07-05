@@ -92,9 +92,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 0
   count: 0
-  player: {fileID: 0}
-  image: {fileID: 0}
-  text: {fileID: 0}
   movingItemCanvas: {fileID: 0}
 --- !u!1 &7589444185623975545
 GameObject:
@@ -164,8 +161,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cbc4aae32b15f7e4783ac109df5c8e80, type: 2}
-  m_sharedMaterial: {fileID: 7879632164316973235, guid: cbc4aae32b15f7e4783ac109df5c8e80, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6b3d1d4b71e93334b9d2b4c739f181a7, type: 2}
+  m_sharedMaterial: {fileID: -1765847416431064541, guid: 6b3d1d4b71e93334b9d2b4c739f181a7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

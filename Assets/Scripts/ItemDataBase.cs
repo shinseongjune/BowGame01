@@ -79,7 +79,7 @@ public class ItemDataBase : MonoBehaviour
         helmet.type = Equipment.Type.Head;
         helmet.stats.Add(Stat.Type.Armor, 10f);
         Sprite sp = Resources.Load<Sprite>("Images/SpecialEffects/SaftyHelmet");
-        SpecialEffect helmetEffect = new("안전 제일", "머리를 든든히 보호합시다.", true, true, null, sp, helmet);
+        SpecialEffect helmetEffect = new("안전 제일", "머리를 든든히 보호합시다.", false, true, null, sp, helmet);
         StatModifier helmetEffectMod = new(StatModifier.Type.TotalFlat, 5, helmetEffect);
         helmetEffect.modifiers.Add(Stat.Type.Armor, helmetEffectMod);
         helmet.effects.Add(helmetEffect);
