@@ -13072,7 +13072,7 @@ MonoBehaviour:
   skillMenuCanvas: {fileID: 1183775988}
   armorCanvas: {fileID: 2117636738}
   skillMenu: {fileID: 372794770}
-  notEnoughtMaterialsTextUIPrefab: {fileID: 2708576395305787329, guid: 320d0d9bcbd6f0543975bfe9949988f4, type: 3}
+  fieldTextPrefab: {fileID: 0}
 --- !u!114 &1307857260
 MonoBehaviour:
   m_ObjectHideFlags: 0

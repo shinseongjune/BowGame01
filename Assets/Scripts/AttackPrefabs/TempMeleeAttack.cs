@@ -7,7 +7,7 @@ public class TempMeleeAttack : MonoBehaviour
     public float speed;
     public Aggression aggression;
 
-    public Dictionary<Aggression.Type, float> damages;
+    public Dictionary<Aggression.DamageType, float> damages;
 
     public float restTime = 8;
     public float restDistance = 30;
@@ -54,16 +54,16 @@ public class TempMeleeAttack : MonoBehaviour
                 {
                     switch (damageRate.Key)
                     {
-                        case Aggression.Type.Attack:
+                        case Aggression.DamageType.Physical:
                             damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
                             break;
-                        case Aggression.Type.Fire:
+                        case Aggression.DamageType.Fire:
                             damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
                             break;
-                        case Aggression.Type.Ice:
+                        case Aggression.DamageType.Ice:
                             damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
                             break;
-                        case Aggression.Type.Lightning:
+                        case Aggression.DamageType.Lightning:
                             damage = stats.stats[(int)Stat.Type.Attack].Value * damageRate.Value;
                             break;
                     }

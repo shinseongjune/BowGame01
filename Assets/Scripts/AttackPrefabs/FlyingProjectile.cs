@@ -9,7 +9,7 @@ public class FlyingProjectile : MonoBehaviour
     public float restTime = 8;
     public float restDistance = 30;
 
-    public Dictionary<Aggression.Type, float> damages = new();
+    public Dictionary<Aggression.DamageType, float> damages = new();
 
     public GameObject afterEffectPrefab;
 

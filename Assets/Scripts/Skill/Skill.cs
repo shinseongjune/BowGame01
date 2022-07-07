@@ -8,7 +8,7 @@ public interface ISkill
 
 public abstract class BasicSkill : ISkill
 {
-    public Dictionary<Aggression.Type, float> damages = new();
+    public Dictionary<Aggression.DamageType, float> damages = new();
 
     public int id;
 
@@ -57,7 +57,7 @@ public class RangedSkill : BasicSkill
         }
         //자원 소모 끝
 
-        Aggression aggression = new(name, owner, null);
+        Aggression aggression = new(name, type, owner, null);
         GameObject projectile = Object.Instantiate(skillPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
         FlyingProjectile flyingProjectile = projectile.GetComponent<FlyingProjectile>();
         flyingProjectile.aggression = aggression;
@@ -75,7 +75,7 @@ public class MeleeSkill : BasicSkill
 {
     public override bool Invoke()
     {
-        Aggression aggression = new(name, owner, null);
+        Aggression aggression = new(name, type, owner, null);
         //TODO: 임시 이펙트 시작
         GameObject effect = Object.Instantiate(skillPrefab, owner.transform.position + new Vector3(0, 1, 0), Quaternion.LookRotation(owner.transform.forward, owner.transform.up));
         TempMeleeAttack tempMeleeAttack = effect.GetComponent<TempMeleeAttack>();
@@ -91,7 +91,7 @@ public class EmplaceSkill : BasicSkill
 {
     public override bool Invoke()
     {
-        Aggression aggression = new(name, owner, null);
+        Aggression aggression = new(name, type, owner, null);
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layer = 1 << LayerMask.NameToLayer("Ground");
@@ -361,6 +361,8 @@ public abstract class Ult : ISkill
     public string description;
 
     public GameObject afterEffect;
+
+    public Aggression.Type type;
 
     public Sprite skillIcon;
 

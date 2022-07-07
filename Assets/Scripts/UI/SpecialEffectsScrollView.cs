@@ -30,6 +30,10 @@ public class SpecialEffectsScrollView : MonoBehaviour
 
             foreach (SpecialEffect effect in stats.specialEffects)
             {
+                if (!effect.isDisplayed)
+                {
+                    continue;
+                }
                 GameObject go = Instantiate(specialEffectIconPrefab, content);
                 go.GetComponent<Image>().sprite = effect.icon;
                 SpecialEffectIconPrefab seip = go.GetComponent<SpecialEffectIconPrefab>();

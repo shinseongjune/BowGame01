@@ -9,7 +9,7 @@ public class Installation : MonoBehaviour
     public Transform body;
     public Transform shootPoint;
 
-    public Dictionary<Aggression.Type, float> damages = new();
+    public Dictionary<Aggression.DamageType, float> damages = new();
 
     public float reach = 3.0f;
 
@@ -43,10 +43,32 @@ public class Installation : MonoBehaviour
 
             foreach(Collider hit in hits)
             {
-                if (hit.gameObject.CompareTag("Enemy"))
+                if (CompareTag("Player"))
                 {
-                    target = hit.transform;
-                    break;
+                    if (hit.gameObject.CompareTag("Enemy"))
+                    {
+                        target = hit.transform;
+                        break;
+                    }
+                }
+                else if (CompareTag("Enemy"))
+                {
+                    if (hit.gameObject.CompareTag("Player"))
+                    {
+                        target = hit.transform;
+                        break;
+                    }
+                }
+            }
+
+            if (target == null)
+            {
+                foreach(Collider hit in hits)
+                {
+                    if (hit.gameObject.CompareTag("Animal"))
+                    {
+                        target = hit.transform;
+                    }
                 }
             }
         }
@@ -75,7 +97,7 @@ public class Installation : MonoBehaviour
             return;
         }
 
-        Aggression newAgg = new(aggression.name, aggression.attacker, null);
+        Aggression newAgg = new(aggression.name, aggression.type, aggression.attacker, null);
         newAgg.damages = new(damages);
 
         GameObject go = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);

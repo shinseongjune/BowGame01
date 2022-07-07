@@ -19,7 +19,7 @@ public class AfterEffect : MonoBehaviour
 
     public List<GameObject> hitObjects = new();
 
-    public Dictionary<Aggression.Type, float> damages = new();
+    public Dictionary<Aggression.DamageType, float> damages = new();
 
     void Update()
     {
