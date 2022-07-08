@@ -5,7 +5,13 @@ using UnityEngine.AI;
 
 public class BasicAI : MonoBehaviour
 {
-
+    public enum Stats
+    {
+        Idle,
+        Hunt,
+        Combat,
+        Defeated
+    }
 
     public GameObject target;
     public NavMeshAgent agent;
