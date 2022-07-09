@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class BasicAI : MonoBehaviour
 {
-    public enum Stats
+    public enum Mode
     {
         Idle,
         Hunt,
@@ -16,9 +16,12 @@ public class BasicAI : MonoBehaviour
     public GameObject target;
     public NavMeshAgent agent;
 
+    public Mode mode;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        mode = Mode.Idle;
     }
 
     void Update()
