@@ -9,6 +9,7 @@ public class BasicAI : MonoBehaviour
     {
         Idle,
         Hunt,
+        Alert,
         Combat,
         Defeated
     }
@@ -16,16 +17,27 @@ public class BasicAI : MonoBehaviour
     public GameObject target;
     public NavMeshAgent agent;
 
-    public Mode mode;
+    public Mode mode = Mode.Idle;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        mode = Mode.Idle;
     }
 
     void Update()
     {
-        
+        switch (mode)
+        {
+            case Mode.Idle:
+                break;
+            case Mode.Hunt:
+                break;
+            case Mode.Alert:
+                break;
+            case Mode.Combat:
+                break;
+            case Mode.Defeated:
+                break;
+        }
     }
 }
