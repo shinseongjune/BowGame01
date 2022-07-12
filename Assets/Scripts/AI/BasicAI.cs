@@ -14,6 +14,8 @@ public class BasicAI : MonoBehaviour
         Defeated
     }
 
+    public Vector3 originPosition;
+
     public GameObject target;
     public NavMeshAgent agent;
 
@@ -38,6 +40,6 @@ public class BasicAI : MonoBehaviour
                 break;
             case Mode.Defeated:
                 break;
-        }
+        }  
     }
 }
