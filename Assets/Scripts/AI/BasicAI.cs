@@ -11,12 +11,14 @@ public class BasicAI : MonoBehaviour
         Hunt,
         Alert,
         Combat,
-        Defeated
+        Defeated,
+        Reset
     }
 
     public Vector3 originPosition;
 
-    public GameObject target;
+    public GameObject mainTarget;
+    public List<GameObject> targets = new();
     public NavMeshAgent agent;
 
     public Mode mode = Mode.Idle;
@@ -39,6 +41,8 @@ public class BasicAI : MonoBehaviour
             case Mode.Combat:
                 break;
             case Mode.Defeated:
+                break;
+            case Mode.Reset:
                 break;
         }  
     }
